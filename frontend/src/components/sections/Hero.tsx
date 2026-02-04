@@ -214,7 +214,13 @@ export default function Hero() {
 
                 {/* Floating Particles */}
                 <div className="hero-particles">
-                    {[...Array(15)].map((_, i) => (
+                    {[
+                        { left: 15, top: 20 }, { left: 35, top: 60 }, { left: 55, top: 30 },
+                        { left: 75, top: 70 }, { left: 25, top: 45 }, { left: 85, top: 15 },
+                        { left: 45, top: 80 }, { left: 65, top: 25 }, { left: 20, top: 65 },
+                        { left: 80, top: 50 }, { left: 40, top: 10 }, { left: 60, top: 85 },
+                        { left: 30, top: 35 }, { left: 70, top: 55 }, { left: 50, top: 40 },
+                    ].map((pos, i) => (
                         <motion.div
                             key={i}
                             className="particle"
@@ -224,14 +230,14 @@ export default function Hero() {
                                 opacity: [0.2, 0.6, 0.2],
                             }}
                             transition={{
-                                duration: 4 + Math.random() * 4,
+                                duration: 4 + (i % 5),
                                 repeat: Infinity,
-                                delay: Math.random() * 2,
+                                delay: i * 0.3,
                                 ease: 'easeInOut',
                             }}
                             style={{
-                                left: `${10 + Math.random() * 80}%`,
-                                top: `${10 + Math.random() * 80}%`,
+                                left: `${pos.left}%`,
+                                top: `${pos.top}%`,
                             }}
                         />
                     ))}
@@ -269,14 +275,7 @@ export default function Hero() {
                                 animate={{ opacity: 1, y: 0, clipPath: 'inset(0% 0 0 0)' }}
                                 transition={{ duration: 1.2, delay: 1, ease: [0.22, 1, 0.36, 1] }}
                             >
-                                {isShortTitle ? (
-                                    <>
-                                        <span className="title-line">{titleWords.slice(0, -1).join(' ')}</span>
-                                        <span className="title-line accent">{titleWords[titleWords.length - 1]}</span>
-                                    </>
-                                ) : (
-                                    <span className="title-line">{content.title}</span>
-                                )}
+                                <span className="title-line">{content.title}</span>
                             </motion.h1>
 
                             <motion.p
@@ -351,6 +350,7 @@ export default function Hero() {
                                                             fill
                                                             sizes="180px"
                                                             className="marquee-img"
+                                                            loading="lazy"
                                                         />
                                                         <div className="marquee-overlay">
                                                             <span className="marquee-number">
@@ -392,8 +392,10 @@ export default function Hero() {
                                                             src={slide.image}
                                                             alt={'Marquee ' + idx}
                                                             fill
-                                                            sizes="180px"
+                                                            sizes="500px"
                                                             className="marquee-img"
+                                                            loading="lazy"
+                                                            quality={90}
                                                         />
                                                     </div>
                                                 </div>

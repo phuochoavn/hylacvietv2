@@ -150,13 +150,15 @@
 }
 
 .hero-title-main {
-    font-family: var(--font-display);
-    font-size: clamp(4rem, 12vw, 10rem);
-    font-weight: 300;
-    line-height: 0.9;
+    font-family: var(--font-brand);
+    font-size: clamp(2rem, 6vw, 4.5rem);
+    font-weight: 400;
+    line-height: 1.5;
     letter-spacing: -0.02em;
     color: var(--ivory);
-    margin-bottom: var(--space-6);
+    margin-bottom: var(--space-4);
+    padding-bottom: 0.5em;
+    overflow: visible;
 }
 
 .title-line {
@@ -167,16 +169,18 @@
     color: var(--gold);
     font-style: italic;
     font-weight: 400;
-    margin-left: 0.2em;
+    letter-spacing: -0.01em;
+    margin-left: 0.15em;
+    margin-top: -0.1em;
 }
 
 .hero-tagline {
-    font-family: var(--font-display);
+    font-family: var(--font-body);
     font-size: var(--text-xl);
     font-weight: 400;
     font-style: italic;
     color: var(--gold-light);
-    letter-spacing: 0.1em;
+    letter-spacing: 0.05em;
     margin-bottom: var(--space-8);
     opacity: 0.9;
 }
@@ -237,32 +241,39 @@
     transform-origin: top right;
 }
 
-/* Left column - smaller images */
+/* Left column - smaller images, fixed size */
 .marquee-column:first-child {
     width: 180px;
+    min-width: 150px;
     margin-top: 120px;
 }
 
 .marquee-column:first-child .marquee-card {
     width: 170px;
+    min-width: 140px;
 }
 
 .marquee-column:first-child .marquee-image {
     height: 220px;
+    min-height: 180px;
 }
 
-/* Right column - larger images, more prominent */
+/* Right column - responsive, 1.8:1 aspect ratio */
 .marquee-column:last-child {
-    width: 280px;
+    width: clamp(280px, 25vw, 500px);
     margin-top: 40px;
 }
 
 .marquee-column:last-child .marquee-card {
-    width: 260px;
+    width: 100%;
 }
 
 .marquee-column:last-child .marquee-image {
-    height: 340px;
+    width: 100%;
+    height: 0;
+    padding-bottom: 55.56%;
+    /* 1.8:1 ratio = 100/1.8 = 55.56% */
+    position: relative;
 }
 
 .marquee-column {
@@ -281,11 +292,12 @@
     position: relative;
     width: 170px;
     flex-shrink: 0;
-    border-radius: var(--radius-lg);
+    border-radius: 12px;
     overflow: hidden;
     cursor: pointer;
     transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
     border: 2px solid transparent;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
 }
 
 .marquee-card:hover {

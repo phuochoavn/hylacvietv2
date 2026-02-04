@@ -1,27 +1,115 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SITE } from '@/lib/constants';
+
+// Critical images to preload (hero backgrounds)
+const CRITICAL_IMAGES_TIMEOUT = 5000; // Max wait time for images
 
 export default function Preloader() {
     const [loading, setLoading] = useState(true);
     const [progress, setProgress] = useState(0);
+    const [imagesLoaded, setImagesLoaded] = useState(false);
+
+    // Check if critical images are already cached
+    const checkImagesCached = useCallback(async (urls: string[]): Promise<boolean> => {
+        if (typeof window === 'undefined') return false;
+
+        // Check via Performance API if images are in cache
+        const entries = performance.getEntriesByType('resource') as PerformanceResourceTiming[];
+        const cachedUrls = entries.map(e => e.name);
+
+        return urls.every(url => cachedUrls.some(cached => cached.includes(url)));
+    }, []);
+
+    // Preload images
+    const preloadImages = useCallback(async (urls: string[]): Promise<void> => {
+        const promises = urls.map(url => {
+            return new Promise<void>((resolve) => {
+                const img = new window.Image();
+                img.onload = () => resolve();
+                img.onerror = () => resolve(); // Don't block on error
+                img.src = url;
+            });
+        });
+
+        await Promise.all(promises);
+    }, []);
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            setProgress((prev) => {
-                if (prev >= 100) {
-                    clearInterval(interval);
-                    setTimeout(() => setLoading(false), 400);
-                    return 100;
-                }
-                return prev + Math.random() * 15;
-            });
-        }, 80);
+        let isMounted = true;
 
-        return () => clearInterval(interval);
-    }, []);
+        const loadCriticalImages = async () => {
+            try {
+                // Fetch hero background URLs from API
+                const res = await fetch('/api/settings');
+                let criticalUrls: string[] = [];
+
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.success && Array.isArray(data.data)) {
+                        const heroBgSetting = data.data.find((s: { key: string }) => s.key === 'hero_backgrounds');
+                        if (heroBgSetting?.value) {
+                            try {
+                                const backgrounds = JSON.parse(heroBgSetting.value);
+                                criticalUrls = backgrounds.slice(0, 3).map((bg: { image: string }) => bg.image).filter(Boolean);
+                            } catch { }
+                        }
+                    }
+                }
+
+                // Check if images already cached
+                const isCached = await checkImagesCached(criticalUrls);
+
+                if (isCached) {
+                    // Fast exit - images already in browser cache
+                    setProgress(100);
+                    setImagesLoaded(true);
+                    setTimeout(() => {
+                        if (isMounted) setLoading(false);
+                    }, 300); // Minimal delay for smooth transition
+                    return;
+                }
+
+                // Preload images with timeout
+                const loadPromise = preloadImages(criticalUrls);
+                const timeoutPromise = new Promise<void>(resolve =>
+                    setTimeout(resolve, CRITICAL_IMAGES_TIMEOUT)
+                );
+
+                // Progress animation while loading
+                const progressInterval = setInterval(() => {
+                    if (isMounted) {
+                        setProgress(prev => Math.min(prev + 5, 90));
+                    }
+                }, 100);
+
+                await Promise.race([loadPromise, timeoutPromise]);
+
+                clearInterval(progressInterval);
+                setProgress(100);
+                setImagesLoaded(true);
+
+                setTimeout(() => {
+                    if (isMounted) setLoading(false);
+                }, 400);
+
+            } catch {
+                // On error, just show the page
+                if (isMounted) {
+                    setProgress(100);
+                    setLoading(false);
+                }
+            }
+        };
+
+        loadCriticalImages();
+
+        return () => {
+            isMounted = false;
+        };
+    }, [checkImagesCached, preloadImages]);
 
     return (
         <AnimatePresence>

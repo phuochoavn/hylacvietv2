@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Serif+Display:wght@400;500;600;700&display=swap');
-
 /* ===== Typography Styles ===== */
 
 body {
@@ -126,6 +124,12 @@ blockquote {
 
 .font-body {
     font-family: var(--font-body);
+}
+
+/* Brand name font - special decorative font for "Hỷ Lạc Việt" */
+.font-brand {
+    font-family: var(--font-brand);
+    font-style: italic;
 }
 
 .uppercase {

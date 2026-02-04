@@ -613,7 +613,7 @@ function generateSlug(name: string): string {
               <div class="section-icon">⬇️</div>
               <div>
                 <h3>Marquee Cột Phải</h3>
-                <p>Ảnh cột phải cuộn xuống (khuyến nghị: 400x600px, tỷ lệ dọc)</p>
+                <p>Ảnh cột phải cuộn xuống (khuyến nghị: 900x500px, tỷ lệ ngang 1.8:1)</p>
               </div>
             </div>
             

@@ -13,6 +13,7 @@ export const SITE = {
 export const NAV_LINKS = [
     { label: 'Trang chủ', href: '/' },
     { label: 'Sản phẩm', href: '/products' },
+    { label: 'May đo', href: '/may-do' },
     { label: 'Giới thiệu', href: '/about' },
     { label: 'Liên hệ', href: '/contact' },
 ];
