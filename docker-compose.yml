@@ -1,0 +1,60 @@
+# Hỷ Lạc Việt - Production Stack
+# Domain: hylacviet.vn
+
+services:
+  # API Backend (Rust + Axum)
+  api:
+    build: ./backend
+    container_name: hylacviet-api
+    restart: unless-stopped
+    volumes:
+      - ./data:/app/data
+    environment:
+      - DATABASE_PATH=/app/data/hylacviet.db
+      - RUST_LOG=info
+    networks:
+      - traefik-network
+    labels:
+      - "traefik.enable=true"
+      # API routes
+      - "traefik.http.routers.api.rule=Host(`hylacviet.vn`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.api.entrypoints=websecure"
+      - "traefik.http.routers.api.tls.certresolver=letsencrypt"
+      - "traefik.http.services.api.loadbalancer.server.port=3000"
+      # Uploads route
+      - "traefik.http.routers.uploads.rule=Host(`hylacviet.vn`) && PathPrefix(`/uploads`)"
+      - "traefik.http.routers.uploads.entrypoints=websecure"
+      - "traefik.http.routers.uploads.tls.certresolver=letsencrypt"
+
+  # Frontend (Astro + Nginx)
+  frontend:
+    build: ./frontend
+    container_name: hylacviet-frontend
+    restart: unless-stopped
+    networks:
+      - traefik-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.rule=Host(`hylacviet.vn`)"
+      - "traefik.http.routers.frontend.entrypoints=websecure"
+      - "traefik.http.routers.frontend.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.frontend.priority=1"
+      - "traefik.http.services.frontend.loadbalancer.server.port=3000"
+
+  # Admin Dashboard (Vue 3 + Nginx)
+  admin:
+    build: ./admin
+    container_name: hylacviet-admin
+    restart: unless-stopped
+    networks:
+      - traefik-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.admin.rule=Host(`admin.hylacviet.vn`)"
+      - "traefik.http.routers.admin.entrypoints=websecure"
+      - "traefik.http.routers.admin.tls.certresolver=letsencrypt"
+      - "traefik.http.services.admin.loadbalancer.server.port=80"
+
+networks:
+  traefik-network:
+    external: true

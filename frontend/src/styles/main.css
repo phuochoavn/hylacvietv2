@@ -1,0 +1,216 @@
+/* ===== HỶ LẠC VIỆT - Main Stylesheet ===== */
+
+/* Design System */
+@import './tokens.css';
+@import './reset.css';
+@import './typography.css';
+@import './utilities.css';
+@import './animations.css';
+@import './layout.css';
+@import './hero.css';
+@import './sections.css';
+@import './products.css';
+
+/* ===== Component Styles ===== */
+
+/* ----- BUTTONS ----- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-6);
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    line-height: 1;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-radius: var(--border-radius-full);
+    transition: all var(--duration-normal) var(--ease-out);
+    cursor: pointer;
+}
+
+.btn-primary {
+    background: var(--gold);
+    color: var(--charcoal);
+    border: 1px solid var(--gold);
+}
+
+.btn-primary:hover {
+    background: var(--gold-light);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-gold);
+}
+
+.btn-outline {
+    background: transparent;
+    color: var(--gold);
+    border: 1px solid var(--gold);
+}
+
+.btn-outline:hover {
+    background: var(--gold);
+    color: var(--charcoal);
+}
+
+.btn-ghost {
+    background: transparent;
+    color: var(--text-on-dark);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn-ghost:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+}
+
+/* ----- CARDS ----- */
+.card {
+    background: var(--bg-light);
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    transition: transform var(--duration-normal) var(--ease-out),
+        box-shadow var(--duration-normal) var(--ease-out);
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+}
+
+.card-dark {
+    background: var(--charcoal-soft);
+    color: var(--text-on-dark);
+}
+
+/* ----- FORM ELEMENTS ----- */
+.input {
+    width: 100%;
+    padding: var(--space-4);
+    font-size: var(--text-base);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--border-radius-md);
+    color: var(--text-on-dark);
+    transition: border-color var(--duration-fast) var(--ease-out);
+}
+
+.input:focus {
+    outline: none;
+    border-color: var(--gold);
+}
+
+.input::placeholder {
+    color: var(--ink-light);
+}
+
+/* ----- CUSTOM CURSOR ----- */
+.cursor {
+    position: fixed;
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--gold);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: var(--z-cursor);
+    opacity: 0;
+    transition: width 0.3s, height 0.3s, opacity 0.3s;
+    mix-blend-mode: difference;
+}
+
+.cursor-dot {
+    position: fixed;
+    width: 8px;
+    height: 8px;
+    background: var(--gold);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: var(--z-cursor);
+    opacity: 0;
+}
+
+.cursor.active {
+    width: 60px;
+    height: 60px;
+    background: rgba(201, 162, 39, 0.1);
+}
+
+@media (max-width: 768px) {
+
+    .cursor,
+    .cursor-dot {
+        display: none !important;
+    }
+}
+
+/* ----- PRELOADER ----- */
+.preloader {
+    position: fixed;
+    inset: 0;
+    background: var(--charcoal);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-6);
+    z-index: var(--z-preloader);
+}
+
+.preloader-logo {
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);
+    color: var(--gold);
+    letter-spacing: 0.1em;
+}
+
+.preloader-progress {
+    width: 200px;
+    height: 2px;
+    background: rgba(201, 162, 39, 0.2);
+    border-radius: var(--border-radius-full);
+    overflow: hidden;
+}
+
+.preloader-progress-bar {
+    height: 100%;
+    background: var(--gold);
+    transition: width 0.1s;
+}
+
+/* ----- SCROLL PROGRESS ----- */
+.scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-light));
+    transform-origin: left;
+    z-index: var(--z-sticky);
+}
+
+.back-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: var(--charcoal);
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: var(--z-sticky);
+    box-shadow: var(--shadow-lg);
+    transition: transform var(--duration-fast) var(--ease-out),
+        background var(--duration-fast) var(--ease-out);
+}
+
+.back-to-top:hover {
+    background: var(--gold);
+    color: var(--charcoal);
+    transform: translateY(-4px);
+}

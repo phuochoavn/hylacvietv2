@@ -1,0 +1,100 @@
+/* ===== HỶ LẠC VIỆT - Design Tokens ===== */
+
+:root {
+    /* ===== COLORS ===== */
+    /* Primary - Gold */
+    --gold: #c9a227;
+    --gold-light: #e5d4a8;
+    --gold-dark: #8b7355;
+    --gold-glow: rgba(201, 162, 39, 0.4);
+
+    /* Neutrals */
+    --cream: #FAF8F5;
+    --ivory: #fffff0;
+    --ivory-dark: #f5f5dc;
+    --charcoal: #1a1614;
+    --charcoal-soft: #2a2420;
+    --ink: #3d3530;
+    --ink-light: #6b5f54;
+
+    /* Semantic */
+    --bg-light: var(--ivory);
+    --bg-dark: var(--charcoal);
+    --text-primary: var(--ink);
+    --text-secondary: var(--ink-light);
+    --text-on-dark: var(--ivory);
+    --accent: var(--gold);
+
+    /* ===== TYPOGRAPHY ===== */
+    --font-display: 'Noto Serif Display', Georgia, serif;
+    --font-body: 'Inter', system-ui, sans-serif;
+
+    /* Font Sizes - Fluid */
+    --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+    --text-sm: clamp(0.875rem, 0.8rem + 0.35vw, 1rem);
+    --text-base: clamp(1rem, 0.9rem + 0.5vw, 1.125rem);
+    --text-lg: clamp(1.125rem, 1rem + 0.6vw, 1.25rem);
+    --text-xl: clamp(1.25rem, 1.1rem + 0.75vw, 1.5rem);
+    --text-2xl: clamp(1.5rem, 1.25rem + 1.25vw, 2rem);
+    --text-3xl: clamp(2rem, 1.5rem + 2.5vw, 3rem);
+    --text-4xl: clamp(2.5rem, 2rem + 3vw, 4rem);
+    --text-5xl: clamp(3rem, 2rem + 5vw, 5.5rem);
+
+    /* ===== SPACING ===== */
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 20px;
+    --space-6: 24px;
+    --space-8: 32px;
+    --space-10: 40px;
+    --space-12: 48px;
+    --space-16: 64px;
+    --space-20: 80px;
+    --space-24: 96px;
+    --space-32: 128px;
+
+    /* Section spacing */
+    --section-py: clamp(80px, 10vh, 140px);
+    --container-max: 1200px;
+    --container-px: var(--space-6);
+
+    /* ===== LAYOUT ===== */
+    --header-height: 80px;
+    --border-radius-sm: 4px;
+    --border-radius-md: 8px;
+    --border-radius-lg: 16px;
+    --border-radius-full: 9999px;
+
+    /* ===== SHADOWS ===== */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+    --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+    --shadow-gold: 0 4px 20px var(--gold-glow);
+
+    /* ===== TRANSITIONS ===== */
+    --ease-out: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+    --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+    --duration-fast: 150ms;
+    --duration-normal: 300ms;
+    --duration-slow: 500ms;
+
+    /* ===== Z-INDEX ===== */
+    --z-base: 1;
+    --z-dropdown: 100;
+    --z-sticky: 200;
+    --z-overlay: 300;
+    --z-modal: 400;
+    --z-cursor: 500;
+    --z-preloader: 600;
+}
+
+/* Dark mode tokens */
+[data-theme="dark"] {
+    --bg-light: var(--charcoal);
+    --bg-dark: var(--ivory);
+    --text-primary: var(--ivory);
+    --text-secondary: var(--gold-light);
+}
