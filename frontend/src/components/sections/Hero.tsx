@@ -16,9 +16,9 @@ const defaultContent = {
 };
 
 const defaultSlides = [
-    { id: 1, image: '/images/hero/aodai-1.jpg', title: 'Áo Dài Ngũ Thân', subtitle: 'Tinh hoa cổ truyền' },
-    { id: 2, image: '/images/hero/aodai-2.jpg', title: 'Áo Dài Cưới', subtitle: 'Ngày trọng đại' },
-    { id: 3, image: '/images/hero/aodai-3.jpg', title: 'Pháp Phục Linen', subtitle: 'Thiền định cao quý' },
+    { id: 1, image: '/images/hero/aodai-1.webp', title: 'Áo Dài Ngũ Thân', subtitle: 'Tinh hoa cổ truyền' },
+    { id: 2, image: '/images/hero/aodai-2.webp', title: 'Áo Dài Cưới', subtitle: 'Ngày trọng đại' },
+    { id: 3, image: '/images/hero/aodai-3.webp', title: 'Pháp Phục Linen', subtitle: 'Thiền định cao quý' },
 ];
 
 interface HeroSlide {
