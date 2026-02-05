@@ -101,13 +101,7 @@ export default function CategoryShowcase() {
 
                 {/* Categories Grid */}
                 {isLoaded && (
-                    <motion.div
-                        className="categories-showcase-grid"
-                        initial={{ opacity: 0 }}
-                        whileInView={{ opacity: 1 }}
-                        transition={{ duration: 0.6, delay: 0.2 }}
-                        viewport={{ once: true }}
-                    >
+                    <div className="categories-showcase-grid">
                         {categories.map((category, index) => (
                             <motion.article
                                 key={category.id}
@@ -148,7 +142,7 @@ export default function CategoryShowcase() {
                                 </Link>
                             </motion.article>
                         ))}
-                    </motion.div>
+                    </div>
                 )}
 
                 {/* View All CTA */}
