@@ -60,11 +60,11 @@
 }
 
 .shape-fill-primary {
-    fill: var(--ivory);
+    fill: #f5f0e8;
 }
 
 .shape-fill-secondary {
-    fill: var(--ivory);
+    fill: #f5f0e8;
 }
 
 .hero-gradient-overlay {

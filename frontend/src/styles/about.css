@@ -1,0 +1,495 @@
+/* =========================================
+   ABOUT PAGE - MEMOIR STYLE
+   "Scrolly-telling" - Hồi ký thương hiệu
+   ========================================= */
+
+/* ========== MAIN CONTAINER ========== */
+.about-memoir {
+    background: var(--charcoal);
+    color: var(--cream);
+}
+
+/* ========== HERO SECTION ========== */
+.memoir-hero {
+    position: relative;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.memoir-hero-bg {
+    position: absolute;
+    inset: 0;
+}
+
+.memoir-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom,
+            rgba(0, 0, 0, 0.4) 0%,
+            rgba(0, 0, 0, 0.6) 50%,
+            rgba(0, 0, 0, 0.8) 100%);
+}
+
+.memoir-hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: var(--space-8);
+}
+
+.memoir-overline {
+    display: inline-block;
+    font-family: var(--font-nav);
+    font-size: 0.7rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: var(--space-6);
+}
+
+.memoir-title {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 10vw, 6rem);
+    font-weight: 400;
+    line-height: 1.1;
+    color: var(--cream);
+}
+
+.memoir-title em {
+    font-style: italic;
+    color: var(--gold);
+}
+
+.memoir-scroll-hint {
+    position: absolute;
+    bottom: var(--space-10);
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+    color: var(--cream);
+    opacity: 0.5;
+}
+
+.memoir-scroll-hint span {
+    font-family: var(--font-nav);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+}
+
+.scroll-line {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+    animation: scrollPulse 2s ease-in-out infinite;
+}
+
+@keyframes scrollPulse {
+
+    0%,
+    100% {
+        opacity: 0.3;
+        transform: scaleY(1);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scaleY(1.2);
+    }
+}
+
+/* ========== ZIG-ZAG SECTIONS ========== */
+.memoir-section {
+    padding: var(--space-32) var(--space-8);
+    background: #f5f0e8;
+}
+
+.memoir-section.dark {
+    background: var(--charcoal);
+}
+
+.memoir-section.dark .memoir-heading {
+    color: var(--cream);
+}
+
+.memoir-section.dark .memoir-drop-cap,
+.memoir-section.dark .memoir-body {
+    color: var(--cream-muted);
+}
+
+.memoir-section.dark .memoir-image-caption {
+    color: var(--cream-muted);
+}
+
+.memoir-zigzag {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-16);
+    align-items: center;
+}
+
+.memoir-zigzag.reverse {
+    direction: rtl;
+}
+
+.memoir-zigzag.reverse>* {
+    direction: ltr;
+}
+
+/* Image Column */
+.memoir-image-col {
+    position: relative;
+}
+
+.memoir-image-frame {
+    position: relative;
+    aspect-ratio: 4/5;
+    overflow: hidden;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
+}
+
+.memoir-image-caption {
+    display: block;
+    margin-top: var(--space-4);
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    font-style: italic;
+    color: var(--text-secondary);
+    text-align: center;
+}
+
+/* Text Column */
+.memoir-text-col {
+    padding: var(--space-8);
+}
+
+.memoir-section-number {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 4rem;
+    font-weight: 300;
+    color: var(--gold);
+    opacity: 0.3;
+    line-height: 1;
+    margin-bottom: var(--space-4);
+}
+
+.memoir-heading {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 400;
+    color: var(--charcoal);
+    margin-bottom: var(--space-4);
+}
+
+.memoir-divider {
+    width: 60px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--gold), transparent);
+    margin-bottom: var(--space-8);
+}
+
+.memoir-drop-cap {
+    font-family: var(--font-body);
+    font-size: 1.15rem;
+    line-height: 1.9;
+    color: var(--charcoal);
+    margin-bottom: var(--space-6);
+    text-align: justify;
+}
+
+.memoir-drop-cap::first-letter {
+    float: left;
+    font-family: var(--font-display);
+    font-size: 4rem;
+    font-weight: 400;
+    line-height: 0.8;
+    padding-right: var(--space-3);
+    padding-top: var(--space-2);
+    color: var(--gold);
+}
+
+.memoir-body {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.9;
+    color: var(--text-secondary);
+    text-align: justify;
+}
+
+/* ========== QUOTE SECTION ========== */
+.memoir-quote-section {
+    padding: var(--space-32) var(--space-8);
+    background: var(--charcoal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.memoir-quote {
+    position: relative;
+    max-width: 800px;
+    padding: var(--space-16);
+    text-align: center;
+}
+
+.memoir-quote .quote-mark {
+    position: absolute;
+    font-family: var(--font-display);
+    font-size: 10rem;
+    color: var(--gold);
+    opacity: 0.15;
+    line-height: 1;
+    user-select: none;
+}
+
+.memoir-quote .quote-mark:first-child {
+    top: 0;
+    left: 0;
+}
+
+.memoir-quote .quote-mark.end {
+    bottom: 0;
+    right: 0;
+}
+
+.memoir-quote p {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-style: italic;
+    font-weight: 400;
+    color: var(--cream);
+    line-height: 1.8;
+    position: relative;
+    z-index: 1;
+}
+
+/* ========== CORE VALUES SECTION ========== */
+.memoir-values {
+    padding: var(--space-32) var(--space-8);
+    background: #0a0908;
+}
+
+.memoir-values-header {
+    text-align: center;
+    margin-bottom: var(--space-16);
+}
+
+.memoir-values-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 400;
+    color: var(--cream);
+}
+
+.memoir-values-title em {
+    font-style: italic;
+    color: var(--gold);
+}
+
+.memoir-values-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-10);
+}
+
+.memoir-value {
+    text-align: center;
+    padding: var(--space-8);
+    transition: all 0.4s ease;
+}
+
+.memoir-value:hover {
+    background: rgba(255, 255, 255, 0.02);
+    transform: translateY(-5px);
+}
+
+.value-icon-svg {
+    display: block;
+    width: 48px;
+    height: 48px;
+    margin: 0 auto var(--space-6);
+    color: var(--gold);
+}
+
+.value-icon-svg svg {
+    width: 100%;
+    height: 100%;
+}
+
+.value-title {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    font-weight: 400;
+    color: var(--cream);
+    margin-bottom: var(--space-2);
+}
+
+.value-subtitle {
+    display: block;
+    font-family: var(--font-nav);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: var(--space-4);
+}
+
+.value-desc {
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: var(--cream-muted);
+    line-height: 1.7;
+    margin-bottom: var(--space-6);
+}
+
+.value-line {
+    width: 40px;
+    height: 2px;
+    background: var(--gold);
+    margin: 0 auto;
+    opacity: 0.4;
+}
+
+/* ========== SIGNATURE SECTION ========== */
+.memoir-signature-section {
+    padding: var(--space-32) var(--space-8);
+    background: linear-gradient(to bottom,
+            #0a0908 0%,
+            var(--charcoal) 100%);
+    text-align: center;
+}
+
+.memoir-signature-content {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.signature-thankyou {
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    font-style: italic;
+    line-height: 1.9;
+    color: var(--cream-muted);
+    margin-bottom: var(--space-12);
+}
+
+.signature-block {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-6);
+    margin-bottom: var(--space-12);
+}
+
+.signature-line-decor {
+    width: 60px;
+    height: 1px;
+    background: var(--gold);
+    opacity: 0.5;
+}
+
+.signature-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.founder-name {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-style: italic;
+    color: var(--gold);
+    line-height: 1.2;
+}
+
+.founder-title {
+    font-family: var(--font-nav);
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--cream-muted);
+    margin-top: var(--space-1);
+}
+
+.memoir-cta {
+    display: inline-block;
+    padding: var(--space-4) var(--space-10);
+    background: linear-gradient(135deg, var(--gold) 0%, #8B7355 50%, var(--gold) 100%);
+    background-size: 200% 200%;
+    border: none;
+    font-family: var(--font-nav);
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--charcoal);
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.5s ease;
+}
+
+.memoir-cta:hover {
+    background-position: 100% 0;
+    box-shadow: 0 15px 50px -15px hsla(45, 80%, 50%, 0.6);
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 1024px) {
+    .memoir-zigzag {
+        grid-template-columns: 1fr;
+        gap: var(--space-10);
+    }
+
+    .memoir-zigzag.reverse {
+        direction: ltr;
+    }
+
+    .memoir-image-frame {
+        aspect-ratio: 16/10;
+    }
+
+    .memoir-values-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .memoir-section {
+        padding: var(--space-16) var(--space-4);
+    }
+
+    .memoir-text-col {
+        padding: var(--space-4);
+    }
+
+    .memoir-section-number {
+        font-size: 2.5rem;
+    }
+
+    .memoir-drop-cap::first-letter {
+        font-size: 2.5rem;
+    }
+
+    .memoir-values-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-6);
+    }
+
+    .memoir-quote p {
+        font-size: 1.2rem;
+    }
+
+    .memoir-quote .quote-mark {
+        font-size: 5rem;
+    }
+}
