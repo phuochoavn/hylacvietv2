@@ -1,0 +1,114 @@
+/* =========================================
+   FLOATING CONTACT BUTTONS
+   3 Nút Thân Quen - Bottom Right Stack
+   ========================================= */
+
+.floating-contact-stack {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.floating-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    text-decoration: none;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.floating-btn svg {
+    width: 24px;
+    height: 24px;
+}
+
+.floating-btn img {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+}
+
+/* Zalo - Xanh Dương đậm */
+.floating-btn.zalo {
+    background: #0068FF;
+    box-shadow: 0 4px 15px rgba(0, 104, 255, 0.4);
+}
+
+.floating-btn.zalo:hover {
+    background: #0055DD;
+    box-shadow: 0 6px 20px rgba(0, 104, 255, 0.5);
+    transform: scale(1.1);
+}
+
+/* Messenger - Gradient Tím Xanh */
+.floating-btn.messenger {
+    background: linear-gradient(135deg, #0078FF 0%, #00C6FF 50%, #A855F7 100%);
+    box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4);
+}
+
+.floating-btn.messenger:hover {
+    background: linear-gradient(135deg, #0066DD 0%, #00B0E6 50%, #9333EA 100%);
+    box-shadow: 0 6px 20px rgba(168, 85, 247, 0.5);
+    transform: scale(1.1);
+}
+
+/* Phone - Xanh Lá với Pulse - KHÔNG CÓ SHADOW ĐEN */
+.floating-btn.phone {
+    background: #4CAF50;
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+    animation: phonePulse 2s ease-in-out infinite;
+}
+
+.floating-btn.phone:hover {
+    background: #43A047;
+    animation: none;
+    transform: scale(1.1);
+}
+
+@keyframes phonePulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+    }
+
+    50% {
+        transform: scale(1.08);
+        box-shadow: 0 4px 25px rgba(76, 175, 80, 0.6);
+    }
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 640px) {
+    .floating-contact-stack {
+        bottom: 16px;
+        right: 16px;
+        gap: 10px;
+    }
+
+    .floating-btn {
+        width: 44px;
+        height: 44px;
+    }
+
+    .floating-btn svg {
+        width: 22px;
+        height: 22px;
+    }
+
+    .floating-btn img {
+        width: 26px;
+        height: 26px;
+    }
+}

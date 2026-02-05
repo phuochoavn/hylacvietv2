@@ -6,6 +6,7 @@ import Preloader from '@/components/effects/Preloader';
 import CustomCursor from '@/components/effects/CustomCursor';
 import SmoothScroll from '@/components/effects/SmoothScroll';
 import ScrollProgress from '@/components/effects/ScrollProgress';
+import FloatingContactButtons from '@/components/ui/FloatingContactButtons';
 
 export const metadata: Metadata = {
     title: 'Hỷ Lạc Việt - Áo Dài & Pháp Phục Cao Cấp',
@@ -34,6 +35,7 @@ export default function RootLayout({
                 <Header />
                 <main>{children}</main>
                 <Footer />
+                <FloatingContactButtons />
             </body>
         </html>
     );
