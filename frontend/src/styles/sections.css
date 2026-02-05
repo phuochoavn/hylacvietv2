@@ -172,7 +172,7 @@
 }
 
 .story-lead {
-    font-family: var(--font-nav);
+    font-family: var(--font-body);
     font-size: var(--text-lg);
     font-weight: 400;
     color: var(--charcoal);

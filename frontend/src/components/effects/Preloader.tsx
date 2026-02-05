@@ -124,9 +124,9 @@ export default function Preloader() {
                 >
                     {/* Lotus SVG */}
                     <motion.svg
-                        width="100"
-                        height="100"
-                        viewBox="0 0 100 100"
+                        width="80"
+                        height="80"
+                        viewBox="10 10 80 80"
                         initial={{ scale: 0.8, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
                         transition={{ duration: 0.5 }}

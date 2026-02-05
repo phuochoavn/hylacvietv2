@@ -198,6 +198,17 @@
 
     .header-menu-btn {
         display: block;
+        position: absolute;
+        right: var(--space-5);
+    }
+
+    .header-logo {
+        position: static;
+        left: auto;
+    }
+
+    .header-inner {
+        justify-content: center;
     }
 }
 
@@ -258,11 +269,11 @@
 }
 
 .footer-logo-luxury {
-    font-family: var(--font-display);
+    font-family: var(--font-brand);
     font-size: clamp(2rem, 4vw, 2.5rem);
     font-weight: 300;
     color: var(--gold);
-    margin-bottom: var(--space-2);
+    margin-bottom: var(--space-6);
     letter-spacing: 0.05em;
 }
 

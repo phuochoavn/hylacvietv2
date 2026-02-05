@@ -30,8 +30,8 @@
     --font-brand: 'SVN-Magellin', Georgia, serif;
     /* Display font - for all headings */
     --font-display: 'Roboto', system-ui, sans-serif;
-    /* Navigation font - elegant serif for menu */
-    --font-nav: 'Cormorant Garamond', Georgia, serif;
+    /* Navigation font - clean sans-serif for menu */
+    --font-nav: 'Roboto', system-ui, sans-serif;
     /* Body font - for all other text */
     --font-body: 'Roboto', system-ui, sans-serif;
 
