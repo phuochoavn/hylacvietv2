@@ -99,12 +99,6 @@ export default function BrandStory() {
                                 />
                             </motion.div>
                         )}
-
-                        {/* Experience badge */}
-                        <div className="story-badge">
-                            <span className="badge-number">6+</span>
-                            <span className="badge-text">Năm<br />Kinh Nghiệm</span>
-                        </div>
                     </div>
                 </motion.div>
 
@@ -133,6 +127,7 @@ export default function BrandStory() {
                         Kế Thừa<br />
                         <span className="title-accent">Tinh Hoa</span><br />
                         Truyền Thống
+                        <span className="story-since">Since 2018</span>
                     </motion.h2>
 
                     <motion.div
@@ -182,7 +177,7 @@ export default function BrandStory() {
                         </div>
                         <div className="stat-divider" />
                         <div className="stat">
-                            <span className="stat-number">{settings.story_stat3_value || '∞'}</span>
+                            <span className="stat-number stat-icon">{settings.story_stat3_value || '❦'}</span>
                             <span className="stat-label">{settings.story_stat3_label || 'Tâm Huyết'}</span>
                         </div>
                     </motion.div>

@@ -1,0 +1,503 @@
+/* ===== Bespoke Tailoring Page - Luxury Edition ===== */
+
+/* Hero Section - Full Screen Cinematic */
+.bespoke-page {
+    min-height: 100vh;
+    background: #0a0908;
+    position: relative;
+}
+
+.bespoke-hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+/* Fabric Texture Background */
+.bespoke-hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+}
+
+.bespoke-hero-bg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url('/images/craft-fabric.webp') center/cover no-repeat;
+    opacity: 0.12;
+    filter: saturate(0.5);
+}
+
+.bespoke-hero-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom,
+            rgba(10, 9, 8, 0.4) 0%,
+            rgba(10, 9, 8, 0.7) 50%,
+            rgba(10, 9, 8, 1) 100%);
+}
+
+/* Hero Content */
+.bespoke-hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    max-width: 900px;
+    padding: var(--space-8);
+}
+
+.bespoke-overline {
+    font-family: var(--font-nav);
+    font-size: var(--text-xs);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    opacity: 0.9;
+    margin-bottom: var(--space-6);
+}
+
+.bespoke-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.8rem, 8vw, 5.5rem);
+    font-weight: 300;
+    color: var(--ivory);
+    line-height: 1.1;
+    margin-bottom: var(--space-6);
+    letter-spacing: -0.02em;
+}
+
+.bespoke-title em {
+    font-style: italic;
+    color: var(--gold);
+}
+
+.bespoke-subtitle {
+    font-family: var(--font-display);
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    font-style: italic;
+    color: rgba(255, 255, 240, 0.6);
+    max-width: 600px;
+    margin: 0 auto var(--space-10);
+    line-height: 1.8;
+}
+
+/* Scroll Indicator */
+.bespoke-scroll-hint {
+    position: absolute;
+    bottom: var(--space-10);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+    opacity: 0.5;
+    animation: float 3s ease-in-out infinite;
+}
+
+.bespoke-scroll-hint span {
+    font-size: var(--text-xs);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+}
+
+.bespoke-scroll-line {
+    width: 1px;
+    height: 60px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateX(-50%) translateY(0);
+    }
+
+    50% {
+        transform: translateX(-50%) translateY(10px);
+    }
+}
+
+/* ===== Split Section - Image + Text ===== */
+.bespoke-split {
+    padding: var(--space-24) 0;
+}
+
+.bespoke-split-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-20);
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 var(--space-8);
+    align-items: center;
+}
+
+.bespoke-split-container.reverse {
+    direction: rtl;
+}
+
+.bespoke-split-container.reverse>* {
+    direction: ltr;
+}
+
+.bespoke-split-image {
+    position: relative;
+    aspect-ratio: 3/4;
+    overflow: hidden;
+}
+
+.bespoke-split-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(0.9);
+}
+
+/* Decorative frame */
+.bespoke-split-image::before {
+    content: '';
+    position: absolute;
+    inset: 20px;
+    border: 1px solid rgba(201, 162, 39, 0.3);
+    z-index: 1;
+    pointer-events: none;
+}
+
+.bespoke-split-content {
+    padding: var(--space-8);
+}
+
+.bespoke-split-number {
+    font-family: var(--font-display);
+    font-size: 6rem;
+    font-weight: 200;
+    color: rgba(201, 162, 39, 0.15);
+    line-height: 1;
+    margin-bottom: var(--space-4);
+}
+
+.bespoke-split-heading {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 300;
+    color: var(--gold);
+    margin-bottom: var(--space-6);
+    line-height: 1.2;
+}
+
+.bespoke-split-text {
+    font-size: var(--text-lg);
+    color: rgba(255, 255, 240, 0.7);
+    line-height: 1.9;
+    max-width: 500px;
+}
+
+/* ===== Artistic Timeline ===== */
+.bespoke-journey {
+    padding: var(--space-24) 0;
+    position: relative;
+}
+
+.bespoke-journey-header {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto var(--space-20);
+    padding: 0 var(--space-6);
+}
+
+.bespoke-journey-title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 300;
+    color: var(--ivory);
+    margin-bottom: var(--space-4);
+}
+
+.bespoke-journey-title em {
+    font-style: italic;
+    color: var(--gold);
+}
+
+.bespoke-journey-desc {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: var(--text-lg);
+    color: rgba(255, 255, 240, 0.5);
+}
+
+/* Timeline Container */
+.bespoke-timeline {
+    position: relative;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 var(--space-6);
+}
+
+/* Central vertical line */
+.bespoke-timeline::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom,
+            transparent,
+            rgba(201, 162, 39, 0.3) 10%,
+            rgba(201, 162, 39, 0.3) 90%,
+            transparent);
+    transform: translateX(-50%);
+}
+
+/* Timeline Step */
+.bespoke-step {
+    display: grid;
+    grid-template-columns: 1fr 80px 1fr;
+    gap: var(--space-4);
+    margin-bottom: var(--space-16);
+    align-items: center;
+}
+
+.bespoke-step:last-child {
+    margin-bottom: 0;
+}
+
+/* Step Number - Center */
+.bespoke-step-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bespoke-step-number span {
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+    font-weight: 300;
+    color: var(--gold);
+    width: 70px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(201, 162, 39, 0.4);
+    background: rgba(10, 9, 8, 0.8);
+    position: relative;
+}
+
+/* Step Content - Alternating sides */
+.bespoke-step-content {
+    padding: var(--space-6);
+}
+
+.bespoke-step-title {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    font-weight: 400;
+    color: var(--ivory);
+    margin-bottom: var(--space-3);
+}
+
+.bespoke-step-desc {
+    font-size: var(--text-base);
+    color: rgba(255, 255, 240, 0.6);
+    line-height: 1.7;
+}
+
+/* Odd steps - content on left */
+.bespoke-step:nth-child(odd) .bespoke-step-content {
+    text-align: right;
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.bespoke-step:nth-child(odd) .bespoke-step-number {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.bespoke-step:nth-child(odd) .bespoke-step-empty {
+    grid-column: 3;
+    grid-row: 1;
+}
+
+/* Even steps - content on right */
+.bespoke-step:nth-child(even) .bespoke-step-content {
+    text-align: left;
+    grid-column: 3;
+    grid-row: 1;
+}
+
+.bespoke-step:nth-child(even) .bespoke-step-number {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.bespoke-step:nth-child(even) .bespoke-step-empty {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+/* ===== CTA Section ===== */
+.bespoke-cta {
+    padding: var(--space-24) 0 var(--space-32);
+    text-align: center;
+    position: relative;
+}
+
+/* Background texture */
+.bespoke-cta::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url('/images/craft-embroidery.webp') center/cover no-repeat;
+    opacity: 0.06;
+}
+
+.bespoke-cta-content {
+    position: relative;
+    z-index: 1;
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 0 var(--space-6);
+}
+
+.bespoke-cta-heading {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 300;
+    color: var(--ivory);
+    margin-bottom: var(--space-4);
+    line-height: 1.2;
+}
+
+.bespoke-cta-heading em {
+    font-style: italic;
+    color: var(--gold);
+}
+
+.bespoke-cta-text {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: var(--text-lg);
+    color: rgba(255, 255, 240, 0.5);
+    margin-bottom: var(--space-10);
+}
+
+/* Premium Button */
+.bespoke-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-5) var(--space-10);
+    font-family: var(--font-nav);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--charcoal);
+    background: var(--gold);
+    border: none;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.bespoke-btn-primary:hover {
+    background: #e6c355;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 40px rgba(201, 162, 39, 0.4);
+}
+
+/* Secondary link */
+.bespoke-link-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: var(--space-6);
+    font-size: var(--text-sm);
+    color: var(--gold);
+    opacity: 0.7;
+    transition: opacity 0.3s;
+}
+
+.bespoke-link-secondary:hover {
+    opacity: 1;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 1024px) {
+    .bespoke-split-container {
+        grid-template-columns: 1fr;
+        gap: var(--space-10);
+    }
+
+    .bespoke-split-container.reverse {
+        direction: ltr;
+    }
+
+    .bespoke-split-image {
+        max-width: 500px;
+        margin: 0 auto;
+    }
+
+    .bespoke-split-content {
+        text-align: center;
+    }
+
+    .bespoke-split-text {
+        max-width: 100%;
+        margin: 0 auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .bespoke-hero {
+        min-height: 80vh;
+    }
+
+    /* Mobile Timeline - Single column */
+    .bespoke-timeline::before {
+        left: 35px;
+    }
+
+    .bespoke-step {
+        grid-template-columns: 70px 1fr;
+        gap: var(--space-4);
+    }
+
+    .bespoke-step-number {
+        grid-column: 1 !important;
+        grid-row: 1 !important;
+    }
+
+    .bespoke-step-content {
+        grid-column: 2 !important;
+        grid-row: 1 !important;
+        text-align: left !important;
+    }
+
+    .bespoke-step-empty {
+        display: none;
+    }
+
+    .bespoke-step-number span {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+    }
+
+    .bespoke-split-number {
+        font-size: 4rem;
+    }
+
+    .bespoke-split-image::before {
+        inset: 10px;
+    }
+}

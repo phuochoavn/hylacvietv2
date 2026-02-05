@@ -231,7 +231,7 @@
 .hero-marquee-gallery {
     position: absolute;
     top: -100px;
-    right: -60px;
+    right: -100px;
     z-index: 10;
     display: flex;
     gap: var(--space-8);
@@ -239,6 +239,7 @@
     padding: 0;
     overflow: visible;
     transform-origin: top right;
+    max-width: 40vw;
 }
 
 /* Left column - smaller images, fixed size */

@@ -95,7 +95,7 @@ export default function CategoryShowcase() {
                     <span className="section-label-premium">Bộ Sưu Tập</span>
                     <h2 className="showcase-title">
                         Khám Phá<br />
-                        <span className="title-accent">Danh Mục</span>
+                        <span className="title-accent">Bộ Sưu Tập</span>
                     </h2>
                 </motion.div>
 
@@ -133,11 +133,8 @@ export default function CategoryShowcase() {
                                             </div>
                                         )}
                                         <div className="category-overlay">
-                                            <span className="view-products-btn">
-                                                Xem Bộ Sưu Tập
-                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                                    <path d="M5 12h14M12 5l7 7-7 7" />
-                                                </svg>
+                                            <span className="view-link">
+                                                Xem chi tiết →
                                             </span>
                                         </div>
                                     </div>
@@ -163,7 +160,7 @@ export default function CategoryShowcase() {
                     viewport={{ once: true }}
                 >
                     <Link href="/products" className="btn-explore">
-                        <span>Xem Toàn Bộ Sản Phẩm</span>
+                        <span>Khám Phá Tất Cả Thiết Kế</span>
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                             <path d="M5 12h14M12 5l7 7-7 7" />
                         </svg>

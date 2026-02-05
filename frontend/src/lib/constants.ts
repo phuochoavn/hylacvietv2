@@ -11,11 +11,10 @@ export const SITE = {
 };
 
 export const NAV_LINKS = [
-    { label: 'Trang chủ', href: '/' },
-    { label: 'Sản phẩm', href: '/products' },
-    { label: 'May đo', href: '/may-do' },
-    { label: 'Giới thiệu', href: '/about' },
-    { label: 'Liên hệ', href: '/contact' },
+    { label: 'Sản Phẩm', href: '/products' },
+    { label: 'May Đo', href: '/may-do' },
+    { label: 'Câu Chuyện', href: '/about' },
+    { label: 'Liên Hệ', href: '/contact' },
 ];
 
 export const SOCIAL_LINKS = [

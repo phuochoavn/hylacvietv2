@@ -3,6 +3,7 @@ import BrandStory from '@/components/sections/BrandStory';
 import Philosophy from '@/components/sections/Philosophy';
 import CategoryShowcase from '@/components/sections/CategoryShowcase';
 import Craftsmanship from '@/components/sections/Craftsmanship';
+import MeasurementJourney from '@/components/sections/MeasurementJourney';
 import Testimonials from '@/components/sections/Testimonials';
 import ContactCTA from '@/components/sections/ContactCTA';
 
@@ -22,6 +23,7 @@ export default function HomePage() {
                 <Philosophy />
                 <CategoryShowcase />
                 <Craftsmanship />
+                <MeasurementJourney />
                 <Testimonials />
                 <ContactCTA />
             </div>

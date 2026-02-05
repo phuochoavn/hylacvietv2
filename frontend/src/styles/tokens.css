@@ -30,6 +30,8 @@
     --font-brand: 'SVN-Magellin', Georgia, serif;
     /* Display font - for all headings */
     --font-display: 'Roboto', system-ui, sans-serif;
+    /* Navigation font - elegant serif for menu */
+    --font-nav: 'Cormorant Garamond', Georgia, serif;
     /* Body font - for all other text */
     --font-body: 'Roboto', system-ui, sans-serif;
 
@@ -65,7 +67,7 @@
     --container-px: var(--space-6);
 
     /* ===== LAYOUT ===== */
-    --header-height: 80px;
+    --header-height: 72px;
     --border-radius-sm: 4px;
     --border-radius-md: 8px;
     --border-radius-lg: 16px;

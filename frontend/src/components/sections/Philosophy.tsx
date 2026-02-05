@@ -3,24 +3,58 @@
 import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 
+// SVG Icons - Monoline Gold Stroke Style
+const PhilosophyIcon = ({ type }: { type: 'stillness' | 'refinement' | 'heritage' }) => {
+    const icons = {
+        stillness: (
+            // Bamboo leaf - nét trúc thanh mảnh
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <path d="M24 44V8" strokeLinecap="round" />
+                <path d="M24 12C20 8 14 6 8 8C14 12 18 16 24 16" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M24 24C28 20 34 18 40 20C34 24 30 28 24 28" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M24 36C20 32 14 30 8 32C14 36 18 40 24 40" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+        ),
+        refinement: (
+            // Lotus petal - cánh sen cách điệu
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <path d="M24 40C24 40 12 32 12 20C12 12 18 8 24 8C30 8 36 12 36 20C36 32 24 40 24 40Z" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M24 8C24 8 20 16 20 24" strokeLinecap="round" />
+                <path d="M24 8C24 8 28 16 28 24" strokeLinecap="round" />
+                <path d="M16 16C18 20 20 24 24 28" strokeLinecap="round" />
+                <path d="M32 16C30 20 28 24 24 28" strokeLinecap="round" />
+            </svg>
+        ),
+        heritage: (
+            // Ancient seal/stamp - ấn triện cổ
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <rect x="10" y="10" width="28" height="28" rx="2" strokeLinecap="round" />
+                <rect x="16" y="16" width="16" height="16" rx="1" strokeLinecap="round" />
+                <path d="M20 22V26M24 20V28M28 22V26" strokeLinecap="round" />
+            </svg>
+        ),
+    };
+    return <span className="pillar-icon-svg">{icons[type]}</span>;
+};
+
 const philosophyItems = [
     {
-        icon: '🎋',
+        iconType: 'stillness' as const,
         title: 'Tĩnh Lặng',
         subtitle: 'Stillness',
-        desc: 'Mỗi tác phẩm được tạo ra trong không gian yên bình, nơi tâm trí nghệ nhân hoàn toàn tập trung.',
+        desc: 'Trong tĩnh lặng, nghệ nhân lắng nghe tiếng thì thầm của lụa — mỗi sợi tơ kể một câu chuyện.',
     },
     {
-        icon: '🌸',
+        iconType: 'refinement' as const,
         title: 'Tinh Tế',
         subtitle: 'Refinement',
-        desc: 'Chi tiết nhỏ nhất cũng được chăm chút, từ đường thêu đến cách chọn màu sắc.',
+        desc: 'Vẻ đẹp ẩn trong chi tiết nhỏ nhất — từ đường kim xuyên lụa đến sắc màu hòa quyện.',
     },
     {
-        icon: '🏛️',
+        iconType: 'heritage' as const,
         title: 'Di Sản',
         subtitle: 'Heritage',
-        desc: 'Kế thừa kỹ thuật truyền thống, kết hợp với cái nhìn đương đại tinh tế.',
+        desc: 'Tiếp nối ngàn năm lịch sử trong từng đường tơ, gìn giữ hồn Việt qua thời đại.',
     },
 ];
 
@@ -90,7 +124,7 @@ export default function Philosophy() {
                             transition={{ duration: 0.6, delay: index * 0.15 }}
                             viewport={{ once: true }}
                         >
-                            <div className="pillar-icon">{item.icon}</div>
+                            <PhilosophyIcon type={item.iconType} />
                             <h3 className="pillar-title">{item.title}</h3>
                             <span className="pillar-subtitle">{item.subtitle}</span>
                             <p className="pillar-desc">{item.desc}</p>

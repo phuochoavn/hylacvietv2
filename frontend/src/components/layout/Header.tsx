@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { NAV_LINKS, SITE } from '@/lib/constants';
@@ -14,6 +15,16 @@ export default function Header() {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [settings, setSettings] = useState<Settings>({});
+    const [isLightMode, setIsLightMode] = useState(false);
+    const pathname = usePathname();
+
+    // Light mode detection - deferred to client to avoid hydration mismatch
+    useEffect(() => {
+        const lightModePages = ['/products', '/contact'];
+        const shouldBeLightMode = lightModePages.some(p => pathname === p || pathname.startsWith(p + '/'));
+        console.log('[Header] pathname:', pathname, 'isLightMode:', shouldBeLightMode);
+        setIsLightMode(shouldBeLightMode);
+    }, [pathname]);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -47,8 +58,21 @@ export default function Header() {
 
     const siteName = settings.site_name || SITE.name;
 
+    // Check if link is active (exact match or starts with for nested routes)
+    const isActiveLink = (href: string) => {
+        if (href === '/') return pathname === '/';
+        return pathname === href || pathname.startsWith(href + '/');
+    };
+
+    // Compute header class name
+    const headerClassName = [
+        'header',
+        isScrolled ? 'header-scrolled' : '',
+        isLightMode ? 'header-light' : ''
+    ].filter(Boolean).join(' ');
+
     return (
-        <header className={`header ${isScrolled ? 'header-scrolled' : ''}`}>
+        <header className={headerClassName}>
             <div className="header-inner container">
                 {/* Logo */}
                 <Link href="/" className="header-logo">
@@ -56,8 +80,8 @@ export default function Header() {
                         <Image
                             src={settings.logo_url}
                             alt={siteName}
-                            width={120}
-                            height={40}
+                            width={140}
+                            height={50}
                             className="header-logo-img"
                             priority
                         />
@@ -69,16 +93,15 @@ export default function Header() {
                 {/* Desktop Navigation */}
                 <nav className="header-nav">
                     {NAV_LINKS.map((link) => (
-                        <Link key={link.href} href={link.href} className="header-nav-link">
+                        <Link
+                            key={link.href}
+                            href={link.href}
+                            className={`header-nav-link ${isActiveLink(link.href) ? 'active' : ''}`}
+                        >
                             {link.label}
                         </Link>
                     ))}
                 </nav>
-
-                {/* CTA Button */}
-                <a href={SITE.zalo} target="_blank" rel="noopener" className="btn btn-outline header-cta">
-                    Zalo
-                </a>
 
                 {/* Mobile Menu Button */}
                 <button
@@ -108,9 +131,6 @@ export default function Header() {
                         </Link>
                     ))}
                 </nav>
-                <a href={SITE.zalo} target="_blank" rel="noopener" className="btn btn-primary mobile-cta">
-                    Chat Zalo
-                </a>
             </div>
         </header>
     );

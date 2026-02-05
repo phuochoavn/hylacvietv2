@@ -70,8 +70,8 @@ export default function ProductsPage() {
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                 >
-                    <span className="section-label">Bộ Sưu Tập</span>
-                    <h1 className="products-title">Sản Phẩm</h1>
+                    <span className="section-label-luxury">Bộ Sưu Tập</span>
+                    <h1 className="products-title-luxury">Gấm Lụa</h1>
                     <p className="products-subtitle">
                         Mỗi tác phẩm là một câu chuyện văn hóa được thêu dệt bằng sự tinh tế
                     </p>
@@ -102,8 +102,10 @@ export default function ProductsPage() {
                         <p>Đang tải sản phẩm...</p>
                     </div>
                 ) : products.length === 0 ? (
-                    <div className="products-empty">
-                        <p>Chưa có sản phẩm nào trong danh mục này</p>
+                    <div className="products-empty-luxury">
+                        <div className="empty-decor">✧</div>
+                        <p className="empty-message">Bộ sưu tập đang được các nghệ nhân hoàn thiện</p>
+                        <p className="empty-sub">Vui lòng quay lại sau hoặc liên hệ để được tư vấn</p>
                     </div>
                 ) : (
                     <motion.div
@@ -146,15 +148,20 @@ export default function ProductsPage() {
 
                 {/* CTA */}
                 <motion.div
-                    className="products-cta"
+                    className="products-cta-luxury"
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4 }}
                 >
-                    <p>Bạn cần tư vấn về sản phẩm phù hợp?</p>
-                    <Button href="/contact" variant="primary">
-                        Liên Hệ Tư Vấn
-                    </Button>
+                    <div className="cta-divider-line" />
+                    <p>Cần tư vấn về tác phẩm phù hợp với bạn?</p>
+                    <a href="/contact" className="cta-text-link">
+                        Liên hệ tư vấn
+                        <svg className="cta-arrow" width="20" height="12" viewBox="0 0 20 12" fill="none" stroke="currentColor" strokeWidth="1.5">
+                            <path d="M1 6h18M14 1l5 5-5 5" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                    </a>
+                    <div className="cta-divider-line" />
                 </motion.div>
             </Container>
         </section>
