@@ -20,9 +20,9 @@ export default function Header() {
 
     // Light mode detection - deferred to client to avoid hydration mismatch
     useEffect(() => {
-        const lightModePages = ['/contact'];
+        // No pages need light mode currently - all use dark header
+        const lightModePages: string[] = [];
         const shouldBeLightMode = lightModePages.some(p => pathname === p || pathname.startsWith(p + '/'));
-        console.log('[Header] pathname:', pathname, 'isLightMode:', shouldBeLightMode);
         setIsLightMode(shouldBeLightMode);
     }, [pathname]);
 

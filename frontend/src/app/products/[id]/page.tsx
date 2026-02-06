@@ -2,10 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { motion } from 'framer-motion';
-import Container from '@/components/core/Container';
-import Button from '@/components/core/Button';
+import Link from 'next/link';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useParams } from 'next/navigation';
+import '@/styles/product-detail-v2.css';
 
 interface Product {
     id: string;
@@ -34,12 +34,40 @@ const categoryLabels: Record<string, string> = {
     'phap_phuc_linen': 'Pháp Phục Linen Cao Cấp',
 };
 
+// Icons
+const ArrowLeftIcon = () => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <path d="M19 12H5M12 19l-7-7 7-7" />
+    </svg>
+);
+
+const RulerIcon = () => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+        <path d="M2 12h4M6 8v8M10 12h2M14 12h2M18 8v8M18 12h4" />
+        <rect x="2" y="8" width="20" height="8" rx="1" />
+    </svg>
+);
+
+const ChevronDownIcon = () => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="accordion-icon-v2">
+        <path d="M6 9l6 6 6-6" />
+    </svg>
+);
+
+const ScissorsIcon = () => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <circle cx="6" cy="6" r="3" />
+        <circle cx="6" cy="18" r="3" />
+        <path d="M20 4L8.12 15.88M14.47 14.48L20 20M8.12 8.12L12 12" />
+    </svg>
+);
+
 export default function ProductDetailPage() {
     const params = useParams();
     const [product, setProduct] = useState<Product | null>(null);
     const [sizeChart, setSizeChart] = useState<SizeChart | null>(null);
     const [loading, setLoading] = useState(true);
-    const [selectedImage, setSelectedImage] = useState(0);
+    const [sizeOpen, setSizeOpen] = useState(false);
     const [showConsultForm, setShowConsultForm] = useState(false);
 
     useEffect(() => {
@@ -82,149 +110,170 @@ export default function ProductDetailPage() {
 
     if (loading) {
         return (
-            <section className="product-detail section">
-                <Container>
-                    <div className="products-loading">
-                        <div className="loading-spinner" />
-                        <p>Đang tải sản phẩm...</p>
-                    </div>
-                </Container>
+            <section className="product-detail-v2">
+                <div className="loading-v2">
+                    <div className="loading-spinner-v2" />
+                    <p>Đang tải tác phẩm...</p>
+                </div>
             </section>
         );
     }
 
     if (!product) {
         return (
-            <section className="product-detail section">
-                <Container>
-                    <div className="products-empty">
-                        <p>Không tìm thấy sản phẩm</p>
-                        <Button href="/products">Quay Lại</Button>
-                    </div>
-                </Container>
+            <section className="product-detail-v2">
+                <div className="loading-v2">
+                    <p>Không tìm thấy sản phẩm</p>
+                    <Link href="/products" className="back-link-v2">
+                        <ArrowLeftIcon /> Quay lại bộ sưu tập
+                    </Link>
+                </div>
             </section>
         );
     }
 
     return (
-        <section className="product-detail section">
-            <Container>
-                <div className="product-detail-grid">
-                    {/* Images Gallery */}
-                    <motion.div
-                        className="product-gallery"
-                        initial={{ opacity: 0, x: -30 }}
-                        animate={{ opacity: 1, x: 0 }}
-                    >
-                        <div className="main-image">
+        <section className="product-detail-v2">
+            {/* Back Link */}
+            <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 var(--space-8)' }}>
+                <Link href="/products" className="back-link-v2">
+                    <ArrowLeftIcon /> Bộ Sưu Tập
+                </Link>
+            </div>
+
+            <div className="product-detail-layout-v2">
+                {/* LEFT: Vertical Image Gallery */}
+                <motion.div
+                    className="product-gallery-v2"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.6 }}
+                >
+                    {product.images.map((img, idx) => (
+                        <motion.div
+                            key={idx}
+                            className="gallery-image-v2"
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, margin: '-50px' }}
+                            transition={{ duration: 0.5, delay: idx * 0.1 }}
+                        >
                             <Image
-                                src={product.images[selectedImage] || '/images/placeholder.jpg'}
-                                alt={product.name}
+                                src={img}
+                                alt={`${product.name} - Ảnh ${idx + 1}`}
                                 fill
-                                sizes="(max-width: 768px) 100vw, 50vw"
-                                className="product-main-img"
+                                sizes="(max-width: 1024px) 100vw, 60vw"
+                                priority={idx === 0}
                             />
-                        </div>
-                        {product.images.length > 1 && (
-                            <div className="thumbnail-row">
-                                {product.images.map((img, idx) => (
-                                    <button
-                                        key={idx}
-                                        onClick={() => setSelectedImage(idx)}
-                                        className={`thumbnail ${selectedImage === idx ? 'active' : ''}`}
-                                    >
-                                        <Image src={img} alt={`${product.name} ${idx + 1}`} fill sizes="80px" />
-                                    </button>
-                                ))}
-                            </div>
-                        )}
-                    </motion.div>
+                            <span className="image-counter-v2">{idx + 1} / {product.images.length}</span>
+                        </motion.div>
+                    ))}
+                </motion.div>
 
-                    {/* Product Info */}
-                    <motion.div
-                        className="product-info-detail"
-                        initial={{ opacity: 0, x: 30 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.1 }}
-                    >
-                        <span className="product-category-badge">
-                            {categoryLabels[product.category] || product.category}
-                        </span>
-                        <h1 className="product-detail-name">{product.name}</h1>
-                        <p className="product-detail-price">{formatPrice(product.price)}</p>
+                {/* RIGHT: Sticky Info Sidebar */}
+                <motion.div
+                    className="product-info-v2"
+                    initial={{ opacity: 0, x: 30 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.6, delay: 0.2 }}
+                >
+                    {/* Category */}
+                    <span className="product-category-v2">
+                        {categoryLabels[product.category] || product.category}
+                    </span>
 
-                        <div className="product-description">
-                            <h3>Mô Tả</h3>
-                            <p>{product.description || 'Sản phẩm được may thủ công từ những nghệ nhân lành nghề với chất liệu cao cấp.'}</p>
-                        </div>
+                    {/* Name */}
+                    <h1 className="product-name-v2">{product.name}</h1>
 
-                        {/* Size Chart */}
-                        {sizeChart && (
-                            <div className="size-chart-section">
-                                <h3>Bảng Size Chuẩn</h3>
-                                <div className="size-chart-table">
-                                    <table>
-                                        <thead>
-                                            <tr>
-                                                <th>Size</th>
-                                                <th>Cân Nặng</th>
-                                                <th>3 Vòng</th>
-                                                <th>Dài Áo</th>
-                                                <th>Dài Tay</th>
-                                                <th>Dài Quần</th>
+                    {/* Price */}
+                    <p className="product-price-v2">{formatPrice(product.price)}</p>
+
+                    {/* Divider */}
+                    <div className="info-divider-v2" />
+
+                    {/* Description */}
+                    <div className="product-description-v2">
+                        <h3>Mô Tả</h3>
+                        <p>{product.description || 'Tác phẩm được thực hiện bởi các nghệ nhân lành nghề với chất liệu cao cấp, thêu tay tinh xảo và may theo số đo riêng của quý khách.'}</p>
+                    </div>
+
+                    {/* Size Chart Accordion */}
+                    {sizeChart && (
+                        <div className={`size-accordion-v2 ${sizeOpen ? 'open' : ''}`}>
+                            <button
+                                className="size-accordion-trigger-v2"
+                                onClick={() => setSizeOpen(!sizeOpen)}
+                            >
+                                <span>
+                                    <RulerIcon />
+                                    Hướng Dẫn Chọn Size
+                                </span>
+                                <ChevronDownIcon />
+                            </button>
+                            <div className="size-accordion-content-v2">
+                                <table className="size-table-v2">
+                                    <thead>
+                                        <tr>
+                                            <th>Size</th>
+                                            <th>Cân Nặng</th>
+                                            <th>3 Vòng</th>
+                                            <th>Dài Áo</th>
+                                            <th>Dài Tay</th>
+                                            <th>Dài Quần</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {Object.entries(sizeChart).map(([size, data]) => (
+                                            <tr key={size}>
+                                                <td className="size-label">{size}</td>
+                                                <td>{data.weight}</td>
+                                                <td>{data.bust}</td>
+                                                <td>{data.ao_dai}</td>
+                                                <td>{data.tay}</td>
+                                                <td>{data.quan}</td>
                                             </tr>
-                                        </thead>
-                                        <tbody>
-                                            {Object.entries(sizeChart).map(([size, data]) => (
-                                                <tr key={size}>
-                                                    <td className="size-name">{size}</td>
-                                                    <td>{data.weight}</td>
-                                                    <td>{data.bust}</td>
-                                                    <td>{data.ao_dai}</td>
-                                                    <td>{data.tay}</td>
-                                                    <td>{data.quan}</td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                </div>
+                                        ))}
+                                    </tbody>
+                                </table>
                             </div>
-                        )}
-
-                        {/* Actions */}
-                        <div className="product-actions">
-                            <Button
-                                variant="primary"
-                                size="lg"
-                                onClick={() => setShowConsultForm(true)}
-                            >
-                                Đặt May Theo Số Đo
-                            </Button>
-                            <Button
-                                href="https://zalo.me/0912503456"
-                                variant="outline"
-                                size="lg"
-                                external
-                            >
-                                Chat Zalo Tư Vấn
-                            </Button>
                         </div>
-                    </motion.div>
-                </div>
+                    )}
 
-                {/* Consultation Form Modal */}
+                    {/* CTA Buttons */}
+                    <div className="product-cta-v2">
+                        <button
+                            className="cta-primary-v2"
+                            onClick={() => setShowConsultForm(true)}
+                        >
+                            <ScissorsIcon />
+                            Thiết Kế Theo Số Đo Riêng
+                        </button>
+                        <a
+                            href="https://zalo.me/0912503456"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="cta-secondary-v2"
+                        >
+                            Hoặc Chat Zalo Tư Vấn
+                        </a>
+                    </div>
+                </motion.div>
+            </div>
+
+            {/* Consultation Form Modal */}
+            <AnimatePresence>
                 {showConsultForm && (
                     <ConsultationModal
                         product={product}
                         onClose={() => setShowConsultForm(false)}
                     />
                 )}
-            </Container>
+            </AnimatePresence>
         </section>
     );
 }
 
-// Consultation Modal Component
+// Consultation Modal Component - Dark Theme
 function ConsultationModal({
     product,
     onClose
@@ -270,27 +319,34 @@ function ConsultationModal({
     }
 
     return (
-        <div className="modal-overlay" onClick={onClose}>
+        <motion.div
+            className="modal-overlay-v2"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+        >
             <motion.div
-                className="modal-content"
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
+                className="modal-content-v2"
+                initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: 20 }}
                 onClick={(e) => e.stopPropagation()}
             >
-                <button className="modal-close" onClick={onClose}>&times;</button>
+                <button className="modal-close-v2" onClick={onClose}>&times;</button>
 
                 {submitted ? (
-                    <div className="modal-success">
-                        <div className="success-icon">✓</div>
+                    <div className="modal-success-v2">
+                        <div className="success-icon-v2">✓</div>
                         <h3>Gửi Thành Công!</h3>
                         <p>Chúng tôi sẽ liên hệ bạn trong thời gian sớm nhất.</p>
-                        <Button onClick={onClose}>Đóng</Button>
+                        <button className="cta-primary-v2" onClick={onClose}>Đóng</button>
                     </div>
                 ) : (
                     <>
                         <h2>Đặt May: {product.name}</h2>
-                        <form onSubmit={handleSubmit} className="consultation-form">
-                            <div className="form-group">
+                        <form onSubmit={handleSubmit} className="form-v2">
+                            <div className="form-group-v2">
                                 <label>Họ Tên *</label>
                                 <input
                                     type="text"
@@ -300,7 +356,7 @@ function ConsultationModal({
                                     placeholder="Nhập họ tên của bạn"
                                 />
                             </div>
-                            <div className="form-group">
+                            <div className="form-group-v2">
                                 <label>Số Điện Thoại *</label>
                                 <input
                                     type="tel"
@@ -310,16 +366,16 @@ function ConsultationModal({
                                     placeholder="Số điện thoại liên hệ"
                                 />
                             </div>
-                            <div className="form-group">
+                            <div className="form-group-v2">
                                 <label>Số Đo (Nếu Có)</label>
                                 <textarea
                                     value={formData.measurements}
                                     onChange={(e) => setFormData({ ...formData, measurements: e.target.value })}
-                                    placeholder="Ví dụ: Vòng 1: 84cm, Vòng 2: 66cm, Vòng 3: 90cm, Dài áo: 134cm..."
+                                    placeholder="Ví dụ: Vòng 1: 84cm, Vòng 2: 66cm, Vòng 3: 90cm..."
                                     rows={3}
                                 />
                             </div>
-                            <div className="form-group">
+                            <div className="form-group-v2">
                                 <label>Ghi Chú</label>
                                 <textarea
                                     value={formData.notes}
@@ -328,18 +384,17 @@ function ConsultationModal({
                                     rows={2}
                                 />
                             </div>
-                            <Button
+                            <button
                                 type="submit"
-                                variant="primary"
-                                size="lg"
+                                className="cta-primary-v2"
                                 disabled={submitting}
                             >
                                 {submitting ? 'Đang Gửi...' : 'Gửi Yêu Cầu'}
-                            </Button>
+                            </button>
                         </form>
                     </>
                 )}
             </motion.div>
-        </div>
+        </motion.div>
     );
 }

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import NextTopLoader from 'nextjs-toploader';
 import '@/styles/main.css';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
@@ -28,6 +29,18 @@ export default function RootLayout({
     return (
         <html lang="vi">
             <body>
+                {/* Page Transition Loading Bar - Gold */}
+                <NextTopLoader
+                    color="#D4AF37"
+                    initialPosition={0.08}
+                    crawlSpeed={200}
+                    height={2}
+                    crawl={true}
+                    showSpinner={false}
+                    easing="ease"
+                    speed={200}
+                    shadow="0 0 10px #D4AF37, 0 0 5px #D4AF37"
+                />
                 <Preloader />
                 <CustomCursor />
                 <SmoothScroll />

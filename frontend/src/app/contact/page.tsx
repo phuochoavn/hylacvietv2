@@ -44,21 +44,19 @@ export default function ContactPage() {
 
     return (
         <main ref={containerRef} className="contact-showroom">
-            {/* HERO - The Invitation */}
-            <section className="contact-hero">
-                <motion.div
-                    className="contact-hero-bg"
-                    style={{ opacity: heroOpacity }}
-                >
+            {/* HERO - Ghost Image Typography */}
+            <section className="contact-hero contact-hero-ghost">
+                {/* Ghost Image Background */}
+                <div className="contact-hero-bg">
                     <Image
                         src="/images/craft-fabric.webp"
-                        alt="Showroom Hỷ Lạc Việt"
+                        alt=""
                         fill
                         style={{ objectFit: 'cover' }}
                         priority
                     />
-                    <div className="contact-hero-overlay" />
-                </motion.div>
+                    <div className="contact-hero-ghost-overlay" />
+                </div>
 
                 <div className="contact-hero-content">
                     <motion.span
@@ -75,17 +73,38 @@ export default function ContactPage() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 0.4 }}
                     >
-                        Ghé Thăm<br />
-                        <em>Atelier</em>
+                        Ghé Thăm
                     </motion.h1>
-                    <motion.p
-                        className="contact-subtitle"
+                    <motion.span
+                        className="contact-title-accent"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 0.6 }}
                     >
-                        Thưởng trà, ngắm lụa, và hình dung tác phẩm của riêng bạn
+                        Atelier
+                    </motion.span>
+                    <motion.p
+                        className="contact-subtitle"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, delay: 0.8 }}
+                    >
+                        Nơi lưu giữ hồn Việt trong từng tà áo
                     </motion.p>
+
+                    {/* Lotus decoration */}
+                    <motion.div
+                        className="hero-lotus-decor"
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.8, delay: 1 }}
+                    >
+                        <svg viewBox="0 0 40 40" fill="none" className="lotus-icon">
+                            <path d="M20 5 C15 12, 8 18, 8 25 C8 32, 14 38, 20 38 C26 38, 32 32, 32 25 C32 18, 25 12, 20 5" stroke="currentColor" strokeWidth="1" />
+                            <path d="M20 10 C17 15, 12 20, 12 25 C12 30, 16 35, 20 35" stroke="currentColor" strokeWidth="0.5" opacity="0.5" />
+                            <path d="M20 10 C23 15, 28 20, 28 25 C28 30, 24 35, 20 35" stroke="currentColor" strokeWidth="0.5" opacity="0.5" />
+                        </svg>
+                    </motion.div>
                 </div>
             </section>
 
