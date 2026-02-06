@@ -304,11 +304,16 @@ export default function Hero() {
                                 transition={{ duration: 0.8, delay: 1.8 }}
                             >
                                 <Button href="/san-pham" variant="primary" size="lg" className="btn-glow">
+                                    <svg className="btn-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                                        <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" strokeLinecap="round" strokeLinejoin="round" />
+                                    </svg>
                                     {content.ctaText}
                                 </Button>
                                 <Button href={SITE.zalo} variant="ghost" size="lg" external>
-                                    <span className="btn-icon">💬</span>
-                                    Tư Vấn Zalo
+                                    <svg className="btn-icon" width="20" height="20" viewBox="0 0 50 50" fill="currentColor">
+                                        <path d="M25 2C12.3 2 2 11.1 2 22.5c0 5.5 2.5 10.5 6.5 14.2L6 47l12-5.5c2.2.6 4.5 1 7 1C37.7 38.5 48 29.4 48 18 48 11.1 37.7 2 25 2zm-4 30l-7-7 2-2 5 5 10-10 2 2-12 12z" />
+                                    </svg>
+                                    Tư vấn Zalo
                                 </Button>
                             </motion.div>
                         </motion.div>

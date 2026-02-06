@@ -61,6 +61,7 @@
     grid-template-columns: 1fr 1fr;
     gap: var(--space-20);
     align-items: center;
+    overflow: hidden;
 }
 
 /* Image Column */
@@ -1299,6 +1300,11 @@
     .story-image-col {
         max-width: 500px;
         margin: 0 auto;
+    }
+
+    /* Hide accent image on tablet to prevent overflow */
+    .story-accent-image {
+        display: none;
     }
 
     .story-text-col {

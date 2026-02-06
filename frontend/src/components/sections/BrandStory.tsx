@@ -5,8 +5,8 @@ import Image from 'next/image';
 import { motion, useScroll, useTransform } from 'framer-motion';
 
 interface StorySettings {
-    story_main_image?: string;
-    story_accent_image?: string;
+    story_image?: string;
+    story_image_2?: string;
     story_label?: string;
     story_title?: string;
     story_intro?: string;
@@ -55,8 +55,8 @@ export default function BrandStory() {
     }, []);
 
     // Use API images or fallback to defaults
-    const mainImage = settings.story_main_image || '/images/story/artisan-work.jpg';
-    const accentImage = settings.story_accent_image || '/images/story/fabric-detail.jpg';
+    const mainImage = settings.story_image || '/images/story/artisan-work.jpg';
+    const accentImage = settings.story_image_2 || '/images/story/fabric-detail.jpg';
 
     return (
         <section ref={containerRef} className="brand-story-premium">

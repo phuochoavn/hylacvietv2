@@ -45,6 +45,7 @@ const uploadingStep1 = ref(false)
 const uploadingStep2 = ref(false)
 const uploadingStep3 = ref(false)
 const uploadingStep4 = ref(false)
+const uploadingPhilosophy = ref(false)
 const saveMessage = ref('')
 
 // Categories
@@ -849,6 +850,54 @@ function generateSlug(name: string): string {
                   class="form-textarea"
                 ></textarea>
               </div>
+              
+              <!-- Story Image Upload -->
+              <div class="form-group full-width">
+                <label>Hình ảnh minh họa</label>
+                <p class="upload-hint">Ảnh đại diện cho phần câu chuyện (khuyến nghị: 800x600px)</p>
+                <div class="upload-preview-single" style="max-width: 300px; position: relative;">
+                  <img v-if="settings.story_image" :src="settings.story_image" alt="Story" style="width: 100%; border-radius: 8px;" />
+                  <label v-else class="upload-placeholder">
+                    <input type="file" accept="image/*" @change="uploadBrandImage('story_image', $event)" :disabled="uploadingStoryMain" />
+                    <span v-if="uploadingStoryMain">⏳ Đang tải...</span>
+                    <span v-else>
+                      <span class="upload-icon">📖</span>
+                      <span>Upload ảnh câu chuyện</span>
+                    </span>
+                  </label>
+                  <div v-if="settings.story_image" class="upload-actions" style="position: absolute; bottom: 8px; right: 8px;">
+                    <label class="change-btn">
+                      <input type="file" accept="image/*" @change="uploadBrandImage('story_image', $event)" />
+                      🔄 Đổi
+                    </label>
+                    <button @click="settings.story_image = ''" class="delete-btn">🗑️</button>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Story Image 2 Upload -->
+              <div class="form-group full-width">
+                <label>Hình ảnh phụ (chi tiết)</label>
+                <p class="upload-hint">Ảnh chi tiết vải/thêu (khuyến nghị: 600x800px)</p>
+                <div class="upload-preview-single" style="max-width: 200px; position: relative;">
+                  <img v-if="settings.story_image_2" :src="settings.story_image_2" alt="Story Detail" style="width: 100%; border-radius: 8px;" />
+                  <label v-else class="upload-placeholder">
+                    <input type="file" accept="image/*" @change="uploadBrandImage('story_image_2', $event)" :disabled="uploadingStoryAccent" />
+                    <span v-if="uploadingStoryAccent">⏳ Đang tải...</span>
+                    <span v-else>
+                      <span class="upload-icon">🧵</span>
+                      <span>Upload ảnh chi tiết</span>
+                    </span>
+                  </label>
+                  <div v-if="settings.story_image_2" class="upload-actions" style="position: absolute; bottom: 8px; right: 8px;">
+                    <label class="change-btn">
+                      <input type="file" accept="image/*" @change="uploadBrandImage('story_image_2', $event)" />
+                      🔄
+                    </label>
+                    <button @click="settings.story_image_2 = ''" class="delete-btn">🗑️</button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           
@@ -882,6 +931,30 @@ function generateSlug(name: string): string {
                   class="form-textarea"
                 ></textarea>
               </div>
+              
+              <!-- Philosophy Image Upload -->
+              <div class="form-group full-width">
+                <label>Hình ảnh triết lý</label>
+                <p class="upload-hint">Ảnh minh họa cho phần triết lý (khuyến nghị: 800x600px)</p>
+                <div class="upload-preview-single" style="max-width: 300px; position: relative;">
+                  <img v-if="settings.philosophy_image" :src="settings.philosophy_image" alt="Philosophy Image" style="width: 100%; border-radius: 8px;" />
+                  <label v-else class="upload-placeholder">
+                    <input type="file" accept="image/*" @change="uploadBrandImage('philosophy_image', $event)" :disabled="uploadingPhilosophy" />
+                    <span v-if="uploadingPhilosophy">⏳ Đang tải...</span>
+                    <span v-else>
+                      <span class="upload-icon">禅</span>
+                      <span>Upload ảnh triết lý</span>
+                    </span>
+                  </label>
+                  <div v-if="settings.philosophy_image" class="upload-actions" style="position: absolute; bottom: 8px; right: 8px;">
+                    <label class="change-btn">
+                      <input type="file" accept="image/*" @change="uploadBrandImage('philosophy_image', $event)" />
+                      🔄 Đổi
+                    </label>
+                    <button @click="settings.philosophy_image = ''" class="delete-btn">🗑️</button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           
@@ -906,8 +979,9 @@ function generateSlug(name: string): string {
                 />
               </div>
               
+              <!-- Step 1 -->
               <div class="form-group">
-                <label>Bước 1</label>
+                <label>Bước 1 - Tên</label>
                 <input 
                   v-model="settings.craft_step1" 
                   type="text" 
@@ -915,9 +989,25 @@ function generateSlug(name: string): string {
                   class="form-input"
                 />
               </div>
-              
               <div class="form-group">
-                <label>Bước 2</label>
+                <label>Bước 1 - Ảnh</label>
+                <div class="upload-preview-single" style="max-width: 150px; position: relative;">
+                  <img v-if="settings.craft_step1_image" :src="settings.craft_step1_image" alt="Step 1" style="width: 100%; border-radius: 8px;" />
+                  <label v-else class="upload-placeholder small">
+                    <input type="file" accept="image/*" @change="uploadBrandImage('craft_step1_image', $event)" :disabled="uploadingStep1" />
+                    <span v-if="uploadingStep1">⏳</span>
+                    <span v-else>📷 Ảnh bước 1</span>
+                  </label>
+                  <div v-if="settings.craft_step1_image" class="upload-actions mini">
+                    <label class="change-btn"><input type="file" accept="image/*" @change="uploadBrandImage('craft_step1_image', $event)" />🔄</label>
+                    <button @click="settings.craft_step1_image = ''" class="delete-btn">🗑️</button>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Step 2 -->
+              <div class="form-group">
+                <label>Bước 2 - Tên</label>
                 <input 
                   v-model="settings.craft_step2" 
                   type="text" 
@@ -925,9 +1015,25 @@ function generateSlug(name: string): string {
                   class="form-input"
                 />
               </div>
-              
               <div class="form-group">
-                <label>Bước 3</label>
+                <label>Bước 2 - Ảnh</label>
+                <div class="upload-preview-single" style="max-width: 150px; position: relative;">
+                  <img v-if="settings.craft_step2_image" :src="settings.craft_step2_image" alt="Step 2" style="width: 100%; border-radius: 8px;" />
+                  <label v-else class="upload-placeholder small">
+                    <input type="file" accept="image/*" @change="uploadBrandImage('craft_step2_image', $event)" :disabled="uploadingStep2" />
+                    <span v-if="uploadingStep2">⏳</span>
+                    <span v-else>📷 Ảnh bước 2</span>
+                  </label>
+                  <div v-if="settings.craft_step2_image" class="upload-actions mini">
+                    <label class="change-btn"><input type="file" accept="image/*" @change="uploadBrandImage('craft_step2_image', $event)" />🔄</label>
+                    <button @click="settings.craft_step2_image = ''" class="delete-btn">🗑️</button>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Step 3 -->
+              <div class="form-group">
+                <label>Bước 3 - Tên</label>
                 <input 
                   v-model="settings.craft_step3" 
                   type="text" 
@@ -935,15 +1041,46 @@ function generateSlug(name: string): string {
                   class="form-input"
                 />
               </div>
-              
               <div class="form-group">
-                <label>Bước 4</label>
+                <label>Bước 3 - Ảnh</label>
+                <div class="upload-preview-single" style="max-width: 150px; position: relative;">
+                  <img v-if="settings.craft_step3_image" :src="settings.craft_step3_image" alt="Step 3" style="width: 100%; border-radius: 8px;" />
+                  <label v-else class="upload-placeholder small">
+                    <input type="file" accept="image/*" @change="uploadBrandImage('craft_step3_image', $event)" :disabled="uploadingStep3" />
+                    <span v-if="uploadingStep3">⏳</span>
+                    <span v-else>📷 Ảnh bước 3</span>
+                  </label>
+                  <div v-if="settings.craft_step3_image" class="upload-actions mini">
+                    <label class="change-btn"><input type="file" accept="image/*" @change="uploadBrandImage('craft_step3_image', $event)" />🔄</label>
+                    <button @click="settings.craft_step3_image = ''" class="delete-btn">🗑️</button>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Step 4 -->
+              <div class="form-group">
+                <label>Bước 4 - Tên</label>
                 <input 
                   v-model="settings.craft_step4" 
                   type="text" 
                   placeholder="Hoàn Thiện Giao Hàng"
                   class="form-input"
                 />
+              </div>
+              <div class="form-group">
+                <label>Bước 4 - Ảnh</label>
+                <div class="upload-preview-single" style="max-width: 150px; position: relative;">
+                  <img v-if="settings.craft_step4_image" :src="settings.craft_step4_image" alt="Step 4" style="width: 100%; border-radius: 8px;" />
+                  <label v-else class="upload-placeholder small">
+                    <input type="file" accept="image/*" @change="uploadBrandImage('craft_step4_image', $event)" :disabled="uploadingStep4" />
+                    <span v-if="uploadingStep4">⏳</span>
+                    <span v-else>📷 Ảnh bước 4</span>
+                  </label>
+                  <div v-if="settings.craft_step4_image" class="upload-actions mini">
+                    <label class="change-btn"><input type="file" accept="image/*" @change="uploadBrandImage('craft_step4_image', $event)" />🔄</label>
+                    <button @click="settings.craft_step4_image = ''" class="delete-btn">🗑️</button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import NextTopLoader from 'nextjs-toploader';
+import { Cormorant_Garamond, Roboto } from 'next/font/google';
 import '@/styles/main.css';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
@@ -8,6 +9,21 @@ import CustomCursor from '@/components/effects/CustomCursor';
 import SmoothScroll from '@/components/effects/SmoothScroll';
 import ScrollProgress from '@/components/effects/ScrollProgress';
 import FloatingContactButtons from '@/components/ui/FloatingContactButtons';
+
+// Configure Google Fonts with next/font for optimized loading
+const cormorant = Cormorant_Garamond({
+    subsets: ['latin', 'vietnamese'],
+    weight: ['400', '500'],
+    variable: '--font-cormorant',
+    display: 'swap',
+});
+
+const roboto = Roboto({
+    subsets: ['latin', 'vietnamese'],
+    weight: ['300', '400', '500', '700'],
+    variable: '--font-roboto',
+    display: 'swap',
+});
 
 // API URL for server-side fetch
 const API_URL = process.env.API_URL || 'http://hylacviet-api:3000';
@@ -101,7 +117,33 @@ export default function RootLayout({
     children: React.ReactNode;
 }) {
     return (
-        <html lang="vi">
+        <html lang="vi" className={`${cormorant.variable} ${roboto.variable}`}>
+            <head>
+                {/* Critical CSS for Mobile Menu - prevents FOUC */}
+                <style dangerouslySetInnerHTML={{
+                    __html: `
+                    .mobile-menu {
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        right: 0;
+                        bottom: 0;
+                        background-color: #1a1614 !important;
+                        background: linear-gradient(135deg, rgba(26,22,20,0.98) 0%, rgba(35,30,26,0.98) 50%, rgba(26,22,20,0.98) 100%) !important;
+                        z-index: 9999;
+                        opacity: 0;
+                        visibility: hidden;
+                    }
+                    .mobile-menu.active {
+                        opacity: 1;
+                        visibility: visible;
+                    }
+                    .mobile-nav-link {
+                        color: #FFFFF0;
+                        font-size: 1.25rem;
+                    }
+                ` }} />
+            </head>
             <body>
                 {/* Page Transition Loading Bar - Gold */}
                 <NextTopLoader

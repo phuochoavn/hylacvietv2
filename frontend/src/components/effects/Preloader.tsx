@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { SITE } from '@/lib/constants';
 
 // Preloader timing configuration
-const MIN_DISPLAY_MS = 1500; // Minimum time to show preloader (see animation)
+const MIN_DISPLAY_MS = 1200; // Bloom animation completes ~0.85s + elements ~1.2s
 const MAX_WAIT_MS = 3000;    // Maximum preloader duration
 
 interface Settings {
@@ -17,6 +17,7 @@ export default function Preloader() {
     const [loading, setLoading] = useState(true);
     const [progress, setProgress] = useState(0);
     const [pageReady, setPageReady] = useState(false);
+    const [fontsLoaded, setFontsLoaded] = useState(false);
     const [settings, setSettings] = useState<Settings>({});
     const startTimeRef = useRef<number>(Date.now());
 
@@ -45,6 +46,18 @@ export default function Preloader() {
             }
         }
         fetchSettings();
+    }, []);
+
+    // Wait for fonts to load before showing brand name
+    useEffect(() => {
+        if (typeof document !== 'undefined' && document.fonts) {
+            document.fonts.ready.then(() => {
+                setFontsLoaded(true);
+            });
+        } else {
+            // Fallback for older browsers
+            setFontsLoaded(true);
+        }
     }, []);
 
     useEffect(() => {
@@ -112,61 +125,81 @@ export default function Preloader() {
                         transition: { duration: 0.5, ease: [0.76, 0, 0.24, 1] }
                     }}
                 >
-                    {/* Lotus SVG */}
+                    {/* Lotus SVG - 7 petals blooming outward */}
                     <motion.svg
-                        width="80"
-                        height="80"
-                        viewBox="10 10 80 80"
-                        initial={{ scale: 0.8, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        transition={{ duration: 0.5 }}
+                        width="90"
+                        height="65"
+                        viewBox="0 0 70 50"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.3 }}
                         style={{
-                            filter: 'drop-shadow(0 0 20px var(--gold-glow))',
-                            willChange: 'transform, opacity'
+                            filter: 'drop-shadow(0 0 15px var(--gold-glow))',
+                            marginBottom: '0px'
                         }}
                     >
                         {/* Center petal */}
                         <motion.path
-                            d="M50 15 C55 35, 55 55, 50 75 C45 55, 45 35, 50 15"
+                            d="M35 5 Q38 20 35 40 Q32 20 35 5"
                             fill="var(--gold)"
-                            initial={{ scale: 0 }}
-                            animate={{ scale: 1 }}
-                            transition={{ delay: 0.1, duration: 0.5 }}
-                            style={{ transformOrigin: '50px 45px' }}
+                            initial={{ scaleY: 0 }}
+                            animate={{ scaleY: 1 }}
+                            transition={{ delay: 0.1, duration: 0.35, ease: "easeOut" }}
+                            style={{ transformOrigin: '35px 40px' }}
                         />
-                        {/* Left petals */}
+                        {/* Left petal 1 */}
                         <motion.path
-                            d="M35 25 C48 40, 48 60, 42 80 C32 60, 28 40, 35 25"
+                            d="M35 40 Q25 25 22 8 Q30 22 35 40"
                             fill="var(--gold)"
                             initial={{ scale: 0, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 0.85 }}
-                            transition={{ delay: 0.2, duration: 0.5 }}
-                            style={{ transformOrigin: '38px 52px' }}
+                            animate={{ scale: 1, opacity: 0.9 }}
+                            transition={{ delay: 0.2, duration: 0.35, ease: "easeOut" }}
+                            style={{ transformOrigin: '35px 40px' }}
                         />
+                        {/* Right petal 1 */}
                         <motion.path
-                            d="M20 35 C38 48, 42 68, 38 85 C22 68, 16 48, 20 35"
+                            d="M35 40 Q45 25 48 8 Q40 22 35 40"
                             fill="var(--gold)"
                             initial={{ scale: 0, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 0.7 }}
-                            transition={{ delay: 0.3, duration: 0.5 }}
-                            style={{ transformOrigin: '29px 60px' }}
+                            animate={{ scale: 1, opacity: 0.9 }}
+                            transition={{ delay: 0.2, duration: 0.35, ease: "easeOut" }}
+                            style={{ transformOrigin: '35px 40px' }}
                         />
-                        {/* Right petals */}
+                        {/* Left petal 2 */}
                         <motion.path
-                            d="M65 25 C52 40, 52 60, 58 80 C68 60, 72 40, 65 25"
+                            d="M35 40 Q18 28 12 12 Q22 26 35 40"
                             fill="var(--gold)"
                             initial={{ scale: 0, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 0.85 }}
-                            transition={{ delay: 0.2, duration: 0.5 }}
-                            style={{ transformOrigin: '62px 52px' }}
+                            animate={{ scale: 1, opacity: 0.75 }}
+                            transition={{ delay: 0.35, duration: 0.35, ease: "easeOut" }}
+                            style={{ transformOrigin: '35px 40px' }}
                         />
+                        {/* Right petal 2 */}
                         <motion.path
-                            d="M80 35 C62 48, 58 68, 62 85 C78 68, 84 48, 80 35"
+                            d="M35 40 Q52 28 58 12 Q48 26 35 40"
                             fill="var(--gold)"
                             initial={{ scale: 0, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 0.7 }}
-                            transition={{ delay: 0.3, duration: 0.5 }}
-                            style={{ transformOrigin: '71px 60px' }}
+                            animate={{ scale: 1, opacity: 0.75 }}
+                            transition={{ delay: 0.35, duration: 0.35, ease: "easeOut" }}
+                            style={{ transformOrigin: '35px 40px' }}
+                        />
+                        {/* Left petal 3 - outer */}
+                        <motion.path
+                            d="M35 40 Q10 32 5 18 Q15 30 35 40"
+                            fill="var(--gold)"
+                            initial={{ scale: 0, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 0.6 }}
+                            transition={{ delay: 0.5, duration: 0.35, ease: "easeOut" }}
+                            style={{ transformOrigin: '35px 40px' }}
+                        />
+                        {/* Right petal 3 - outer */}
+                        <motion.path
+                            d="M35 40 Q60 32 65 18 Q55 30 35 40"
+                            fill="var(--gold)"
+                            initial={{ scale: 0, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 0.6 }}
+                            transition={{ delay: 0.5, duration: 0.35, ease: "easeOut" }}
+                            style={{ transformOrigin: '35px 40px' }}
                         />
                     </motion.svg>
 
@@ -177,26 +210,29 @@ export default function Preloader() {
                             initial={{ opacity: 0, scale: 0.8 }}
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ delay: 0.35, duration: 0.5 }}
+                            style={{ marginBottom: '16px' }}
                         >
                             <Image
                                 src={settings.logo_url}
                                 alt="Logo"
-                                width={100}
-                                height={40}
+                                width={130}
+                                height={52}
                                 style={{ objectFit: 'contain' }}
                             />
                         </motion.div>
                     )}
 
-                    {/* Brand name */}
-                    <motion.div
-                        className="preloader-logo"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.4, duration: 0.5 }}
-                    >
-                        {SITE.name}
-                    </motion.div>
+                    {/* Brand name - only show after fonts loaded */}
+                    {fontsLoaded && (
+                        <motion.div
+                            className="preloader-logo"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.4, duration: 0.5 }}
+                        >
+                            {SITE.name}
+                        </motion.div>
+                    )}
 
                     {/* Progress bar */}
                     <motion.div
