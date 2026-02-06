@@ -119,28 +119,46 @@ export default function RootLayout({
     return (
         <html lang="vi" className={`${cormorant.variable} ${roboto.variable}`}>
             <head>
-                {/* Critical CSS for Mobile Menu - prevents FOUC */}
+                {/* Critical CSS for Mobile Menu - prevents FOUC on iOS WebKit */}
                 <style dangerouslySetInnerHTML={{
                     __html: `
                     .mobile-menu {
-                        position: fixed;
-                        top: 0;
-                        left: 0;
-                        right: 0;
-                        bottom: 0;
+                        position: fixed !important;
+                        top: 0 !important;
+                        left: 0 !important;
+                        right: 0 !important;
+                        bottom: 0 !important;
                         background-color: #1a1614 !important;
                         background: linear-gradient(135deg, rgba(26,22,20,0.98) 0%, rgba(35,30,26,0.98) 50%, rgba(26,22,20,0.98) 100%) !important;
-                        z-index: 9999;
-                        opacity: 0;
-                        visibility: hidden;
+                        z-index: 9999 !important;
+                        opacity: 0 !important;
+                        visibility: hidden !important;
+                        transform: translateY(-20px) !important;
+                        display: flex !important;
+                        flex-direction: column !important;
+                        align-items: center !important;
+                        justify-content: center !important;
                     }
                     .mobile-menu.active {
-                        opacity: 1;
-                        visibility: visible;
+                        opacity: 1 !important;
+                        visibility: visible !important;
+                        transform: translateY(0) !important;
                     }
                     .mobile-nav-link {
-                        color: #FFFFF0;
+                        color: #FFFFF0 !important;
                         font-size: 1.25rem;
+                        opacity: 0 !important;
+                        transform: translateY(20px) !important;
+                    }
+                    .mobile-menu.active .mobile-nav-link {
+                        opacity: 1 !important;
+                        transform: translateY(0) !important;
+                    }
+                    .mobile-menu-footer {
+                        opacity: 0 !important;
+                    }
+                    .mobile-menu.active .mobile-menu-footer {
+                        opacity: 1 !important;
                     }
                 ` }} />
             </head>

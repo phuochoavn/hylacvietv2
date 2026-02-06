@@ -43,6 +43,9 @@
     padding: var(--space-32) 0;
     background: #f5f0e8;
     overflow: hidden;
+    /* iOS WebKit: force containing block for transformed children */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
 }
 
 .story-bg-pattern {
@@ -62,15 +65,20 @@
     gap: var(--space-20);
     align-items: center;
     overflow: hidden;
+    /* iOS WebKit: force proper overflow clipping with transforms */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
 }
 
 /* Image Column */
 .story-image-col {
     position: relative;
+    overflow: hidden;
 }
 
 .story-image-wrapper {
     position: relative;
+    overflow: hidden;
 }
 
 .story-image-frame {
@@ -98,6 +106,9 @@
     box-shadow:
         0 25px 50px rgba(0, 0, 0, 0.25),
         0 10px 20px rgba(0, 0, 0, 0.15);
+    /* iOS WebKit: prevent overflow leak through transform layers */
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
 }
 
 .story-accent-image img {

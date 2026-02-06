@@ -14,6 +14,8 @@ html {
     text-size-adjust: 100%;
     scroll-behavior: smooth;
     overflow-x: hidden;
+    /* iOS WebKit: ensure overflow-x clips properly */
+    -webkit-overflow-scrolling: touch;
 }
 
 html.lenis,
