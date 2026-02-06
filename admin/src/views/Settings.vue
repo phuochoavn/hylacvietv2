@@ -2,15 +2,15 @@
 import { ref, onMounted, computed } from 'vue'
 import api from '../api'
 
-// Tabs
-const activeTab = ref('branding')
+// Tabs - Now organized by PAGE instead of section
+const activeTab = ref('general')
 const tabs = [
-  { id: 'branding', label: 'Logo & Thương Hiệu', icon: '🏷️' },
-  { id: 'hero', label: 'Hero Slides', icon: '🖼️' },
-  { id: 'story', label: 'Câu Chuyện', icon: '📖' },
-  { id: 'philosophy', label: 'Triết Lý', icon: '禅' },
-  { id: 'process', label: 'Quy Trình', icon: '⚙️' },
-  { id: 'social', label: 'Liên Hệ', icon: '🔗' },
+  { id: 'general', label: 'Cài Đặt Chung', icon: '⚙️' },
+  { id: 'homepage', label: 'Trang Chủ', icon: '🏠' },
+  { id: 'products', label: 'Sản Phẩm', icon: '👗' },
+  { id: 'maydo', label: 'May Đo', icon: '✂️' },
+  { id: 'about', label: 'Câu Chuyện', icon: '📖' },
+  { id: 'contact', label: 'Liên Hệ', icon: '📞' },
 ]
 
 // Data
@@ -34,6 +34,7 @@ const uploading = ref<number | null>(null)
 const uploadProgress = ref(0)
 const uploadingLogo = ref(false)
 const uploadingFavicon = ref(false)
+const uploadingOgImage = ref(false)
 const uploadingBackground = ref(false)
 // Story section images
 const uploadingStoryMain = ref(false)
@@ -385,7 +386,7 @@ function generateSlug(name: string): string {
     <div class="page-header">
       <div>
         <h1>Cài Đặt Website</h1>
-        <p class="subtitle">Quản lý thông tin, nội dung và hình ảnh trang chủ</p>
+        <p class="subtitle">Quản lý nội dung tĩnh cho tất cả các trang</p>
       </div>
       <button @click="saveSettings" :disabled="saving" class="btn-save">
         <span v-if="saving">⏳ Đang lưu...</span>
@@ -422,7 +423,7 @@ function generateSlug(name: string): string {
       <div class="tab-content">
         
         <!-- Branding Settings -->
-        <div v-if="activeTab === 'branding'" class="tab-panel">
+        <div v-if="activeTab === 'general'" class="tab-panel">
           <div class="panel-header">
             <h2>🏷️ Logo & Thương Hiệu</h2>
             <p>Cấu hình logo, favicon và màu sắc thương hiệu</p>
@@ -523,11 +524,110 @@ function generateSlug(name: string): string {
               />
             </div>
           </div>
+          
+          <!-- SEO & Social Meta -->
+          <div class="hero-section-card">
+            <div class="section-header">
+              <div class="section-icon">🔍</div>
+              <div>
+                <h3>SEO & Chia Sẻ Mạng Xã Hội</h3>
+                <p>Cài đặt meta tags để hiển thị đẹp khi chia sẻ link lên Zalo, Facebook</p>
+              </div>
+            </div>
+            
+            <!-- OG Image Upload -->
+            <div class="upload-section" style="margin-bottom: var(--space-6);">
+              <label class="upload-label">Hình Ảnh Chia Sẻ (OG Image)</label>
+              <p class="upload-hint">Khuyến nghị: 1200x630px. Hiển thị khi chia sẻ link lên mạng xã hội</p>
+              <div class="upload-preview-single" style="max-width: 400px;">
+                <img v-if="settings.og_image" :src="settings.og_image" alt="OG Image" style="width: 100%; border-radius: 8px;" />
+                <label v-else class="upload-placeholder">
+                  <input type="file" accept="image/*" @change="uploadBrandImage('og_image', $event)" :disabled="uploadingOgImage" />
+                  <span v-if="uploadingOgImage">⏳ Đang tải...</span>
+                  <span v-else>
+                    <span class="upload-icon">🖼️</span>
+                    <span>Upload hình ảnh chia sẻ</span>
+                  </span>
+                </label>
+                <div v-if="settings.og_image" class="upload-actions">
+                  <label class="change-btn">
+                    <input type="file" accept="image/*" @change="uploadBrandImage('og_image', $event)" />
+                    🔄 Đổi
+                  </label>
+                  <button @click="settings.og_image = ''" class="delete-btn">🗑️</button>
+                </div>
+              </div>
+            </div>
+            
+            <div class="hero-content-grid">
+              <div class="form-group">
+                <label>Meta Title (Tiêu đề SEO)</label>
+                <input 
+                  v-model="settings.meta_title" 
+                  type="text" 
+                  placeholder="Hỷ Lạc Việt - Áo Dài Cao Cấp May Đo"
+                  class="form-input"
+                />
+                <span class="field-hint">Tiêu đề hiển thị trên Google và khi chia sẻ link</span>
+              </div>
+              
+              <div class="form-group full-width">
+                <label>Meta Description (Mô tả SEO)</label>
+                <textarea 
+                  v-model="settings.meta_description" 
+                  rows="3"
+                  placeholder="Chuyên may đo áo dài cao cấp, áo dài truyền thống, pháp phục linen. Giao hàng toàn quốc."
+                  class="form-textarea"
+                ></textarea>
+                <span class="field-hint">Mô tả ngắn hiển thị trên kết quả tìm kiếm</span>
+              </div>
+              
+              <div class="form-group">
+                <label>Facebook Page URL</label>
+                <input 
+                  v-model="settings.facebook_url" 
+                  type="url" 
+                  placeholder="https://facebook.com/hylacviet"
+                  class="form-input"
+                />
+              </div>
+              
+              <div class="form-group">
+                <label>Zalo OA URL</label>
+                <input 
+                  v-model="settings.zalo_url" 
+                  type="url" 
+                  placeholder="https://zalo.me/0912503456"
+                  class="form-input"
+                />
+              </div>
+              
+              <div class="form-group">
+                <label>Instagram URL</label>
+                <input 
+                  v-model="settings.instagram_url" 
+                  type="url" 
+                  placeholder="https://instagram.com/hylacviet"
+                  class="form-input"
+                />
+              </div>
+              
+              <div class="form-group">
+                <label>YouTube URL</label>
+                <input 
+                  v-model="settings.youtube_url" 
+                  type="url" 
+                  placeholder="https://youtube.com/@hylacviet"
+                  class="form-input"
+                />
+              </div>
+            </div>
+          </div>
         </div>
 
 
         <!-- Hero Section Management -->
-        <div v-if="activeTab === 'hero'" class="tab-panel">
+        <div v-if="activeTab === 'homepage'" class="tab-panel">
           
           <!-- Section 1: Background Slides -->
           <div class="hero-section-card">
@@ -709,6 +809,537 @@ function generateSlug(name: string): string {
             </div>
           </div>
           
+          <!-- Section 5: Brand Story -->
+          <div class="hero-section-card">
+            <div class="section-header">
+              <div class="section-icon">📖</div>
+              <div>
+                <h3>Câu Chuyện Thương Hiệu</h3>
+                <p>Nội dung phần Brand Story trên trang chủ</p>
+              </div>
+            </div>
+            
+            <div class="hero-content-grid">
+              <div class="form-group">
+                <label>Tiêu đề</label>
+                <input 
+                  v-model="settings.story_title" 
+                  type="text" 
+                  placeholder="Câu Chuyện Thương Hiệu"
+                  class="form-input"
+                />
+              </div>
+              
+              <div class="form-group">
+                <label>Phụ đề</label>
+                <input 
+                  v-model="settings.story_subtitle" 
+                  type="text" 
+                  placeholder="Hơn 6 năm gìn giữ giá trị truyền thống"
+                  class="form-input"
+                />
+              </div>
+              
+              <div class="form-group full-width">
+                <label>Nội dung chính</label>
+                <textarea 
+                  v-model="settings.story_content" 
+                  rows="4"
+                  placeholder="Hỷ Lạc Việt được thành lập với tâm huyết gìn giữ..."
+                  class="form-textarea"
+                ></textarea>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Section 6: Philosophy -->
+          <div class="hero-section-card">
+            <div class="section-header">
+              <div class="section-icon">禅</div>
+              <div>
+                <h3>Triết Lý</h3>
+                <p>Phần triết lý thương hiệu</p>
+              </div>
+            </div>
+            
+            <div class="hero-content-grid">
+              <div class="form-group">
+                <label>Tiêu đề</label>
+                <input 
+                  v-model="settings.philosophy_title" 
+                  type="text" 
+                  placeholder="Triết Lý Thương Hiệu"
+                  class="form-input"
+                />
+              </div>
+              
+              <div class="form-group full-width">
+                <label>Câu trích dẫn</label>
+                <textarea 
+                  v-model="settings.philosophy_quote" 
+                  rows="3"
+                  placeholder="Mỗi đường kim mũi chỉ là một lời nhắn gửi..."
+                  class="form-textarea"
+                ></textarea>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Section 7: Craftsmanship -->
+          <div class="hero-section-card">
+            <div class="section-header">
+              <div class="section-icon">🪡</div>
+              <div>
+                <h3>Quy Trình Thủ Công</h3>
+                <p>Nội dung phần Craftsmanship - 4 bước làm việc</p>
+              </div>
+            </div>
+            
+            <div class="hero-content-grid">
+              <div class="form-group">
+                <label>Tiêu đề section</label>
+                <input 
+                  v-model="settings.craft_title" 
+                  type="text" 
+                  placeholder="Nghệ Thuật Thủ Công"
+                  class="form-input"
+                />
+              </div>
+              
+              <div class="form-group">
+                <label>Bước 1</label>
+                <input 
+                  v-model="settings.craft_step1" 
+                  type="text" 
+                  placeholder="Chọn Vải Cao Cấp"
+                  class="form-input"
+                />
+              </div>
+              
+              <div class="form-group">
+                <label>Bước 2</label>
+                <input 
+                  v-model="settings.craft_step2" 
+                  type="text" 
+                  placeholder="Lấy Số Đo Chuẩn"
+                  class="form-input"
+                />
+              </div>
+              
+              <div class="form-group">
+                <label>Bước 3</label>
+                <input 
+                  v-model="settings.craft_step3" 
+                  type="text" 
+                  placeholder="May Thêu Tỉ Mỉ"
+                  class="form-input"
+                />
+              </div>
+              
+              <div class="form-group">
+                <label>Bước 4</label>
+                <input 
+                  v-model="settings.craft_step4" 
+                  type="text" 
+                  placeholder="Hoàn Thiện Giao Hàng"
+                  class="form-input"
+                />
+              </div>
+            </div>
+          </div>
+          
+          <!-- Section 8: Testimonials -->
+          <div class="hero-section-card">
+            <div class="section-header">
+              <div class="section-icon">💬</div>
+              <div>
+                <h3>Đánh Giá Khách Hàng</h3>
+                <p>Các nhận xét từ khách hàng</p>
+              </div>
+            </div>
+            
+            <div class="hero-content-grid">
+              <div class="form-group">
+                <label>Tiêu đề section</label>
+                <input 
+                  v-model="settings.testimonial_title" 
+                  type="text" 
+                  placeholder="Khách Hàng Nói Gì"
+                  class="form-input"
+                />
+              </div>
+              
+              <div class="form-group full-width">
+                <label>Nhận xét 1</label>
+                <textarea 
+                  v-model="settings.testimonial_1" 
+                  rows="2"
+                  placeholder="Áo dài rất đẹp, chất lượng tuyệt vời..."
+                  class="form-textarea"
+                ></textarea>
+              </div>
+              
+              <div class="form-group">
+                <label>Tên khách 1</label>
+                <input 
+                  v-model="settings.testimonial_1_name" 
+                  type="text" 
+                  placeholder="Chị Ngọc Anh"
+                  class="form-input"
+                />
+              </div>
+              
+              <div class="form-group full-width">
+                <label>Nhận xét 2</label>
+                <textarea 
+                  v-model="settings.testimonial_2" 
+                  rows="2"
+                  placeholder="Dịch vụ tận tâm, sản phẩm vượt mong đợi..."
+                  class="form-textarea"
+                ></textarea>
+              </div>
+              
+              <div class="form-group">
+                <label>Tên khách 2</label>
+                <input 
+                  v-model="settings.testimonial_2_name" 
+                  type="text" 
+                  placeholder="Chị Thu Hà"
+                  class="form-input"
+                />
+              </div>
+              
+              <div class="form-group full-width">
+                <label>Nhận xét 3</label>
+                <textarea 
+                  v-model="settings.testimonial_3" 
+                  rows="2"
+                  placeholder="May đúng số đo, ship nhanh..."
+                  class="form-textarea"
+                ></textarea>
+              </div>
+              
+              <div class="form-group">
+                <label>Tên khách 3</label>
+                <input 
+                  v-model="settings.testimonial_3_name" 
+                  type="text" 
+                  placeholder="Anh Minh Đức"
+                  class="form-input"
+                />
+              </div>
+            </div>
+          </div>
+          
+          <!-- Section 9: Contact CTA -->
+          <div class="hero-section-card">
+            <div class="section-header">
+              <div class="section-icon">📞</div>
+              <div>
+                <h3>Call To Action Liên Hệ</h3>
+                <p>Phần kêu gọi liên hệ cuối trang</p>
+              </div>
+            </div>
+            
+            <div class="hero-content-grid">
+              <div class="form-group">
+                <label>Tiêu đề CTA</label>
+                <input 
+                  v-model="settings.cta_title" 
+                  type="text" 
+                  placeholder="Sẵn Sàng Tạo Nên Bộ Áo Dài Của Riêng Bạn?"
+                  class="form-input"
+                />
+              </div>
+              
+              <div class="form-group full-width">
+                <label>Mô tả CTA</label>
+                <textarea 
+                  v-model="settings.cta_description" 
+                  rows="2"
+                  placeholder="Liên hệ ngay để được tư vấn miễn phí..."
+                  class="form-textarea"
+                ></textarea>
+              </div>
+              
+              <div class="form-group">
+                <label>Nút CTA chính</label>
+                <input 
+                  v-model="settings.cta_button_text" 
+                  type="text" 
+                  placeholder="Đặt Lịch Tư Vấn"
+                  class="form-input"
+                />
+              </div>
+              
+              <div class="form-group">
+                <label>Nút CTA phụ</label>
+                <input 
+                  v-model="settings.cta_button_secondary" 
+                  type="text" 
+                  placeholder="Chat Zalo Ngay"
+                  class="form-input"
+                />
+              </div>
+            </div>
+          </div>
+          
+        </div>
+
+        <!-- ===================== SẢN PHẨM PAGE SETTINGS ===================== -->
+        <div v-if="activeTab === 'products'" class="tab-panel">
+          <div class="panel-header">
+            <h2>👗 Trang Sản Phẩm</h2>
+            <p>Quản lý nội dung tĩnh trên trang danh sách sản phẩm</p>
+          </div>
+
+          <div class="hero-section-card">
+            <div class="section-header">
+              <div class="section-icon">📝</div>
+              <div>
+                <h3>Tiêu Đề Trang</h3>
+                <p>Nội dung hiển thị ở đầu trang sản phẩm</p>
+              </div>
+            </div>
+            
+            <div class="hero-content-grid">
+              <div class="form-group">
+                <label>Tiêu đề chính</label>
+                <input 
+                  v-model="settings.products_title" 
+                  type="text" 
+                  placeholder="Bộ Sưu Tập"
+                  class="form-input hero-title-input"
+                />
+              </div>
+              
+              <div class="form-group">
+                <label>Phụ đề</label>
+                <input 
+                  v-model="settings.products_subtitle" 
+                  type="text" 
+                  placeholder="Áo Dài & Pháp Phục Cao Cấp"
+                  class="form-input"
+                />
+              </div>
+              
+              <div class="form-group full-width">
+                <label>Mô tả SEO</label>
+                <textarea 
+                  v-model="settings.products_description" 
+                  rows="3"
+                  placeholder="Khám phá bộ sưu tập áo dài và pháp phục cao cấp..."
+                  class="form-textarea"
+                ></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div class="hero-section-card">
+            <div class="section-header">
+              <div class="section-icon">🏷️</div>
+              <div>
+                <h3>Thông Tin Chi Tiết Sản Phẩm</h3>
+                <p>Giá trị mặc định cho chi tiết sản phẩm (có thể tùy chỉnh theo sản phẩm)</p>
+              </div>
+            </div>
+            
+            <div class="hero-content-grid">
+              <div class="form-group">
+                <label>Chất liệu mặc định</label>
+                <input 
+                  v-model="settings.default_material" 
+                  type="text" 
+                  placeholder="Gấm lụa tơ tằm cao cấp"
+                  class="form-input"
+                />
+              </div>
+              
+              <div class="form-group">
+                <label>Thời gian may mặc định</label>
+                <input 
+                  v-model="settings.default_production_time" 
+                  type="text" 
+                  placeholder="7-10 ngày làm việc"
+                  class="form-input"
+                />
+              </div>
+              
+              <div class="form-group">
+                <label>Bảo hành mặc định</label>
+                <input 
+                  v-model="settings.default_warranty" 
+                  type="text" 
+                  placeholder="12 tháng đường may"
+                  class="form-input"
+                />
+              </div>
+              
+              <div class="form-group">
+                <label>Giao hàng</label>
+                <input 
+                  v-model="settings.default_shipping" 
+                  type="text" 
+                  placeholder="Miễn phí toàn quốc"
+                  class="form-input"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================== MAY ĐO PAGE SETTINGS ===================== -->
+        <div v-if="activeTab === 'maydo'" class="tab-panel">
+          <div class="panel-header">
+            <h2>✂️ Trang May Đo</h2>
+            <p>Quản lý nội dung tĩnh trên trang dịch vụ may đo</p>
+          </div>
+
+          <div class="hero-section-card">
+            <div class="section-header">
+              <div class="section-icon">📝</div>
+              <div>
+                <h3>Tiêu Đề Trang</h3>
+                <p>Nội dung hiển thị ở đầu trang may đo</p>
+              </div>
+            </div>
+            
+            <div class="hero-content-grid">
+              <div class="form-group">
+                <label>Tiêu đề chính</label>
+                <input 
+                  v-model="settings.maydo_title" 
+                  type="text" 
+                  placeholder="Dịch Vụ May Đo"
+                  class="form-input hero-title-input"
+                />
+              </div>
+              
+              <div class="form-group">
+                <label>Phụ đề</label>
+                <input 
+                  v-model="settings.maydo_subtitle" 
+                  type="text" 
+                  placeholder="Thiết kế riêng theo số đo của bạn"
+                  class="form-input"
+                />
+              </div>
+              
+              <div class="form-group full-width">
+                <label>Mô tả dịch vụ</label>
+                <textarea 
+                  v-model="settings.maydo_description" 
+                  rows="4"
+                  placeholder="Chúng tôi cung cấp dịch vụ may đo áo dài theo yêu cầu..."
+                  class="form-textarea"
+                ></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div class="hero-section-card">
+            <div class="section-header">
+              <div class="section-icon">💰</div>
+              <div>
+                <h3>Bảng Giá May Đo</h3>
+                <p>Thông tin giá cả hiển thị trên trang</p>
+              </div>
+            </div>
+            
+            <div class="hero-content-grid">
+              <div class="form-group">
+                <label>Giá may đo cơ bản</label>
+                <input 
+                  v-model="settings.maydo_price_basic" 
+                  type="text" 
+                  placeholder="Từ 3.500.000₫"
+                  class="form-input"
+                />
+              </div>
+              
+              <div class="form-group">
+                <label>Giá may đo cao cấp</label>
+                <input 
+                  v-model="settings.maydo_price_premium" 
+                  type="text" 
+                  placeholder="Từ 8.500.000₫"
+                  class="form-input"
+                />
+              </div>
+              
+              <div class="form-group">
+                <label>Giá may đo VIP</label>
+                <input 
+                  v-model="settings.maydo_price_vip" 
+                  type="text" 
+                  placeholder="Từ 15.000.000₫"
+                  class="form-input"
+                />
+              </div>
+              
+              <div class="form-group">
+                <label>Thời gian hoàn thành</label>
+                <input 
+                  v-model="settings.maydo_production_time" 
+                  type="text" 
+                  placeholder="10-15 ngày làm việc"
+                  class="form-input"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="hero-section-card">
+            <div class="section-header">
+              <div class="section-icon">📋</div>
+              <div>
+                <h3>Quy Trình May Đo</h3>
+                <p>Các bước trong quy trình may đo</p>
+              </div>
+            </div>
+            
+            <div class="hero-content-grid">
+              <div class="form-group">
+                <label>Bước 1</label>
+                <input 
+                  v-model="settings.maydo_step1" 
+                  type="text" 
+                  placeholder="Tư vấn & Lấy số đo"
+                  class="form-input"
+                />
+              </div>
+              
+              <div class="form-group">
+                <label>Bước 2</label>
+                <input 
+                  v-model="settings.maydo_step2" 
+                  type="text" 
+                  placeholder="Chọn chất liệu & Thiết kế"
+                  class="form-input"
+                />
+              </div>
+              
+              <div class="form-group">
+                <label>Bước 3</label>
+                <input 
+                  v-model="settings.maydo_step3" 
+                  type="text" 
+                  placeholder="May & Thêu tay"
+                  class="form-input"
+                />
+              </div>
+              
+              <div class="form-group">
+                <label>Bước 4</label>
+                <input 
+                  v-model="settings.maydo_step4" 
+                  type="text" 
+                  placeholder="Thử đồ & Giao hàng"
+                  class="form-input"
+                />
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- Categories Management -->
@@ -785,7 +1416,7 @@ function generateSlug(name: string): string {
 
         <!-- Content Settings -->
         <!-- Story Section -->
-        <div v-if="activeTab === 'story'" class="tab-panel">
+        <div v-if="activeTab === 'about'" class="tab-panel">
           <div class="panel-header">
             <h2>📖 Câu Chuyện Thương Hiệu</h2>
             <p>Quản lý nội dung phần "Câu Chuyện Thương Hiệu" trên trang chủ</p>
@@ -1203,7 +1834,7 @@ function generateSlug(name: string): string {
         </div>
 
         <!-- Social & Contact -->
-        <div v-if="activeTab === 'social'" class="tab-panel">
+        <div v-if="activeTab === 'contact'" class="tab-panel">
           <div class="panel-header">
             <h2>🔗 Liên Hệ & Mạng Xã Hội</h2>
             <p>Thông tin liên lạc và đường dẫn mạng xã hội</p>

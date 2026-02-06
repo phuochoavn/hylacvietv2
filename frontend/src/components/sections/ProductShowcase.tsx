@@ -124,7 +124,7 @@ export default function ProductShowcase() {
                                 exit={{ opacity: 0, scale: 0.9 }}
                                 transition={{ duration: 0.5, delay: index * 0.08 }}
                             >
-                                <Link href={`/products/${product.id}`} className="showcase-link">
+                                <Link href={`/san-pham/${product.id}`} className="showcase-link">
                                     <div className="showcase-image-wrapper">
                                         <Image
                                             src={product.image}
@@ -161,7 +161,7 @@ export default function ProductShowcase() {
                     transition={{ duration: 0.6, delay: 0.4 }}
                     viewport={{ once: true }}
                 >
-                    <Link href="/products" className="btn-explore">
+                    <Link href="/san-pham" className="btn-explore">
                         <span>Xem Toàn Bộ Bộ Sưu Tập</span>
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                             <path d="M5 12h14M12 5l7 7-7 7" />

@@ -57,7 +57,7 @@ function ProductCard({
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
         >
-            <Link href={`/products/${product.id}`} className="card-link-v2">
+            <Link href={`/san-pham/${product.id}`} className="card-link-v2">
                 {/* Image */}
                 <div className="card-image-wrapper-v2">
                     <Image

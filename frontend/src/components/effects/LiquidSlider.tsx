@@ -191,20 +191,44 @@ export default function LiquidSlider({
     useEffect(() => {
         const loader = new THREE.TextureLoader();
         const loadedTextures: THREE.Texture[] = [];
+        let loadedCount = 0;
+        let hasError = false;
+
+        // Timeout fallback - if textures don't load in 5s, switch to simple mode
+        const timeoutId = setTimeout(() => {
+            if (loadedCount < images.length) {
+                console.warn('Texture loading timeout, falling back to simple mode');
+                setIsMobile(true); // Force simple image mode
+            }
+        }, 5000);
 
         images.forEach((src, idx) => {
-            loader.load(src, (texture) => {
-                texture.minFilter = THREE.LinearFilter;
-                texture.magFilter = THREE.LinearFilter;
-                loadedTextures[idx] = texture;
+            loader.load(
+                src,
+                (texture) => {
+                    texture.minFilter = THREE.LinearFilter;
+                    texture.magFilter = THREE.LinearFilter;
+                    loadedTextures[idx] = texture;
+                    loadedCount++;
 
-                if (loadedTextures.filter(Boolean).length === images.length) {
-                    setTextures([...loadedTextures]);
+                    if (loadedCount === images.length) {
+                        clearTimeout(timeoutId);
+                        setTextures([...loadedTextures]);
+                    }
+                },
+                undefined,
+                (error) => {
+                    console.error('Failed to load texture:', src, error);
+                    hasError = true;
+                    clearTimeout(timeoutId);
+                    // Fallback to simple image mode on error
+                    setIsMobile(true);
                 }
-            });
+            );
         });
 
         return () => {
+            clearTimeout(timeoutId);
             loadedTextures.forEach(t => t?.dispose());
         };
     }, [images]);

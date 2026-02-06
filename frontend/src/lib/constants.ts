@@ -11,10 +11,10 @@ export const SITE = {
 };
 
 export const NAV_LINKS = [
-    { label: 'Sản Phẩm', href: '/products' },
+    { label: 'Sản Phẩm', href: '/san-pham' },
     { label: 'May Đo', href: '/may-do' },
-    { label: 'Câu Chuyện', href: '/about' },
-    { label: 'Liên Hệ', href: '/contact' },
+    { label: 'Câu Chuyện', href: '/gioi-thieu' },
+    { label: 'Liên Hệ', href: '/lien-he' },
 ];
 
 export const SOCIAL_LINKS = [

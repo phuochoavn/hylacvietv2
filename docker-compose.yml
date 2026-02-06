@@ -9,6 +9,7 @@ services:
     restart: unless-stopped
     volumes:
       - ./data:/app/data
+      - ./uploads:/app/uploads
     environment:
       - DATABASE_PATH=/app/data/hylacviet.db
       - RUST_LOG=info

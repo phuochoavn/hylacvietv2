@@ -114,7 +114,7 @@ export default function CategoryShowcase() {
                                 transition={{ duration: 0.6, delay: index * 0.1 }}
                                 viewport={{ once: true, margin: '-100px' }}
                             >
-                                <Link href={`/products?category=${category.slug}`} className="category-showcase-link">
+                                <Link href={`/san-pham?category=${category.slug}`} className="category-showcase-link">
                                     <div className="category-showcase-image">
                                         {category.image ? (
                                             <Image
@@ -160,7 +160,7 @@ export default function CategoryShowcase() {
                     transition={{ duration: 0.6, delay: 0.4 }}
                     viewport={{ once: true }}
                 >
-                    <Link href="/products" className="btn-explore">
+                    <Link href="/san-pham" className="btn-explore">
                         <span>Khám Phá Tất Cả Thiết Kế</span>
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                             <path d="M5 12h14M12 5l7 7-7 7" />

@@ -132,7 +132,7 @@ export default function ProductDetailPage() {
             <section className="product-detail-v2">
                 <div className="loading-v2">
                     <p>Không tìm thấy sản phẩm</p>
-                    <Link href="/products" className="back-link-v2">
+                    <Link href="/san-pham" className="back-link-v2">
                         <ArrowLeftIcon /> Quay lại bộ sưu tập
                     </Link>
                 </div>
@@ -144,7 +144,7 @@ export default function ProductDetailPage() {
         <section className="product-detail-v2">
             {/* Back Link */}
             <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 var(--space-8)' }}>
-                <Link href="/products" className="back-link-v2">
+                <Link href="/san-pham" className="back-link-v2">
                     <ArrowLeftIcon /> Bộ Sưu Tập
                 </Link>
             </div>
@@ -281,6 +281,45 @@ export default function ProductDetailPage() {
                         </a>
                     </div>
                 </motion.div>
+            </div>
+
+            {/* TẦNG 2: Chi Tiết Sản Phẩm - Below the fold */}
+            <div className="product-details-section">
+                <div className="product-details-container">
+                    <h2 className="details-title">Chi Tiết Sản Phẩm</h2>
+                    <div className="details-grid">
+                        <div className="detail-item">
+                            <span className="detail-icon">🧵</span>
+                            <span className="detail-label">Chất liệu</span>
+                            <span className="detail-value">Gấm lụa tơ tằm cao cấp</span>
+                        </div>
+                        <div className="detail-item">
+                            <span className="detail-icon">🌸</span>
+                            <span className="detail-label">Họa tiết</span>
+                            <span className="detail-value">Thêu tay sen vàng tinh xảo</span>
+                        </div>
+                        <div className="detail-item">
+                            <span className="detail-icon">👗</span>
+                            <span className="detail-label">Kiểu dáng</span>
+                            <span className="detail-value">{categoryLabels[product.category] || 'Áo dài cách tân'}</span>
+                        </div>
+                        <div className="detail-item">
+                            <span className="detail-icon">🎨</span>
+                            <span className="detail-label">Màu sắc</span>
+                            <span className="detail-value">Xanh ngọc bích phối vàng</span>
+                        </div>
+                        <div className="detail-item">
+                            <span className="detail-icon">⏱️</span>
+                            <span className="detail-label">Thời gian may</span>
+                            <span className="detail-value">7-10 ngày làm việc</span>
+                        </div>
+                        <div className="detail-item">
+                            <span className="detail-icon">🛡️</span>
+                            <span className="detail-label">Bảo hành</span>
+                            <span className="detail-value">12 tháng đường may</span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             {/* Consultation Form Modal */}

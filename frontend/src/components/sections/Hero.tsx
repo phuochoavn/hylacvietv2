@@ -303,7 +303,7 @@ export default function Hero() {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.8, delay: 1.8 }}
                             >
-                                <Button href="/products" variant="primary" size="lg" className="btn-glow">
+                                <Button href="/san-pham" variant="primary" size="lg" className="btn-glow">
                                     {content.ctaText}
                                 </Button>
                                 <Button href={SITE.zalo} variant="ghost" size="lg" external>

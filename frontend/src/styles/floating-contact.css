@@ -5,7 +5,7 @@
 
 .floating-contact-stack {
     position: fixed;
-    bottom: 24px;
+    bottom: 120px;
     right: 24px;
     z-index: 9999;
     display: flex;
