@@ -6,8 +6,9 @@ import Image from 'next/image';
 import { SITE } from '@/lib/constants';
 
 // Preloader timing configuration
-const MIN_DISPLAY_MS = 1200; // Bloom animation completes ~0.85s + elements ~1.2s
-const MAX_WAIT_MS = 3000;    // Maximum preloader duration
+const LOGO_ANIMATION_MS = 1800; // Logo spin+zoom animation duration
+const MIN_DISPLAY_MS = 2200;    // Must be > LOGO_ANIMATION_MS to complete animation
+const MAX_WAIT_MS = 4000;       // Maximum preloader duration
 
 interface Settings {
     logo_url?: string;
@@ -203,20 +204,34 @@ export default function Preloader() {
                         />
                     </motion.svg>
 
-                    {/* Website Logo - between lotus and text */}
+                    {/* Website Logo - Zoom + Spin Animation */}
                     {settings.logo_url && (
                         <motion.div
                             className="preloader-website-logo"
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: 0.35, duration: 0.5 }}
+                            initial={{
+                                opacity: 0,
+                                scale: 0.1,
+                                rotate: -180,
+                                filter: 'blur(8px)'
+                            }}
+                            animate={{
+                                opacity: 1,
+                                scale: 1,
+                                rotate: 0,
+                                filter: 'blur(0px)'
+                            }}
+                            transition={{
+                                delay: 0.3,
+                                duration: LOGO_ANIMATION_MS / 1000,
+                                ease: [0.34, 1.56, 0.64, 1] // Custom spring-like ease
+                            }}
                             style={{ marginBottom: '16px' }}
                         >
                             <Image
                                 src={settings.logo_url}
                                 alt="Logo"
-                                width={130}
-                                height={52}
+                                width={180}
+                                height={72}
                                 style={{ objectFit: 'contain' }}
                             />
                         </motion.div>

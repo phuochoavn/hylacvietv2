@@ -400,7 +400,7 @@
         display: block;
         position: absolute;
         right: var(--space-5);
-        z-index: calc(var(--z-sticky) + 2);
+        z-index: calc(var(--z-sticky) + 20);
     }
 
     .header-logo {

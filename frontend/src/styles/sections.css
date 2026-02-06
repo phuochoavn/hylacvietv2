@@ -1306,6 +1306,9 @@
     .story-container {
         grid-template-columns: 1fr;
         gap: var(--space-12);
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
     }
 
     .story-image-col {
@@ -1320,11 +1323,18 @@
 
     .story-text-col {
         text-align: center;
+        width: 100%;
+        max-width: 100%;
+        overflow: hidden;
+        box-sizing: border-box;
     }
 
     .story-lead,
     .story-body {
         text-align: center;
+        width: 100%;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
     }
 
     .story-divider {

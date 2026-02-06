@@ -72,52 +72,54 @@ export default function Header() {
     ].filter(Boolean).join(' ');
 
     return (
-        <header className={headerClassName}>
-            <div className="header-inner container">
-                {/* Logo */}
-                <Link href="/" className="header-logo">
-                    {settings.logo_url ? (
-                        <Image
-                            src={settings.logo_url}
-                            alt={siteName}
-                            width={140}
-                            height={50}
-                            className="header-logo-img"
-                            priority
-                        />
-                    ) : (
-                        <span className="header-logo-text">{siteName}</span>
-                    )}
-                </Link>
+        <>
+            <header className={headerClassName}>
+                <div className="header-inner container">
+                    {/* Logo */}
+                    <Link href="/" className="header-logo">
+                        {settings.logo_url ? (
+                            <Image
+                                src={settings.logo_url}
+                                alt={siteName}
+                                width={140}
+                                height={50}
+                                className="header-logo-img"
+                                priority
+                            />
+                        ) : (
+                            <span className="header-logo-text">{siteName}</span>
+                        )}
+                    </Link>
 
-                {/* Desktop Navigation */}
-                <nav className="header-nav">
-                    {NAV_LINKS.map((link) => (
-                        <Link
-                            key={link.href}
-                            href={link.href}
-                            className={`header-nav-link ${isActiveLink(link.href) ? 'active' : ''}`}
-                        >
-                            {link.label}
-                        </Link>
-                    ))}
-                </nav>
+                    {/* Desktop Navigation */}
+                    <nav className="header-nav">
+                        {NAV_LINKS.map((link) => (
+                            <Link
+                                key={link.href}
+                                href={link.href}
+                                className={`header-nav-link ${isActiveLink(link.href) ? 'active' : ''}`}
+                            >
+                                {link.label}
+                            </Link>
+                        ))}
+                    </nav>
 
-                {/* Mobile Menu Button */}
-                <button
-                    className="header-menu-btn"
-                    onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                    aria-label="Toggle menu"
-                >
-                    <span className={`hamburger ${isMobileMenuOpen ? 'active' : ''}`}>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </span>
-                </button>
-            </div>
+                    {/* Mobile Menu Button */}
+                    <button
+                        className="header-menu-btn"
+                        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                        aria-label="Toggle menu"
+                    >
+                        <span className={`hamburger ${isMobileMenuOpen ? 'active' : ''}`}>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </span>
+                    </button>
+                </div>
+            </header>
 
-            {/* Mobile Menu */}
+            {/* Mobile Menu - OUTSIDE header to avoid stacking context issues */}
             <div className={`mobile-menu ${isMobileMenuOpen ? 'active' : ''}`}>
                 {/* Mobile Menu Logo */}
                 {settings.logo_url && (
@@ -131,6 +133,12 @@ export default function Header() {
                     </div>
                 )}
 
+                {/* Close Button */}
+                <button
+                    className="mobile-menu-close"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    aria-label="Đóng menu"
+                />
 
                 {/* Navigation Links */}
                 <nav className="mobile-nav">
@@ -152,6 +160,6 @@ export default function Header() {
                     <span className="mobile-menu-tagline">Since 2018 • Hà Nội</span>
                 </div>
             </div>
-        </header>
+        </>
     );
 }

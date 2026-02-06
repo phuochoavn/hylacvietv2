@@ -9,18 +9,22 @@ interface ProcessSettings {
     step1_subtitle?: string;
     step1_desc?: string;
     step1_image?: string;
+    craft_step1_image?: string;
     step2_title?: string;
     step2_subtitle?: string;
     step2_desc?: string;
     step2_image?: string;
+    craft_step2_image?: string;
     step3_title?: string;
     step3_subtitle?: string;
     step3_desc?: string;
     step3_image?: string;
+    craft_step3_image?: string;
     step4_title?: string;
     step4_subtitle?: string;
     step4_desc?: string;
     step4_image?: string;
+    craft_step4_image?: string;
     process_label?: string;
     process_title?: string;
     process_subtitle?: string;
@@ -98,28 +102,28 @@ export default function Craftsmanship() {
             title: settings.step1_title || defaultSteps[0].title,
             titleEn: settings.step1_subtitle || defaultSteps[0].titleEn,
             desc: settings.step1_desc || defaultSteps[0].desc,
-            image: settings.step1_image || defaultSteps[0].image,
+            image: settings.craft_step1_image || settings.step1_image || defaultSteps[0].image,
         },
         {
             number: '02',
             title: settings.step2_title || defaultSteps[1].title,
             titleEn: settings.step2_subtitle || defaultSteps[1].titleEn,
             desc: settings.step2_desc || defaultSteps[1].desc,
-            image: settings.step2_image || defaultSteps[1].image,
+            image: settings.craft_step2_image || settings.step2_image || defaultSteps[1].image,
         },
         {
             number: '03',
             title: settings.step3_title || defaultSteps[2].title,
             titleEn: settings.step3_subtitle || defaultSteps[2].titleEn,
             desc: settings.step3_desc || defaultSteps[2].desc,
-            image: settings.step3_image || defaultSteps[2].image,
+            image: settings.craft_step3_image || settings.step3_image || defaultSteps[2].image,
         },
         {
             number: '04',
             title: settings.step4_title || defaultSteps[3].title,
             titleEn: settings.step4_subtitle || defaultSteps[3].titleEn,
             desc: settings.step4_desc || defaultSteps[3].desc,
-            image: settings.step4_image || defaultSteps[3].image,
+            image: settings.craft_step4_image || settings.step4_image || defaultSteps[3].image,
         },
     ];
 
