@@ -3,9 +3,16 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useParams } from 'next/navigation';
 import '@/styles/product-detail-v2.css';
+
+// Dynamic import for LiquidSlider (WebGL - client only)
+const LiquidSlider = dynamic(
+    () => import('@/components/effects/LiquidSlider'),
+    { ssr: false, loading: () => <div className="liquid-slider-placeholder" style={{ aspectRatio: '3/4' }}><div className="liquid-loading"><div className="liquid-loading-spinner" /></div></div> }
+);
 
 interface Product {
     id: string;
@@ -69,6 +76,7 @@ export default function ProductDetailPage() {
     const [loading, setLoading] = useState(true);
     const [sizeOpen, setSizeOpen] = useState(false);
     const [showConsultForm, setShowConsultForm] = useState(false);
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
     useEffect(() => {
         if (params.id) {
@@ -142,32 +150,47 @@ export default function ProductDetailPage() {
             </div>
 
             <div className="product-detail-layout-v2">
-                {/* LEFT: Vertical Image Gallery */}
+                {/* LEFT: Gallery with Thumbnails + Main Image */}
                 <motion.div
                     className="product-gallery-v2"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.6 }}
                 >
-                    {product.images.map((img, idx) => (
-                        <motion.div
-                            key={idx}
-                            className="gallery-image-v2"
-                            initial={{ opacity: 0, y: 30 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true, margin: '-50px' }}
-                            transition={{ duration: 0.5, delay: idx * 0.1 }}
-                        >
-                            <Image
-                                src={img}
-                                alt={`${product.name} - Ảnh ${idx + 1}`}
-                                fill
-                                sizes="(max-width: 1024px) 100vw, 60vw"
-                                priority={idx === 0}
+                    <div className="gallery-wrapper">
+                        {/* Main Liquid Slider */}
+                        <div style={{ position: 'relative', width: '100%' }}>
+                            <LiquidSlider
+                                images={product.images}
+                                currentIndex={currentImageIndex}
+                                aspectRatio={3 / 4}
                             />
-                            <span className="image-counter-v2">{idx + 1} / {product.images.length}</span>
-                        </motion.div>
-                    ))}
+                            <span className="liquid-counter">
+                                {currentImageIndex + 1} / {product.images.length}
+                            </span>
+                        </div>
+
+                        {/* Thumbnails - Below main image */}
+                        {product.images.length > 1 && (
+                            <div className="liquid-thumbnails">
+                                {product.images.map((img, idx) => (
+                                    <button
+                                        key={idx}
+                                        className={`liquid-thumb ${currentImageIndex === idx ? 'active' : ''}`}
+                                        onMouseEnter={() => setCurrentImageIndex(idx)}
+                                        onClick={() => setCurrentImageIndex(idx)}
+                                    >
+                                        <Image
+                                            src={img}
+                                            alt={`Thumbnail ${idx + 1}`}
+                                            fill
+                                            sizes="70px"
+                                        />
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+                    </div>
                 </motion.div>
 
                 {/* RIGHT: Sticky Info Sidebar */}
