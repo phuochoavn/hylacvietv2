@@ -78,6 +78,7 @@ export default function BrandStory() {
                                     fill
                                     sizes="(max-width: 1024px) 100vw, 50vw"
                                     className="story-main-image"
+                                    style={{ objectFit: 'cover' }}
                                 />
                             )}
                         </div>

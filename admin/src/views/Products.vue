@@ -188,6 +188,18 @@ function getCategoryIcon(value: string) {
   const cat = categories.find(c => c.value === value)
   return cat ? cat.icon : '📦'
 }
+
+// Convert relative image URLs to absolute URLs on main domain
+function getImageUrl(path: string | undefined): string {
+  if (!path) return '/placeholder.jpg'
+  // If already absolute URL, return as-is
+  if (path.startsWith('http://') || path.startsWith('https://')) return path
+  // Convert relative paths to main domain
+  if (path.startsWith('/uploads/') || path.startsWith('/images/')) {
+    return `https://hylacviet.vn${path}`
+  }
+  return path
+}
 </script>
 
 <template>
@@ -263,7 +275,7 @@ function getCategoryIcon(value: string) {
       >
         <div class="product-image">
           <img 
-            :src="product.images[0] || '/placeholder.jpg'" 
+            :src="getImageUrl(product.images[0])" 
             :alt="product.name"
           />
           <div class="image-count" v-if="product.images.length > 1">
@@ -318,7 +330,7 @@ function getCategoryIcon(value: string) {
                 :key="index"
                 class="image-item"
               >
-                <img :src="img" :alt="`Ảnh ${index + 1}`" />
+                <img :src="getImageUrl(img)" :alt="`Ảnh ${index + 1}`" />
                 <div class="image-actions">
                   <button type="button" @click="moveImage(index, index - 1)" :disabled="index === 0">↑</button>
                   <button type="button" @click="moveImage(index, index + 1)" :disabled="index === form.images.length - 1">↓</button>

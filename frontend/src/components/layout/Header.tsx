@@ -20,7 +20,7 @@ export default function Header() {
 
     // Light mode detection - deferred to client to avoid hydration mismatch
     useEffect(() => {
-        const lightModePages = ['/products', '/contact'];
+        const lightModePages = ['/contact'];
         const shouldBeLightMode = lightModePages.some(p => pathname === p || pathname.startsWith(p + '/'));
         console.log('[Header] pathname:', pathname, 'isLightMode:', shouldBeLightMode);
         setIsLightMode(shouldBeLightMode);

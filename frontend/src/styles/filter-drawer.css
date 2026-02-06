@@ -1,0 +1,322 @@
+/* =========================================
+   FILTER DRAWER - LUXURY STYLE
+   Slide-in panel from right
+   ========================================= */
+
+/* Backdrop overlay */
+.filter-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 9998;
+}
+
+/* Drawer Panel */
+.filter-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 380px;
+    max-width: 90vw;
+    height: 100vh;
+    background: var(--charcoal);
+    border-left: 1px solid rgba(255, 255, 255, 0.08);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    box-shadow: -10px 0 40px rgba(0, 0, 0, 0.5);
+}
+
+/* Header */
+.filter-drawer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-6) var(--space-8);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.filter-drawer-header h2 {
+    font-family: var(--font-serif);
+    font-size: var(--text-xl);
+    font-weight: 400;
+    color: var(--ivory);
+    letter-spacing: 0.05em;
+    margin: 0;
+}
+
+.filter-close-btn {
+    background: none;
+    border: none;
+    padding: var(--space-2);
+    color: var(--ivory);
+    opacity: 0.6;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.filter-close-btn:hover {
+    opacity: 1;
+}
+
+/* Body - Scrollable */
+.filter-drawer-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--space-6) var(--space-8);
+}
+
+/* Section */
+.filter-section {
+    margin-bottom: var(--space-8);
+}
+
+.filter-section-title {
+    font-family: var(--font-nav);
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    margin: 0 0 var(--space-4);
+}
+
+/* Radio Options */
+.filter-options {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.filter-radio {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    cursor: pointer;
+}
+
+.filter-radio input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.radio-custom {
+    width: 18px;
+    height: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    position: relative;
+    transition: all 0.2s ease;
+}
+
+.filter-radio input:checked+.radio-custom {
+    border-color: var(--gold);
+}
+
+.filter-radio input:checked+.radio-custom::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 8px;
+    height: 8px;
+    background: var(--gold);
+    border-radius: 50%;
+}
+
+.radio-label {
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    color: var(--ivory);
+    opacity: 0.8;
+    transition: opacity 0.2s ease;
+}
+
+.filter-radio:hover .radio-label {
+    opacity: 1;
+}
+
+.filter-radio input:checked~.radio-label {
+    color: var(--gold);
+    opacity: 1;
+}
+
+/* Footer */
+.filter-drawer-footer {
+    display: flex;
+    gap: var(--space-4);
+    padding: var(--space-6) var(--space-8);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.filter-reset-btn,
+.filter-apply-btn {
+    flex: 1;
+    padding: var(--space-4) var(--space-6);
+    font-family: var(--font-nav);
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    border-radius: 0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.filter-reset-btn {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--ivory);
+}
+
+.filter-reset-btn:hover {
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+.filter-apply-btn {
+    background: var(--gold);
+    border: 1px solid var(--gold);
+    color: var(--charcoal);
+}
+
+.filter-apply-btn:hover {
+    background: transparent;
+    color: var(--gold);
+}
+
+/* =========================================
+   STICKY TOOLBAR
+   ========================================= */
+
+.products-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-4) 0;
+    margin-bottom: var(--space-6);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.toolbar-left,
+.toolbar-right {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+}
+
+/* Filter Toggle Button */
+.filter-toggle-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    background: none;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: var(--space-3) var(--space-5);
+    font-family: var(--font-nav);
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--ivory);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.filter-toggle-btn:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+}
+
+.filter-toggle-btn svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* Active Filters Count */
+.filter-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    background: var(--gold);
+    color: var(--charcoal);
+    font-size: 10px;
+    font-weight: 600;
+    border-radius: 50%;
+    margin-left: var(--space-2);
+}
+
+/* View Mode Toggle */
+.view-toggle {
+    display: flex;
+    gap: var(--space-2);
+}
+
+.view-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: none;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.view-btn:hover {
+    border-color: rgba(255, 255, 255, 0.3);
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.view-btn.active {
+    border-color: var(--gold);
+    color: var(--gold);
+}
+
+.view-btn svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* Results Count */
+.results-count {
+    font-family: var(--font-nav);
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.7);
+    letter-spacing: 0.08em;
+}
+
+/* =========================================
+   RESPONSIVE
+   ========================================= */
+
+@media (max-width: 768px) {
+    .filter-drawer {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .products-toolbar {
+        flex-wrap: wrap;
+        gap: var(--space-4);
+    }
+
+    .toolbar-left,
+    .toolbar-right {
+        flex: 1;
+    }
+
+    .results-count {
+        order: -1;
+        width: 100%;
+        text-align: center;
+        margin-bottom: var(--space-2);
+    }
+}

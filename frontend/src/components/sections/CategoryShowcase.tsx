@@ -55,6 +55,9 @@ const defaultCategories: Category[] = [
     },
 ];
 
+// Shimmer placeholder - matches page ivory background for smooth transition
+const shimmerPlaceholder = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUzMyIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjVmM2VlIi8+PC9zdmc+';
+
 export default function CategoryShowcase() {
     const containerRef = useRef<HTMLElement>(null);
     const [categories, setCategories] = useState<Category[]>([]);
@@ -109,7 +112,7 @@ export default function CategoryShowcase() {
                                 initial={{ opacity: 0, y: 30 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                                viewport={{ once: true }}
+                                viewport={{ once: true, margin: '-100px' }}
                             >
                                 <Link href={`/products?category=${category.slug}`} className="category-showcase-link">
                                     <div className="category-showcase-image">
@@ -120,6 +123,10 @@ export default function CategoryShowcase() {
                                                 fill
                                                 sizes="(max-width: 768px) 100vw, 25vw"
                                                 className="category-img"
+                                                placeholder="blur"
+                                                blurDataURL={shimmerPlaceholder}
+                                                priority={index < 2}
+                                                style={{ objectFit: 'cover' }}
                                             />
                                         ) : (
                                             <div className="category-icon-fallback">

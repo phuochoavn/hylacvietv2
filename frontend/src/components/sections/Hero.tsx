@@ -202,6 +202,7 @@ export default function Hero() {
                                     quality={90}
                                     className="hero-bg-img"
                                     sizes="100vw"
+                                    style={{ objectFit: 'cover' }}
                                 />
                             </motion.div>
                         )}
@@ -351,6 +352,7 @@ export default function Hero() {
                                                             sizes="180px"
                                                             className="marquee-img"
                                                             loading="lazy"
+                                                            style={{ objectFit: 'cover' }}
                                                         />
                                                         <div className="marquee-overlay">
                                                             <span className="marquee-number">
@@ -396,6 +398,7 @@ export default function Hero() {
                                                             className="marquee-img"
                                                             loading="lazy"
                                                             quality={90}
+                                                            style={{ objectFit: 'cover' }}
                                                         />
                                                     </div>
                                                 </div>

@@ -132,6 +132,7 @@ export default function ProductShowcase() {
                                             fill
                                             sizes="(max-width: 768px) 100vw, 33vw"
                                             className="showcase-image"
+                                            style={{ objectFit: 'cover' }}
                                         />
                                         <div className="showcase-overlay">
                                             <span className="view-btn">

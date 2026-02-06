@@ -1,115 +1,78 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SITE } from '@/lib/constants';
 
-// Critical images to preload (hero backgrounds)
-const CRITICAL_IMAGES_TIMEOUT = 5000; // Max wait time for images
+// Preloader timing configuration
+const MIN_DISPLAY_MS = 1500; // Minimum time to show preloader (see animation)
+const MAX_WAIT_MS = 3000;    // Maximum preloader duration
 
 export default function Preloader() {
     const [loading, setLoading] = useState(true);
     const [progress, setProgress] = useState(0);
-    const [imagesLoaded, setImagesLoaded] = useState(false);
+    const [pageReady, setPageReady] = useState(false);
+    const startTimeRef = useRef<number>(Date.now());
 
-    // Check if critical images are already cached
-    const checkImagesCached = useCallback(async (urls: string[]): Promise<boolean> => {
+    // Check if page content is ready
+    const checkPageReady = useCallback((): boolean => {
         if (typeof window === 'undefined') return false;
-
-        // Check via Performance API if images are in cache
-        const entries = performance.getEntriesByType('resource') as PerformanceResourceTiming[];
-        const cachedUrls = entries.map(e => e.name);
-
-        return urls.every(url => cachedUrls.some(cached => cached.includes(url)));
-    }, []);
-
-    // Preload images
-    const preloadImages = useCallback(async (urls: string[]): Promise<void> => {
-        const promises = urls.map(url => {
-            return new Promise<void>((resolve) => {
-                const img = new window.Image();
-                img.onload = () => resolve();
-                img.onerror = () => resolve(); // Don't block on error
-                img.src = url;
-            });
-        });
-
-        await Promise.all(promises);
+        return document.readyState === 'complete';
     }, []);
 
     useEffect(() => {
         let isMounted = true;
+        startTimeRef.current = Date.now();
 
-        const loadCriticalImages = async () => {
-            try {
-                // Fetch hero background URLs from API
-                const res = await fetch('/api/settings');
-                let criticalUrls: string[] = [];
+        const finishLoading = () => {
+            if (!isMounted) return;
 
-                if (res.ok) {
-                    const data = await res.json();
-                    if (data.success && Array.isArray(data.data)) {
-                        const heroBgSetting = data.data.find((s: { key: string }) => s.key === 'hero_backgrounds');
-                        if (heroBgSetting?.value) {
-                            try {
-                                const backgrounds = JSON.parse(heroBgSetting.value);
-                                criticalUrls = backgrounds.slice(0, 3).map((bg: { image: string }) => bg.image).filter(Boolean);
-                            } catch { }
-                        }
-                    }
-                }
+            setProgress(100);
+            setPageReady(true);
 
-                // Check if images already cached
-                const isCached = await checkImagesCached(criticalUrls);
+            // Calculate remaining time to meet minimum display
+            const elapsed = Date.now() - startTimeRef.current;
+            const remainingMin = Math.max(0, MIN_DISPLAY_MS - elapsed);
 
-                if (isCached) {
-                    // Fast exit - images already in browser cache
-                    setProgress(100);
-                    setImagesLoaded(true);
-                    setTimeout(() => {
-                        if (isMounted) setLoading(false);
-                    }, 300); // Minimal delay for smooth transition
-                    return;
-                }
-
-                // Preload images with timeout
-                const loadPromise = preloadImages(criticalUrls);
-                const timeoutPromise = new Promise<void>(resolve =>
-                    setTimeout(resolve, CRITICAL_IMAGES_TIMEOUT)
-                );
-
-                // Progress animation while loading
-                const progressInterval = setInterval(() => {
-                    if (isMounted) {
-                        setProgress(prev => Math.min(prev + 5, 90));
-                    }
-                }, 100);
-
-                await Promise.race([loadPromise, timeoutPromise]);
-
-                clearInterval(progressInterval);
-                setProgress(100);
-                setImagesLoaded(true);
-
-                setTimeout(() => {
-                    if (isMounted) setLoading(false);
-                }, 400);
-
-            } catch {
-                // On error, just show the page
-                if (isMounted) {
-                    setProgress(100);
-                    setLoading(false);
-                }
-            }
+            // Wait for minimum display time before hiding
+            setTimeout(() => {
+                if (isMounted) setLoading(false);
+            }, remainingMin + 200); // +200ms for smooth exit
         };
 
-        loadCriticalImages();
+        // Progress animation
+        const progressInterval = setInterval(() => {
+            if (isMounted) {
+                setProgress(prev => Math.min(prev + 6, pageReady ? 100 : 90));
+            }
+        }, 80);
+
+        // Listen for page load
+        const handleLoad = () => {
+            clearInterval(progressInterval);
+            finishLoading();
+        };
+
+        // Fallback: max wait time
+        const maxWaitTimer = setTimeout(() => {
+            clearInterval(progressInterval);
+            finishLoading();
+        }, MAX_WAIT_MS);
+
+        window.addEventListener('load', handleLoad);
+
+        // Check if already loaded
+        if (checkPageReady()) {
+            handleLoad();
+        }
 
         return () => {
             isMounted = false;
+            clearInterval(progressInterval);
+            clearTimeout(maxWaitTimer);
+            window.removeEventListener('load', handleLoad);
         };
-    }, [checkImagesCached, preloadImages]);
+    }, [checkPageReady, pageReady]);
 
     return (
         <AnimatePresence>
@@ -119,7 +82,7 @@ export default function Preloader() {
                     initial={{ opacity: 1 }}
                     exit={{
                         opacity: 0,
-                        transition: { duration: 0.6, ease: [0.76, 0, 0.24, 1] }
+                        transition: { duration: 0.5, ease: [0.76, 0, 0.24, 1] }
                     }}
                 >
                     {/* Lotus SVG */}
@@ -130,7 +93,10 @@ export default function Preloader() {
                         initial={{ scale: 0.8, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
                         transition={{ duration: 0.5 }}
-                        style={{ filter: 'drop-shadow(0 0 20px var(--gold-glow))' }}
+                        style={{
+                            filter: 'drop-shadow(0 0 20px var(--gold-glow))',
+                            willChange: 'transform, opacity'
+                        }}
                     >
                         {/* Center petal */}
                         <motion.path

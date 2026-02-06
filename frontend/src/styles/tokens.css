@@ -28,8 +28,10 @@
     /* ===== TYPOGRAPHY ===== */
     /* Brand display font - ONLY for "Hỷ Lạc Việt" hero title */
     --font-brand: 'SVN-Magellin', Georgia, serif;
-    /* Display font - for all headings */
-    --font-display: 'Roboto', system-ui, sans-serif;
+    /* Serif font - for sophisticated headings and narrative */
+    --font-serif: 'Cormorant Garamond', serif;
+    /* Display font - for all headings (Standard Imperial Zen) */
+    --font-display: 'Cormorant Garamond', serif;
     /* Navigation font - clean sans-serif for menu */
     --font-nav: 'Roboto', system-ui, sans-serif;
     /* Body font - for all other text */

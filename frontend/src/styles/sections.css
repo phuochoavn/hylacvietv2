@@ -1305,6 +1305,11 @@
         text-align: center;
     }
 
+    .story-lead,
+    .story-body {
+        text-align: center;
+    }
+
     .story-divider {
         margin-left: auto;
         margin-right: auto;

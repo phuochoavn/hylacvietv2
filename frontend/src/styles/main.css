@@ -13,6 +13,7 @@
 @import './hero.css';
 @import './sections.css';
 @import './products.css';
+@import './filter-drawer.css';
 
 /* Custom Font - SVN-Magellin (must be after @imports) */
 @font-face {
