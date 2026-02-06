@@ -119,6 +119,20 @@ export default function Header() {
 
             {/* Mobile Menu */}
             <div className={`mobile-menu ${isMobileMenuOpen ? 'active' : ''}`}>
+                {/* Mobile Menu Logo */}
+                {settings.logo_url && (
+                    <div className="mobile-menu-logo">
+                        <Image
+                            src={settings.logo_url}
+                            alt={siteName}
+                            width={120}
+                            height={48}
+                        />
+                    </div>
+                )}
+
+
+                {/* Navigation Links */}
                 <nav className="mobile-nav">
                     {NAV_LINKS.map((link) => (
                         <Link
@@ -131,6 +145,12 @@ export default function Header() {
                         </Link>
                     ))}
                 </nav>
+
+                {/* Footer Tagline */}
+                <div className="mobile-menu-footer">
+                    <div className="mobile-menu-divider" />
+                    <span className="mobile-menu-tagline">Since 2018 • Hà Nội</span>
+                </div>
             </div>
         </header>
     );

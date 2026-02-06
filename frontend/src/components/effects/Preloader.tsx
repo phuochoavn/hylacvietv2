@@ -2,22 +2,49 @@
 
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Image from 'next/image';
 import { SITE } from '@/lib/constants';
 
 // Preloader timing configuration
 const MIN_DISPLAY_MS = 1500; // Minimum time to show preloader (see animation)
 const MAX_WAIT_MS = 3000;    // Maximum preloader duration
 
+interface Settings {
+    logo_url?: string;
+}
+
 export default function Preloader() {
     const [loading, setLoading] = useState(true);
     const [progress, setProgress] = useState(0);
     const [pageReady, setPageReady] = useState(false);
+    const [settings, setSettings] = useState<Settings>({});
     const startTimeRef = useRef<number>(Date.now());
 
     // Check if page content is ready
     const checkPageReady = useCallback((): boolean => {
         if (typeof window === 'undefined') return false;
         return document.readyState === 'complete';
+    }, []);
+
+    // Fetch logo from settings
+    useEffect(() => {
+        async function fetchSettings() {
+            try {
+                const res = await fetch('/api/settings');
+                const data = await res.json();
+                if (data.success && Array.isArray(data.data)) {
+                    for (const item of data.data) {
+                        if (item.key === 'logo_url') {
+                            setSettings({ logo_url: item.value });
+                            break;
+                        }
+                    }
+                }
+            } catch (e) {
+                console.error('Failed to fetch logo:', e);
+            }
+        }
+        fetchSettings();
     }, []);
 
     useEffect(() => {
@@ -142,6 +169,24 @@ export default function Preloader() {
                             style={{ transformOrigin: '71px 60px' }}
                         />
                     </motion.svg>
+
+                    {/* Website Logo - between lotus and text */}
+                    {settings.logo_url && (
+                        <motion.div
+                            className="preloader-website-logo"
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: 0.35, duration: 0.5 }}
+                        >
+                            <Image
+                                src={settings.logo_url}
+                                alt="Logo"
+                                width={100}
+                                height={40}
+                                style={{ objectFit: 'contain' }}
+                            />
+                        </motion.div>
+                    )}
 
                     {/* Brand name */}
                     <motion.div

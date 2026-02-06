@@ -539,7 +539,7 @@ function generateSlug(name: string): string {
             <div class="upload-section" style="margin-bottom: var(--space-6);">
               <label class="upload-label">Hình Ảnh Chia Sẻ (OG Image)</label>
               <p class="upload-hint">Khuyến nghị: 1200x630px. Hiển thị khi chia sẻ link lên mạng xã hội</p>
-              <div class="upload-preview-single" style="max-width: 400px;">
+              <div class="upload-preview-single" style="max-width: 400px; position: relative;">
                 <img v-if="settings.og_image" :src="settings.og_image" alt="OG Image" style="width: 100%; border-radius: 8px;" />
                 <label v-else class="upload-placeholder">
                   <input type="file" accept="image/*" @change="uploadBrandImage('og_image', $event)" :disabled="uploadingOgImage" />
@@ -549,7 +549,7 @@ function generateSlug(name: string): string {
                     <span>Upload hình ảnh chia sẻ</span>
                   </span>
                 </label>
-                <div v-if="settings.og_image" class="upload-actions">
+                <div v-if="settings.og_image" class="upload-actions" style="position: absolute; bottom: 8px; right: 8px;">
                   <label class="change-btn">
                     <input type="file" accept="image/*" @change="uploadBrandImage('og_image', $event)" />
                     🔄 Đổi

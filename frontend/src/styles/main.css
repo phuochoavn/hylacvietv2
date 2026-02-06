@@ -177,6 +177,12 @@
     letter-spacing: 0.05em;
 }
 
+.preloader-website-logo {
+    margin-top: var(--space-2);
+    margin-bottom: var(--space-1);
+    filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.4));
+}
+
 .preloader-progress {
     width: 200px;
     height: 2px;
