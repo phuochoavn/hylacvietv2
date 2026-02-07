@@ -4,7 +4,7 @@ import Philosophy from '@/components/sections/Philosophy';
 import CategoryShowcase from '@/components/sections/CategoryShowcase';
 import Craftsmanship from '@/components/sections/Craftsmanship';
 import MeasurementJourney from '@/components/sections/MeasurementJourney';
-import Testimonials from '@/components/sections/Testimonials';
+
 import ContactCTA from '@/components/sections/ContactCTA';
 
 export default function HomePage() {
@@ -24,7 +24,7 @@ export default function HomePage() {
                 <CategoryShowcase />
                 <Craftsmanship />
                 <MeasurementJourney />
-                <Testimonials />
+
                 <ContactCTA />
             </div>
         </>

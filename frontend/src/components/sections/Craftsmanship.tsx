@@ -15,11 +15,6 @@ interface ProcessSettings {
     step2_desc?: string;
     step2_image?: string;
     craft_step2_image?: string;
-    step3_title?: string;
-    step3_subtitle?: string;
-    step3_desc?: string;
-    step3_image?: string;
-    craft_step3_image?: string;
     step4_title?: string;
     step4_subtitle?: string;
     step4_desc?: string;
@@ -47,13 +42,6 @@ const defaultSteps = [
     },
     {
         number: '03',
-        title: 'Thêu Tay',
-        titleEn: 'Handcraft',
-        desc: 'Nghệ nhân thêu tay từng chi tiết với kỹ thuật truyền thống.',
-        image: '/images/craft/step-3.jpg',
-    },
-    {
-        number: '04',
         title: 'Hoàn Thiện',
         titleEn: 'Finishing',
         desc: 'Kiểm tra chất lượng, điều chỉnh size và bàn giao tác phẩm.',
@@ -113,17 +101,10 @@ export default function Craftsmanship() {
         },
         {
             number: '03',
-            title: settings.step3_title || defaultSteps[2].title,
-            titleEn: settings.step3_subtitle || defaultSteps[2].titleEn,
-            desc: settings.step3_desc || defaultSteps[2].desc,
-            image: settings.craft_step3_image || settings.step3_image || defaultSteps[2].image,
-        },
-        {
-            number: '04',
-            title: settings.step4_title || defaultSteps[3].title,
-            titleEn: settings.step4_subtitle || defaultSteps[3].titleEn,
-            desc: settings.step4_desc || defaultSteps[3].desc,
-            image: settings.craft_step4_image || settings.step4_image || defaultSteps[3].image,
+            title: settings.step4_title || defaultSteps[2].title,
+            titleEn: settings.step4_subtitle || defaultSteps[2].titleEn,
+            desc: settings.step4_desc || defaultSteps[2].desc,
+            image: settings.craft_step4_image || settings.step4_image || defaultSteps[2].image,
         },
     ];
 

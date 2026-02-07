@@ -5,31 +5,86 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { SITE } from '@/lib/constants';
 
+/** Convert absolute hylacviet URL to relative path */
+function toRelativeUrl(url: string): string {
+    if (!url) return url;
+    try {
+        const u = new URL(url);
+        if (u.hostname.endsWith('hylacviet.vn')) {
+            return u.pathname + u.search;
+        }
+    } catch { /* not a valid URL, return as-is */ }
+    return url;
+}
+
 
 // Preloader timing configuration
 const LOGO_ANIMATION_MS = 1800; // Logo spin+zoom animation duration
-const MIN_DISPLAY_MS = 2800;    // Must allow stroke drawing animation to complete
-const MAX_WAIT_MS = 5000;       // Maximum preloader duration
+const STROKE_ANIMATION_MS = 2100; // Stroke drawing + fill (1.5s draw + 0.5s fill + delays)
+const MIN_DISPLAY_MS = 2800;    // Minimum preloader display time
+const MAX_WAIT_MS = 10000;      // Maximum preloader duration (fallback)
 
 interface Settings {
     logo_url?: string;
 }
 
+/**
+ * Smart Preloader — waits for critical assets before dismissing:
+ *   1. Logo image must be loaded
+ *   2. Hero background must be prefetched
+ *   3. Animations must complete (MIN_DISPLAY_MS)
+ *   4. Fallback: MAX_WAIT_MS prevents infinite loading
+ *
+ * Progress bar reflects real loading state.
+ */
 export default function Preloader() {
     const [loading, setLoading] = useState(true);
     const [progress, setProgress] = useState(0);
-    const [pageReady, setPageReady] = useState(false);
-    const [fontsLoaded, setFontsLoaded] = useState(false);
     const [settings, setSettings] = useState<Settings>({});
     const startTimeRef = useRef<number>(Date.now());
 
-    // Check if page content is ready
-    const checkPageReady = useCallback((): boolean => {
-        if (typeof window === 'undefined') return false;
-        return document.readyState === 'complete';
+    // Asset readiness flags
+    const [logoLoaded, setLogoLoaded] = useState(false);
+    const [heroImageLoaded, setHeroImageLoaded] = useState(false);
+    const [animationDone, setAnimationDone] = useState(false);
+    const [fontsLoaded, setFontsLoaded] = useState(false);
+
+    // Refs to avoid stale closures
+    const logoLoadedRef = useRef(false);
+    const heroImageLoadedRef = useRef(false);
+    const animationDoneRef = useRef(false);
+    const fontsLoadedRef = useRef(false);
+    const dismissedRef = useRef(false);
+
+    // Keep refs in sync
+    useEffect(() => { logoLoadedRef.current = logoLoaded; }, [logoLoaded]);
+    useEffect(() => { heroImageLoadedRef.current = heroImageLoaded; }, [heroImageLoaded]);
+    useEffect(() => { animationDoneRef.current = animationDone; }, [animationDone]);
+    useEffect(() => { fontsLoadedRef.current = fontsLoaded; }, [fontsLoaded]);
+
+    // ─── Try to dismiss preloader whenever any flag changes ───
+    const tryDismiss = useCallback(() => {
+        if (dismissedRef.current) return;
+
+        const allReady = logoLoadedRef.current && heroImageLoadedRef.current && animationDoneRef.current;
+        if (!allReady) return;
+
+        dismissedRef.current = true;
+
+        // Ensure minimum display time is met
+        const elapsed = Date.now() - startTimeRef.current;
+        const remaining = Math.max(0, MIN_DISPLAY_MS - elapsed);
+
+        setTimeout(() => {
+            setProgress(100);
+            setTimeout(() => setLoading(false), 300); // Brief pause at 100%
+        }, remaining);
     }, []);
 
-    // Fetch logo from settings
+    // Call tryDismiss whenever any readiness flag changes
+    useEffect(() => { tryDismiss(); }, [logoLoaded, heroImageLoaded, animationDone, tryDismiss]);
+
+    // ─── 1. Fetch logo from settings ───
     useEffect(() => {
         async function fetchSettings() {
             try {
@@ -38,83 +93,148 @@ export default function Preloader() {
                 if (data.success && Array.isArray(data.data)) {
                     for (const item of data.data) {
                         if (item.key === 'logo_url') {
-                            setSettings({ logo_url: item.value });
+                            setSettings({ logo_url: toRelativeUrl(item.value) });
                             break;
                         }
                     }
                 }
             } catch (e) {
                 console.error('Failed to fetch logo:', e);
+                // If we can't fetch settings, mark logo as "loaded" so we don't block
+                setLogoLoaded(true);
             }
         }
         fetchSettings();
     }, []);
 
-    // Wait for fonts to load before showing brand name
+    // If no logo URL after settings load, mark as loaded
+    useEffect(() => {
+        if (settings.logo_url === undefined) return;
+        if (!settings.logo_url) {
+            setLogoLoaded(true);
+        }
+        // If logo_url exists, we wait for the Image onLoad callback
+    }, [settings]);
+
+    // ─── 2. Prefetch hero background image ───
+    useEffect(() => {
+        async function prefetchHeroImage() {
+            try {
+                const res = await fetch('/api/settings');
+                const data = await res.json();
+                if (data.success && Array.isArray(data.data)) {
+                    let heroImageUrl = '';
+
+                    for (const item of data.data) {
+                        // Try hero_backgrounds gallery first
+                        if (item.key === 'hero_backgrounds' && item.value) {
+                            try {
+                                const images = JSON.parse(item.value);
+                                if (images.length > 0 && images[0].image) {
+                                    heroImageUrl = toRelativeUrl(images[0].image);
+                                    if (!heroImageUrl.startsWith('http') && !heroImageUrl.startsWith('/')) {
+                                        heroImageUrl = '/' + heroImageUrl;
+                                    }
+                                    break;
+                                }
+                            } catch { /* ignore parse error */ }
+                        }
+                        // Fallback to hero_slides
+                        if (item.key === 'hero_slides' && item.value && !heroImageUrl) {
+                            try {
+                                const slides = JSON.parse(item.value);
+                                if (slides.length > 0 && slides[0].image) {
+                                    heroImageUrl = toRelativeUrl(slides[0].image);
+                                    if (!heroImageUrl.startsWith('http') && !heroImageUrl.startsWith('/')) {
+                                        heroImageUrl = '/' + heroImageUrl;
+                                    }
+                                }
+                            } catch { /* ignore parse error */ }
+                        }
+                    }
+
+                    if (heroImageUrl) {
+                        // Prefetch using native Image
+                        const img = new window.Image();
+                        img.onload = () => {
+                            setHeroImageLoaded(true);
+                        };
+                        img.onerror = () => {
+                            // Don't block preloader on image error
+                            setHeroImageLoaded(true);
+                        };
+                        img.src = heroImageUrl;
+                        return; // Wait for onload/onerror
+                    }
+                }
+            } catch (e) {
+                console.error('Failed to prefetch hero image:', e);
+            }
+            // Fallback: if nothing to prefetch, mark as ready
+            setHeroImageLoaded(true);
+        }
+        prefetchHeroImage();
+    }, []);
+
+    // ─── 3. Wait for fonts ───
     useEffect(() => {
         if (typeof document !== 'undefined' && document.fonts) {
             document.fonts.ready.then(() => {
                 setFontsLoaded(true);
             });
         } else {
-            // Fallback for older browsers
             setFontsLoaded(true);
         }
     }, []);
 
+    // ─── 4. Animation timer ───
     useEffect(() => {
-        let isMounted = true;
-        startTimeRef.current = Date.now();
+        const timer = setTimeout(() => {
+            setAnimationDone(true);
+        }, STROKE_ANIMATION_MS + 500); // Stroke animation + buffer
 
-        const finishLoading = () => {
-            if (!isMounted) return;
+        return () => clearTimeout(timer);
+    }, []);
 
-            setProgress(100);
-            setPageReady(true);
+    // ─── 5. Progress bar (reflects real state) ───
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setProgress(prev => {
+                let target = 10; // Base: fonts loading
 
-            // Calculate remaining time to meet minimum display
-            const elapsed = Date.now() - startTimeRef.current;
-            const remainingMin = Math.max(0, MIN_DISPLAY_MS - elapsed);
+                if (fontsLoadedRef.current) target += 15;     // fonts: +15 = 25
+                if (logoLoadedRef.current) target += 25;      // logo: +25 = 50
+                if (heroImageLoadedRef.current) target += 30;  // hero: +30 = 80
+                if (animationDoneRef.current) target += 15;   // anim: +15 = 95
 
-            // Wait for minimum display time before hiding
-            setTimeout(() => {
-                if (isMounted) setLoading(false);
-            }, remainingMin + 200); // +200ms for smooth exit
-        };
+                // Smoothly approach target (never jump)
+                const step = Math.max(1, Math.ceil((target - prev) * 0.15));
+                const next = Math.min(prev + step, target);
+                return Math.min(next, 95); // Cap at 95 until dismiss
+            });
+        }, 100);
 
-        // Progress animation
-        const progressInterval = setInterval(() => {
-            if (isMounted) {
-                setProgress(prev => Math.min(prev + 6, pageReady ? 100 : 90));
+        return () => clearInterval(interval);
+    }, []);
+
+    // ─── 6. Fallback: MAX_WAIT prevents infinite loading ───
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            if (!dismissedRef.current) {
+                console.warn('Preloader: MAX_WAIT reached, forcing dismiss');
+                dismissedRef.current = true;
+                setProgress(100);
+                setTimeout(() => setLoading(false), 300);
             }
-        }, 80);
-
-        // Listen for page load
-        const handleLoad = () => {
-            clearInterval(progressInterval);
-            finishLoading();
-        };
-
-        // Fallback: max wait time
-        const maxWaitTimer = setTimeout(() => {
-            clearInterval(progressInterval);
-            finishLoading();
         }, MAX_WAIT_MS);
 
-        window.addEventListener('load', handleLoad);
+        return () => clearTimeout(timer);
+    }, []);
 
-        // Check if already loaded
-        if (checkPageReady()) {
-            handleLoad();
-        }
-
-        return () => {
-            isMounted = false;
-            clearInterval(progressInterval);
-            clearTimeout(maxWaitTimer);
-            window.removeEventListener('load', handleLoad);
-        };
-    }, [checkPageReady, pageReady]);
+    // Handle logo image loaded
+    const handleLogoLoad = useCallback(() => {
+        setLogoLoaded(true);
+    }, []);
 
     return (
         <AnimatePresence>
@@ -234,6 +354,8 @@ export default function Preloader() {
                                 width={180}
                                 height={72}
                                 style={{ objectFit: 'contain' }}
+                                onLoad={handleLogoLoad}
+                                priority
                             />
                         </motion.div>
                     )}

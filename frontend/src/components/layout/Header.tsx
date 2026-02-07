@@ -8,6 +8,18 @@ import { NAV_LINKS, SITE } from '@/lib/constants';
 import BrandLogoText from '@/components/core/BrandLogoText';
 import ThemeToggle from '@/components/core/ThemeToggle';
 
+/** Convert absolute hylacviet URL to relative path */
+function toRelativeUrl(url: string): string {
+    if (!url) return url;
+    try {
+        const u = new URL(url);
+        if (u.hostname.endsWith('hylacviet.vn')) {
+            return u.pathname + u.search;
+        }
+    } catch { /* not a valid URL, return as-is */ }
+    return url;
+}
+
 interface Settings {
     logo_url?: string;
     site_name?: string;
@@ -17,6 +29,7 @@ export default function Header() {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [settings, setSettings] = useState<Settings>({});
+    const [logoError, setLogoError] = useState(false); // Added logoError state
     const pathname = usePathname();
 
     useEffect(() => {
@@ -36,8 +49,10 @@ export default function Header() {
                 if (data.success && Array.isArray(data.data)) {
                     const settingsMap: Settings = {};
                     for (const item of data.data) {
-                        if (item.key === 'logo_url' || item.key === 'site_name') {
-                            settingsMap[item.key as keyof Settings] = item.value;
+                        if (item.key === 'logo_url') {
+                            settingsMap.logo_url = toRelativeUrl(item.value);
+                        } else if (item.key === 'site_name') {
+                            settingsMap.site_name = item.value;
                         }
                     }
                     setSettings(settingsMap);
@@ -69,7 +84,7 @@ export default function Header() {
                 <div className="header-inner container">
                     {/* Logo */}
                     <Link href="/" className="header-logo">
-                        {settings.logo_url ? (
+                        {settings.logo_url && !logoError ? (
                             <Image
                                 src={settings.logo_url}
                                 alt={siteName}
@@ -77,6 +92,7 @@ export default function Header() {
                                 height={50}
                                 className="header-logo-img"
                                 priority
+                                onError={() => setLogoError(true)}
                             />
                         ) : (
                             <span className="header-logo-text"><BrandLogoText height={28} /></span>
@@ -117,14 +133,19 @@ export default function Header() {
             {/* Mobile Menu - OUTSIDE header to avoid stacking context issues */}
             <div className={`mobile-menu ${isMobileMenuOpen ? 'active' : ''}`}>
                 {/* Mobile Menu Logo */}
-                {settings.logo_url && (
+                {settings.logo_url && !logoError ? (
                     <div className="mobile-menu-logo">
                         <Image
                             src={settings.logo_url}
                             alt={siteName}
                             width={120}
                             height={48}
+                            onError={() => setLogoError(true)}
                         />
+                    </div>
+                ) : (
+                    <div className="mobile-menu-logo">
+                        <BrandLogoText height={36} />
                     </div>
                 )}
 
