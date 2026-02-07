@@ -55,13 +55,19 @@ const defaultCategories: Category[] = [
     },
 ];
 
-// Shimmer placeholder - matches page ivory background for smooth transition
-const shimmerPlaceholder = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUzMyIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjVmM2VlIi8+PC9zdmc+';
+// Shimmer placeholder - dark warm tone to match product images (reduces flash on load)
+const shimmerPlaceholder = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUzMyIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMmEyNDIwIi8+PC9zdmc+';
 
 export default function CategoryShowcase() {
     const containerRef = useRef<HTMLElement>(null);
     const [categories, setCategories] = useState<Category[]>([]);
     const [isLoaded, setIsLoaded] = useState(false);
+    const [loadedImages, setLoadedImages] = useState<Set<string>>(new Set());
+
+    // Track when an image finishes loading
+    const handleImageLoad = (categoryId: string) => {
+        setLoadedImages(prev => new Set(prev).add(categoryId));
+    };
 
     // Fetch categories from API
     useEffect(() => {
@@ -105,50 +111,55 @@ export default function CategoryShowcase() {
                 {/* Categories Grid */}
                 {isLoaded && (
                     <div className="categories-showcase-grid">
-                        {categories.map((category, index) => (
-                            <motion.article
-                                key={category.id}
-                                className="category-showcase-item"
-                                initial={{ opacity: 0, y: 30 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.6, delay: index * 0.1 }}
-                                viewport={{ once: true, margin: '-100px' }}
-                            >
-                                <Link href={`/san-pham?category=${category.slug}`} className="category-showcase-link">
-                                    <div className="category-showcase-image">
-                                        {category.image ? (
-                                            <Image
-                                                src={category.image}
-                                                alt={category.name}
-                                                fill
-                                                sizes="(max-width: 768px) 100vw, 25vw"
-                                                className="category-img"
-                                                placeholder="blur"
-                                                blurDataURL={shimmerPlaceholder}
-                                                priority={index < 2}
-                                                style={{ objectFit: 'cover' }}
-                                            />
-                                        ) : (
-                                            <div className="category-icon-fallback">
-                                                <span>{category.icon}</span>
+                        {categories.map((category, index) => {
+                            const isImageLoaded = loadedImages.has(category.id);
+                            return (
+                                <motion.article
+                                    key={category.id}
+                                    className="category-showcase-item"
+                                    initial={{ opacity: 0, y: 30 }}
+                                    animate={isImageLoaded || !category.image ? { opacity: 1, y: 0 } : { opacity: 0.3, y: 30 }}
+                                    transition={{ duration: 0.6, delay: isImageLoaded ? 0 : index * 0.1 }}
+                                    viewport={{ once: true, margin: '-100px' }}
+                                    style={{ willChange: 'transform, opacity' }}
+                                >
+                                    <Link href={`/san-pham?category=${category.slug}`} className="category-showcase-link">
+                                        <div className="category-showcase-image">
+                                            {category.image ? (
+                                                <Image
+                                                    src={category.image}
+                                                    alt={category.name}
+                                                    fill
+                                                    sizes="(max-width: 768px) 100vw, 25vw"
+                                                    className="category-img"
+                                                    placeholder="blur"
+                                                    blurDataURL={shimmerPlaceholder}
+                                                    priority={index < 2}
+                                                    style={{ objectFit: 'cover' }}
+                                                    onLoad={() => handleImageLoad(category.id)}
+                                                />
+                                            ) : (
+                                                <div className="category-icon-fallback">
+                                                    <span>{category.icon}</span>
+                                                </div>
+                                            )}
+                                            <div className="category-overlay">
+                                                <span className="view-link">
+                                                    Xem chi tiết →
+                                                </span>
                                             </div>
-                                        )}
-                                        <div className="category-overlay">
-                                            <span className="view-link">
-                                                Xem chi tiết →
-                                            </span>
                                         </div>
-                                    </div>
-                                    <div className="category-showcase-info">
-                                        <h3>{category.name}</h3>
-                                        <p>{category.description}</p>
-                                        {category.product_count && category.product_count > 0 && (
-                                            <span className="product-count">{category.product_count} sản phẩm</span>
-                                        )}
-                                    </div>
-                                </Link>
-                            </motion.article>
-                        ))}
+                                        <div className="category-showcase-info">
+                                            <h3>{category.name}</h3>
+                                            <p>{category.description}</p>
+                                            {category.product_count && category.product_count > 0 && (
+                                                <span className="product-count">{category.product_count} sản phẩm</span>
+                                            )}
+                                        </div>
+                                    </Link>
+                                </motion.article>
+                            );
+                        })}
                     </div>
                 )}
 

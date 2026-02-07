@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { NAV_LINKS, SITE } from '@/lib/constants';
+import BrandLogoText from '@/components/core/BrandLogoText';
 
 interface Settings {
     logo_url?: string;
@@ -87,7 +88,7 @@ export default function Header() {
                                 priority
                             />
                         ) : (
-                            <span className="header-logo-text">{siteName}</span>
+                            <span className="header-logo-text"><BrandLogoText height={28} /></span>
                         )}
                     </Link>
 
@@ -157,7 +158,7 @@ export default function Header() {
                 {/* Footer Tagline */}
                 <div className="mobile-menu-footer">
                     <div className="mobile-menu-divider" />
-                    <span className="mobile-menu-tagline">Since 2018 • Hà Nội</span>
+                    <span className="mobile-menu-tagline">Since 2026 • Hà Nội</span>
                 </div>
             </div>
         </>

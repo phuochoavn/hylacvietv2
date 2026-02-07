@@ -128,7 +128,7 @@ export default function BrandStory() {
                         Kế Thừa<br />
                         <span className="title-accent">Tinh Hoa</span><br />
                         Truyền Thống
-                        <span className="story-since">Since 2018</span>
+                        <span className="story-since">Since 2026</span>
                     </motion.h2>
 
                     <motion.div

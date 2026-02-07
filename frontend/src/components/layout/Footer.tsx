@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { SITE, NAV_LINKS, SOCIAL_LINKS } from '@/lib/constants';
+import BrandLogoText from '@/components/core/BrandLogoText';
 
 export default function Footer() {
     return (
@@ -7,7 +8,7 @@ export default function Footer() {
             <div className="container">
                 {/* Centered Logo */}
                 <div className="footer-center-brand">
-                    <h3 className="footer-logo-luxury">{SITE.name}</h3>
+                    <h3 className="footer-logo-luxury"><BrandLogoText height={40} /></h3>
                     <p className="footer-tagline-luxury">{SITE.tagline}</p>
                 </div>
 

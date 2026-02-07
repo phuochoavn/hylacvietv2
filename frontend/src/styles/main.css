@@ -14,7 +14,16 @@
 @import './products.css';
 @import './filter-drawer.css';
 
-/* Custom Font - SVN-Magellin (must be after @imports) */
+/* Custom Font - Cotta Free (brand name font, must be after @imports) */
+@font-face {
+    font-family: 'Cotta Free';
+    src: url('/fonts/CottaFree.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Custom Font - SVN-Magellin (legacy) */
 @font-face {
     font-family: 'SVN-Magellin';
     src: url('/fonts/SVN-Magellin.otf') format('opentype');

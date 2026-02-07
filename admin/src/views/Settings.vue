@@ -66,7 +66,7 @@ const brandingFields = [
 ]
 
 const contentFields = [
-  { key: 'hero_label', label: 'Label Hero (dòng nhỏ trên)', type: 'text', placeholder: 'Since 2018 • Hà Nội' },
+  { key: 'hero_label', label: 'Label Hero (dòng nhỏ trên)', type: 'text', placeholder: 'Since 2026 • Hà Nội' },
   { key: 'hero_title', label: 'Tiêu đề Hero chính', type: 'text', placeholder: 'Hỷ Lạc Việt' },
   { key: 'hero_tagline', label: 'Tagline Hero', type: 'text', placeholder: 'Áo Dài & Pháp Phục Cao Cấp' },
   { key: 'hero_description', label: 'Mô tả Hero', type: 'textarea', placeholder: 'Nơi nghệ thuật áo dài truyền thống hội tụ cùng tâm huyết...' },
@@ -763,7 +763,7 @@ function generateSlug(name: string): string {
                 <input 
                   v-model="settings.hero_label" 
                   type="text" 
-                  placeholder="Since 2018 • Hà Nội"
+                  placeholder="Since 2026 • Hà Nội"
                   class="form-input"
                 />
               </div>

@@ -27,7 +27,7 @@
 
     /* ===== TYPOGRAPHY ===== */
     /* Brand display font - ONLY for "Hỷ Lạc Việt" hero title */
-    --font-brand: 'SVN-Magellin', Georgia, serif;
+    --font-brand: 'Cotta Free', 'SVN-Magellin', Georgia, serif;
     /* Serif font - for sophisticated headings and narrative (uses next/font) */
     --font-serif: var(--font-cormorant, 'Cormorant Garamond'), serif;
     /* Display font - for all headings (uses next/font) */

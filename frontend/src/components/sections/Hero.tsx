@@ -4,11 +4,12 @@ import { useRef, useEffect, useState } from 'react';
 import Image from 'next/image';
 import { motion, useScroll, useTransform, useSpring, AnimatePresence } from 'framer-motion';
 import Button from '@/components/core/Button';
+import BrandLogoText from '@/components/core/BrandLogoText';
 import { SITE } from '@/lib/constants';
 
 // Default content (fallback if API fails)
 const defaultContent = {
-    label: 'Since 2018 • Hà Nội',
+    label: 'Since 2026 • Hà Nội',
     title: 'Hỷ Lạc Việt',
     tagline: 'Áo Dài & Pháp Phục Cao Cấp',
     description: 'Nơi nghệ thuật áo dài truyền thống hội tụ cùng tâm huyết của những nghệ nhân lành nghề. Mỗi tác phẩm là một câu chuyện văn hóa được thêu dệt bằng sự tinh tế.',
@@ -276,7 +277,7 @@ export default function Hero() {
                                 animate={{ opacity: 1, y: 0, clipPath: 'inset(0% 0 0 0)' }}
                                 transition={{ duration: 1.2, delay: 1, ease: [0.22, 1, 0.36, 1] }}
                             >
-                                <span className="title-line">{content.title}</span>
+                                <span className="title-line"><BrandLogoText height={80} /></span>
                             </motion.h1>
 
                             <motion.p
