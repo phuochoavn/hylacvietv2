@@ -1,7 +1,7 @@
 import Hero from '@/components/sections/Hero';
 import BrandStory from '@/components/sections/BrandStory';
 import Philosophy from '@/components/sections/Philosophy';
-import CategoryShowcase from '@/components/sections/CategoryShowcase';
+import ProductShowcase from '@/components/sections/ProductShowcase';
 import Craftsmanship from '@/components/sections/Craftsmanship';
 import MeasurementJourney from '@/components/sections/MeasurementJourney';
 
@@ -21,7 +21,7 @@ export default function HomePage() {
             <div className="main-content">
                 <BrandStory />
                 <Philosophy />
-                <CategoryShowcase />
+                <ProductShowcase />
                 <Craftsmanship />
                 <MeasurementJourney />
 

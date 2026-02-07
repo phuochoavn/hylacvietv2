@@ -3,6 +3,7 @@
 :root {
     /* ===== COLORS ===== */
     /* Primary - Gold */
+    --brand-brown: #6B4226;
     --gold: #c9a227;
     --gold-light: #e5d4a8;
     --gold-dark: #8b7355;

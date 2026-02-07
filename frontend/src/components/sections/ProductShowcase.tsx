@@ -1,78 +1,72 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 
-const categories = [
-    { id: 'all', label: 'Tất Cả' },
-    { id: 'ao_dai_ngu_than', label: 'Ngũ Thân' },
-    { id: 'ao_dai_4_ta', label: '4 Tà' },
-    { id: 'ao_dai_2_ta', label: '2 Tà' },
-    { id: 'phap_phuc_linen', label: 'Pháp Phục' },
-];
+interface Product {
+    id: string;
+    name: string;
+    description: string;
+    price: number;
+    images: string[];
+    category: string;
+    status: string;
+}
 
-// Featured products data
-const products = [
-    {
-        id: 1,
-        name: 'Áo Dài Hoa Sen Đỏ',
-        category: 'ao_dai_ngu_than',
-        price: 8500000,
-        image: '/images/products/aodai-1.jpg',
-    },
-    {
-        id: 2,
-        name: 'Áo Dài Cưới Vàng Hoàng Gia',
-        category: 'ao_dai_4_ta',
-        price: 15000000,
-        image: '/images/products/aodai-2.jpg',
-    },
-    {
-        id: 3,
-        name: 'Pháp Phục Linen Trắng',
-        category: 'phap_phuc_linen',
-        price: 6500000,
-        image: '/images/products/aodai-3.jpg',
-    },
-    {
-        id: 4,
-        name: 'Áo Dài Thêu Rồng Phượng',
-        category: 'ao_dai_2_ta',
-        price: 12000000,
-        image: '/images/products/aodai-4.jpg',
-    },
-    {
-        id: 5,
-        name: 'Áo Dài Ngũ Thân Xanh Lục',
-        category: 'ao_dai_ngu_than',
-        price: 9500000,
-        image: '/images/products/aodai-5.jpg',
-    },
-    {
-        id: 6,
-        name: 'Áo Dài Cách Tân Hồng Pastel',
-        category: 'ao_dai_2_ta',
-        price: 7500000,
-        image: '/images/products/aodai-6.jpg',
-    },
-];
+/** Convert absolute hylacviet URL to relative path */
+function toRelativeUrl(url: string): string {
+    if (!url) return url;
+    try {
+        const u = new URL(url);
+        if (u.hostname.endsWith('hylacviet.vn')) {
+            return u.pathname + u.search;
+        }
+    } catch { /* not a valid URL, return as-is */ }
+    return url;
+}
+
+function formatPrice(price: number): string {
+    return new Intl.NumberFormat('vi-VN').format(price) + 'đ';
+}
+
+// Shimmer placeholder
+const shimmerPlaceholder = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUzMyIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMmEyNDIwIi8+PC9zdmc+';
 
 export default function ProductShowcase() {
-    const [activeCategory, setActiveCategory] = useState('all');
-    const containerRef = useRef<HTMLElement>(null);
+    const [products, setProducts] = useState<Product[]>([]);
+    const [isLoaded, setIsLoaded] = useState(false);
 
-    const filteredProducts = activeCategory === 'all'
-        ? products
-        : products.filter(p => p.category === activeCategory);
+    useEffect(() => {
+        async function fetchProducts() {
+            try {
+                const res = await fetch('/api/products');
+                const data = await res.json();
+                if (data.success && Array.isArray(data.data)) {
+                    // Take up to 3 active products
+                    const activeProducts = data.data
+                        .filter((p: Product) => p.status === 'active')
+                        .slice(0, 3);
+                    setProducts(activeProducts);
+                }
+            } catch (e) {
+                console.error('Failed to fetch products:', e);
+            } finally {
+                setIsLoaded(true);
+            }
+        }
+        fetchProducts();
+    }, []);
 
-    function formatPrice(price: number) {
-        return new Intl.NumberFormat('vi-VN').format(price) + '₫';
+    if (!isLoaded) return null;
+
+    if (products.length === 0) {
+        return null; // Don't show section if no products
     }
 
     return (
-        <section ref={containerRef} className="showcase-premium">
+        <section className="product-showcase">
             <div className="showcase-container">
                 {/* Header */}
                 <motion.div
@@ -82,87 +76,82 @@ export default function ProductShowcase() {
                     transition={{ duration: 0.8 }}
                     viewport={{ once: true }}
                 >
-                    <span className="section-label-premium">Bộ Sưu Tập</span>
+                    <span className="section-label-premium">Sản Phẩm</span>
                     <h2 className="showcase-title">
-                        Tác Phẩm<br />
+                        Bộ Sưu Tập<br />
                         <span className="title-accent">Nổi Bật</span>
                     </h2>
                 </motion.div>
 
-                {/* Category Filter */}
-                <motion.div
-                    className="showcase-filter"
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: 0.2 }}
-                    viewport={{ once: true }}
-                >
-                    {categories.map((cat) => (
-                        <button
-                            key={cat.id}
-                            onClick={() => setActiveCategory(cat.id)}
-                            className={`filter-btn ${activeCategory === cat.id ? 'active' : ''}`}
-                        >
-                            {cat.label}
-                        </button>
-                    ))}
-                </motion.div>
+                {/* Products Grid */}
+                <div className="product-showcase-grid">
+                    {products.map((product, index) => {
+                        const mainImage = product.images && product.images.length > 0
+                            ? toRelativeUrl(product.images[0])
+                            : null;
 
-                {/* Products Grid - Masonry Style */}
-                <motion.div
-                    className="showcase-grid"
-                    layout
-                >
-                    <AnimatePresence mode="popLayout">
-                        {filteredProducts.map((product, index) => (
+                        return (
                             <motion.article
                                 key={product.id}
-                                className="showcase-item"
-                                layout
-                                initial={{ opacity: 0, scale: 0.9 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                exit={{ opacity: 0, scale: 0.9 }}
-                                transition={{ duration: 0.5, delay: index * 0.08 }}
+                                className="product-showcase-card"
+                                initial={{ opacity: 0, y: 40 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.6, delay: index * 0.15 }}
+                                viewport={{ once: true, margin: '-50px' }}
                             >
-                                <Link href={`/san-pham/${product.id}`} className="showcase-link">
-                                    <div className="showcase-image-wrapper">
-                                        <Image
-                                            src={product.image}
-                                            alt={product.name}
-                                            fill
-                                            sizes="(max-width: 768px) 100vw, 33vw"
-                                            className="showcase-image"
-                                            style={{ objectFit: 'cover' }}
-                                        />
-                                        <div className="showcase-overlay">
-                                            <span className="view-btn">
-                                                <span>Xem Chi Tiết</span>
-                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                                    <path d="M7 17L17 7M17 7H7M17 7V17" />
+                                <Link href={`/san-pham/${product.id}`} className="product-showcase-link">
+                                    <div className="product-showcase-image">
+                                        {mainImage ? (
+                                            <Image
+                                                src={mainImage}
+                                                alt={product.name}
+                                                fill
+                                                sizes="(max-width: 768px) 100vw, 33vw"
+                                                className="product-img"
+                                                placeholder="blur"
+                                                blurDataURL={shimmerPlaceholder}
+                                                style={{ objectFit: 'cover' }}
+                                            />
+                                        ) : (
+                                            <div className="product-placeholder">
+                                                <span>📷</span>
+                                                <p>Ảnh sắp có</p>
+                                            </div>
+                                        )}
+                                        <div className="product-overlay">
+                                            <span className="view-detail-btn">
+                                                Xem Chi Tiết
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                                    <path d="M5 12h14M12 5l7 7-7 7" />
                                                 </svg>
                                             </span>
                                         </div>
                                     </div>
-                                    <div className="showcase-info">
-                                        <h3>{product.name}</h3>
-                                        <span className="showcase-price">{formatPrice(product.price)}</span>
+                                    <div className="product-showcase-info">
+                                        <h3 className="product-name">{product.name}</h3>
+                                        {product.description && (
+                                            <p className="product-desc">{product.description}</p>
+                                        )}
+                                        <div className="product-price-row">
+                                            <span className="product-price">{formatPrice(product.price)}</span>
+                                        </div>
                                     </div>
                                 </Link>
                             </motion.article>
-                        ))}
-                    </AnimatePresence>
-                </motion.div>
+                        );
+                    })}
+                </div>
 
                 {/* View All CTA */}
                 <motion.div
                     className="showcase-cta"
-                    initial={{ opacity: 0, y: 30 }}
+                    initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: 0.4 }}
+                    transition={{ duration: 0.6, delay: 0.3 }}
                     viewport={{ once: true }}
                 >
                     <Link href="/san-pham" className="btn-explore">
-                        <span>Xem Toàn Bộ Bộ Sưu Tập</span>
+                        <span>Xem Tất Cả Sản Phẩm</span>
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                             <path d="M5 12h14M12 5l7 7-7 7" />
                         </svg>
