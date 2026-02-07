@@ -15,7 +15,7 @@ interface BrandLogoTextProps {
 export default function BrandLogoText({ height = 60, className = '' }: BrandLogoTextProps) {
     // aspect ratio from potrace SVG viewBox: 1731 x 417
     const aspectRatio = 1731 / 417;
-    const width = height * aspectRatio;
+    const maxWidth = height * aspectRatio;
 
     return (
         <span
@@ -24,8 +24,9 @@ export default function BrandLogoText({ height = 60, className = '' }: BrandLogo
             aria-label="Hỷ Lạc Việt"
             style={{
                 display: 'inline-block',
-                width: `${width}px`,
-                height: `${height}px`,
+                width: '100%',
+                maxWidth: `${maxWidth}px`,
+                aspectRatio: `${aspectRatio}`,
                 backgroundColor: 'currentColor',
                 WebkitMaskImage: 'url(/images/brand-logo-text.svg)',
                 WebkitMaskSize: 'contain',
