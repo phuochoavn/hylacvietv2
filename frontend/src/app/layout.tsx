@@ -119,6 +119,10 @@ export default function RootLayout({
     return (
         <html lang="vi" className={`${cormorant.variable} ${roboto.variable}`}>
             <head>
+                {/* Theme initialization - prevents flash of wrong theme */}
+                <script dangerouslySetInnerHTML={{
+                    __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='dark'){document.documentElement.setAttribute('data-theme','dark')}else{document.documentElement.setAttribute('data-theme','light')}}catch(e){document.documentElement.setAttribute('data-theme','light')}})()`
+                }} />
                 {/* Critical CSS for Mobile Menu - prevents FOUC on iOS WebKit */}
                 <style dangerouslySetInnerHTML={{
                     __html: `

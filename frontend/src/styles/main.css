@@ -169,7 +169,7 @@
 .preloader {
     position: fixed;
     inset: 0;
-    background: var(--charcoal);
+    background: var(--preloader-bg);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -181,27 +181,27 @@
 .preloader-logo {
     font-family: var(--font-brand);
     font-size: var(--text-4xl);
-    color: var(--gold);
+    color: var(--preloader-accent);
     letter-spacing: 0.05em;
 }
 
 .preloader-website-logo {
     margin-top: var(--space-2);
     margin-bottom: var(--space-1);
-    filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.4));
+    filter: drop-shadow(0 0 15px rgba(139, 105, 20, 0.3));
 }
 
 .preloader-progress {
     width: 200px;
     height: 2px;
-    background: rgba(201, 162, 39, 0.2);
+    background: var(--preloader-bar-track);
     border-radius: var(--border-radius-full);
     overflow: hidden;
 }
 
 .preloader-progress-bar {
     height: 100%;
-    background: var(--gold);
+    background: var(--preloader-bar-fill);
     transition: width 0.1s;
 }
 

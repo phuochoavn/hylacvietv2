@@ -106,3 +106,46 @@
     --text-primary: var(--ivory);
     --text-secondary: var(--gold-light);
 }
+
+/* ===== SCOPED THEME TOKENS (header, preloader, hero only) ===== */
+/* Light = default. These vars are ONLY used by header, preloader, hero CSS. */
+:root {
+    /* Header */
+    --header-bg: rgba(250, 248, 245, 0.97);
+    --header-text: #1a1614;
+    --header-accent: #8B6914;
+    --header-border: rgba(0, 0, 0, 0.06);
+    --header-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+
+    /* Preloader */
+    --preloader-bg: #FAF8F5;
+    --preloader-text: #1a1614;
+    --preloader-accent: #8B6914;
+    --preloader-bar-track: rgba(139, 105, 20, 0.15);
+    --preloader-bar-fill: #8B6914;
+
+    /* Hero (homepage) */
+    --hero-overlay-opacity: 0.35;
+    --hero-gradient-end: rgba(250, 248, 245, 0.15);
+}
+
+/* Dark mode overrides for scoped areas */
+[data-theme="dark"] {
+    /* Header */
+    --header-bg: rgba(26, 22, 20, 0.95);
+    --header-text: #fffff0;
+    --header-accent: #c9a227;
+    --header-border: rgba(201, 162, 39, 0.1);
+    --header-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+
+    /* Preloader */
+    --preloader-bg: #1a1614;
+    --preloader-text: #fffff0;
+    --preloader-accent: #c9a227;
+    --preloader-bar-track: rgba(201, 162, 39, 0.2);
+    --preloader-bar-fill: #c9a227;
+
+    /* Hero */
+    --hero-overlay-opacity: 0.55;
+    --hero-gradient-end: rgba(10, 9, 8, 0.3);
+}

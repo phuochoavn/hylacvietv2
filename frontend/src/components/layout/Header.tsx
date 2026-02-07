@@ -6,6 +6,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { NAV_LINKS, SITE } from '@/lib/constants';
 import BrandLogoText from '@/components/core/BrandLogoText';
+import ThemeToggle from '@/components/core/ThemeToggle';
 
 interface Settings {
     logo_url?: string;
@@ -16,16 +17,7 @@ export default function Header() {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [settings, setSettings] = useState<Settings>({});
-    const [isLightMode, setIsLightMode] = useState(false);
     const pathname = usePathname();
-
-    // Light mode detection - deferred to client to avoid hydration mismatch
-    useEffect(() => {
-        // No pages need light mode currently - all use dark header
-        const lightModePages: string[] = [];
-        const shouldBeLightMode = lightModePages.some(p => pathname === p || pathname.startsWith(p + '/'));
-        setIsLightMode(shouldBeLightMode);
-    }, [pathname]);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -69,7 +61,6 @@ export default function Header() {
     const headerClassName = [
         'header',
         isScrolled ? 'header-scrolled' : '',
-        isLightMode ? 'header-light' : ''
     ].filter(Boolean).join(' ');
 
     return (
@@ -105,18 +96,21 @@ export default function Header() {
                         ))}
                     </nav>
 
-                    {/* Mobile Menu Button */}
-                    <button
-                        className="header-menu-btn"
-                        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                        aria-label="Toggle menu"
-                    >
-                        <span className={`hamburger ${isMobileMenuOpen ? 'active' : ''}`}>
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                        </span>
-                    </button>
+                    {/* Theme Toggle + Mobile Menu Button */}
+                    <div style={{ position: 'absolute', right: 'var(--space-6)', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <ThemeToggle />
+                        <button
+                            className="header-menu-btn"
+                            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                            aria-label="Toggle menu"
+                        >
+                            <span className={`hamburger ${isMobileMenuOpen ? 'active' : ''}`}>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </span>
+                        </button>
+                    </div>
                 </div>
             </header>
 
@@ -157,6 +151,7 @@ export default function Header() {
 
                 {/* Footer Tagline */}
                 <div className="mobile-menu-footer">
+                    <ThemeToggle />
                     <div className="mobile-menu-divider" />
                     <span className="mobile-menu-tagline">Since 2026 • Hà Nội</span>
                 </div>

@@ -261,23 +261,13 @@ export default function Hero() {
                                 transform: `translate(${mousePosition.x * 0.5}px, ${mousePosition.y * 0.5}px)`,
                             }}
                         >
-                            <motion.span
-                                className="hero-label"
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.8, delay: 0.8 }}
-                            >
-                                <span className="hero-label-line" />
-                                {content.label}
-                            </motion.span>
-
                             <motion.h1
                                 className="hero-title-main"
                                 initial={{ opacity: 0, y: 60, clipPath: 'inset(100% 0 0 0)' }}
                                 animate={{ opacity: 1, y: 0, clipPath: 'inset(0% 0 0 0)' }}
                                 transition={{ duration: 1.2, delay: 1, ease: [0.22, 1, 0.36, 1] }}
                             >
-                                <span className="title-line"><BrandLogoText height={80} /></span>
+                                <span className="title-line"><BrandLogoText height={100} /></span>
                             </motion.h1>
 
                             <motion.p
@@ -297,6 +287,16 @@ export default function Hero() {
                             >
                                 <p>{content.description}</p>
                             </motion.div>
+
+                            <motion.span
+                                className="hero-label"
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.8, delay: 1.7 }}
+                            >
+                                <span className="hero-label-line" />
+                                {content.label}
+                            </motion.span>
 
                             <motion.div
                                 className="hero-cta-group"
