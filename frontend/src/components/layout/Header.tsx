@@ -6,7 +6,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { NAV_LINKS, SITE } from '@/lib/constants';
 import BrandLogoText from '@/components/core/BrandLogoText';
-import ThemeToggle from '@/components/core/ThemeToggle';
+
 
 /** Convert absolute hylacviet URL to relative path */
 function toRelativeUrl(url: string): string {
@@ -112,21 +112,19 @@ export default function Header() {
                         ))}
                     </nav>
 
-                    {/* Theme Toggle + Mobile Menu Button */}
-                    <div style={{ position: 'absolute', right: 'var(--space-6)', display: 'flex', alignItems: 'center', gap: '12px' }}>
-                        <ThemeToggle />
-                        <button
-                            className="header-menu-btn"
-                            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                            aria-label="Toggle menu"
-                        >
-                            <span className={`hamburger ${isMobileMenuOpen ? 'active' : ''}`}>
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                            </span>
-                        </button>
-                    </div>
+                    {/* Mobile Menu Button */}
+                    <button
+                        className="header-menu-btn"
+                        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                        aria-label="Toggle menu"
+                        style={{ position: 'absolute', right: 'var(--space-6)' }}
+                    >
+                        <span className={`hamburger ${isMobileMenuOpen ? 'active' : ''}`}>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </span>
+                    </button>
                 </div>
             </header>
 
@@ -172,7 +170,6 @@ export default function Header() {
 
                 {/* Footer Tagline */}
                 <div className="mobile-menu-footer">
-                    <ThemeToggle />
                     <div className="mobile-menu-divider" />
                     <span className="mobile-menu-tagline">Since 2026 • Hà Nội</span>
                 </div>

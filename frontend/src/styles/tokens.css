@@ -1,30 +1,43 @@
 /* ===== HỶ LẠC VIỆT - Design Tokens ===== */
+/* Light-Only Premium Theme */
 
 :root {
     /* ===== COLORS ===== */
-    /* Primary - Gold */
+    /* Brand Gold */
     --brand-brown: #6B4226;
-    --gold: #c9a227;
-    --gold-light: #e5d4a8;
-    --gold-dark: #8b7355;
-    --gold-glow: rgba(201, 162, 39, 0.4);
+    --gold: #8B6914;
+    --gold-light: #C9A227;
+    --gold-dark: #6B5110;
+    --gold-glow: rgba(139, 105, 20, 0.25);
 
-    /* Neutrals */
+    /* Neutrals — Warm Light Palette */
     --cream: #FAF8F5;
     --ivory: #fffff0;
     --ivory-dark: #f5f5dc;
     --charcoal: #1a1614;
     --charcoal-soft: #2a2420;
-    --ink: #3d3530;
-    --ink-light: #6b5f54;
+    --ink: #2C2520;
+    --ink-light: #6B5F54;
 
-    /* Semantic */
-    --bg-light: var(--ivory);
-    --bg-dark: var(--charcoal);
-    --text-primary: var(--ink);
-    --text-secondary: var(--ink-light);
-    --text-on-dark: var(--ivory);
+    /* Backgrounds */
+    --bg-primary: #FAF8F5;
+    --bg-secondary: #F0EBE3;
+    --bg-accent: #E8E0D4;
+    --bg-light: #FAF8F5;
+    --bg-dark: #1a1614;
+
+    /* Text */
+    --text-primary: #2C2520;
+    --text-secondary: #6B5F54;
+    --text-tertiary: #9B8E82;
+    --text-on-dark: #fffff0;
+
+    /* Accent */
     --accent: var(--gold);
+
+    /* Borders */
+    --border-light: rgba(0, 0, 0, 0.08);
+    --border-medium: rgba(0, 0, 0, 0.12);
 
     /* ===== TYPOGRAPHY ===== */
     /* Brand display font - ONLY for "Hỷ Lạc Việt" hero title */
@@ -59,6 +72,7 @@
     --space-8: 32px;
     --space-10: 40px;
     --space-12: 48px;
+    --space-14: 56px;
     --space-16: 64px;
     --space-20: 80px;
     --space-24: 96px;
@@ -77,10 +91,12 @@
     --border-radius-full: 9999px;
 
     /* ===== SHADOWS ===== */
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
-    --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.08);
+    --shadow-xl: 0 20px 50px rgba(0, 0, 0, 0.1);
     --shadow-gold: 0 4px 20px var(--gold-glow);
+    --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.06);
 
     /* ===== TRANSITIONS ===== */
     --ease-out: cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -98,55 +114,23 @@
     --z-modal: 400;
     --z-cursor: 500;
     --z-preloader: 600;
-}
 
-/* Dark mode tokens */
-[data-theme="dark"] {
-    --bg-light: var(--charcoal);
-    --bg-dark: var(--ivory);
-    --text-primary: var(--ivory);
-    --text-secondary: var(--gold-light);
-}
-
-/* ===== SCOPED THEME TOKENS (header, preloader, hero only) ===== */
-/* Light = default. These vars are ONLY used by header, preloader, hero CSS. */
-:root {
+    /* ===== SCOPED THEME TOKENS ===== */
     /* Header */
     --header-bg: rgba(250, 248, 245, 0.97);
-    --header-text: #1a1614;
+    --header-text: #2C2520;
     --header-accent: #8B6914;
     --header-border: rgba(0, 0, 0, 0.06);
     --header-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
 
     /* Preloader */
     --preloader-bg: #FAF8F5;
-    --preloader-text: #1a1614;
+    --preloader-text: #2C2520;
     --preloader-accent: #8B6914;
     --preloader-bar-track: rgba(139, 105, 20, 0.15);
     --preloader-bar-fill: #8B6914;
 
-    /* Hero (homepage) */
+    /* Hero (homepage — keeps dark overlay on images) */
     --hero-overlay-opacity: 0.35;
     --hero-gradient-end: rgba(250, 248, 245, 0.15);
-}
-
-/* Dark mode overrides for scoped areas */
-[data-theme="dark"] {
-    /* Header */
-    --header-bg: rgba(26, 22, 20, 0.95);
-    --header-text: #fffff0;
-    --header-accent: #c9a227;
-    --header-border: rgba(201, 162, 39, 0.1);
-    --header-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
-
-    /* Preloader */
-    --preloader-bg: #1a1614;
-    --preloader-text: #fffff0;
-    --preloader-accent: #c9a227;
-    --preloader-bar-track: rgba(201, 162, 39, 0.2);
-    --preloader-bar-fill: #c9a227;
-
-    /* Hero */
-    --hero-overlay-opacity: 0.55;
-    --hero-gradient-end: rgba(10, 9, 8, 0.3);
 }

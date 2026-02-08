@@ -1,28 +1,11 @@
 'use client';
 
-import { useRef, useState, useEffect } from 'react';
+import { useRef } from 'react';
 import Image from 'next/image';
 import { motion, useScroll, useTransform } from 'framer-motion';
 
-interface StorySettings {
-    story_image?: string;
-    story_image_2?: string;
-    story_label?: string;
-    story_title?: string;
-    story_intro?: string;
-    story_content?: string;
-    story_stat1_value?: string;
-    story_stat1_label?: string;
-    story_stat2_value?: string;
-    story_stat2_label?: string;
-    story_stat3_value?: string;
-    story_stat3_label?: string;
-}
-
 export default function BrandStory() {
     const containerRef = useRef<HTMLElement>(null);
-    const [settings, setSettings] = useState<StorySettings>({});
-    const [isLoaded, setIsLoaded] = useState(false);
 
     const { scrollYProgress } = useScroll({
         target: containerRef,
@@ -31,32 +14,6 @@ export default function BrandStory() {
 
     const imageY = useTransform(scrollYProgress, [0, 1], ['10%', '-10%']);
     const textY = useTransform(scrollYProgress, [0, 1], ['5%', '-5%']);
-
-    // Fetch settings from API
-    useEffect(() => {
-        async function fetchSettings() {
-            try {
-                const res = await fetch('/api/settings');
-                const data = await res.json();
-                if (data.success && Array.isArray(data.data)) {
-                    const settingsMap: StorySettings = {};
-                    for (const item of data.data) {
-                        settingsMap[item.key as keyof StorySettings] = item.value;
-                    }
-                    setSettings(settingsMap);
-                }
-            } catch (e) {
-                console.error('Failed to fetch settings:', e);
-            } finally {
-                setIsLoaded(true);
-            }
-        }
-        fetchSettings();
-    }, []);
-
-    // Use API images or fallback to defaults
-    const mainImage = settings.story_image || '/images/story/artisan-work.jpg';
-    const accentImage = settings.story_image_2 || '/images/story/fabric-detail.jpg';
 
     return (
         <section ref={containerRef} className="brand-story-premium">
@@ -71,35 +28,31 @@ export default function BrandStory() {
                 >
                     <div className="story-image-wrapper">
                         <div className="story-image-frame">
-                            {isLoaded && (
-                                <Image
-                                    src={mainImage}
-                                    alt="Nghệ nhân Hỷ Lạc Việt đang thêu tay"
-                                    fill
-                                    sizes="(max-width: 1024px) 100vw, 50vw"
-                                    className="story-main-image"
-                                    style={{ objectFit: 'cover' }}
-                                />
-                            )}
+                            <Image
+                                src="/images/craft-measuring.webp"
+                                alt="Nghệ nhân Hỷ Lạc Việt đang thêu tay"
+                                fill
+                                sizes="(max-width: 1024px) 100vw, 50vw"
+                                className="story-main-image"
+                                style={{ objectFit: 'cover' }}
+                            />
                         </div>
 
                         {/* Floating accent image */}
-                        {isLoaded && (
-                            <motion.div
-                                className="story-accent-image"
-                                initial={{ opacity: 0, scale: 0.8 }}
-                                whileInView={{ opacity: 1, scale: 1 }}
-                                transition={{ duration: 0.8, delay: 0.3 }}
-                                viewport={{ once: true }}
-                            >
-                                <Image
-                                    src={accentImage}
-                                    alt="Chi tiết vải lụa"
-                                    width={200}
-                                    height={250}
-                                />
-                            </motion.div>
-                        )}
+                        <motion.div
+                            className="story-accent-image"
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 0.8, delay: 0.3 }}
+                            viewport={{ once: true }}
+                        >
+                            <Image
+                                src="/images/craft-embroidery.webp"
+                                alt="Chi tiết vải lụa"
+                                width={200}
+                                height={250}
+                            />
+                        </motion.div>
                     </div>
                 </motion.div>
 
@@ -115,7 +68,7 @@ export default function BrandStory() {
                         transition={{ duration: 0.6 }}
                         viewport={{ once: true }}
                     >
-                        {settings.story_label || 'Câu Chuyện Thương Hiệu'}
+                        Câu Chuyện Thương Hiệu
                     </motion.span>
 
                     <motion.h2
@@ -146,7 +99,7 @@ export default function BrandStory() {
                         transition={{ duration: 0.6, delay: 0.4 }}
                         viewport={{ once: true }}
                     >
-                        {settings.story_intro || 'Từ năm 2018, Hỷ Lạc Việt đã miệt mài gìn giữ và phát triển nghệ thuật may áo dài truyền thống Việt Nam.'}
+                        Từ năm 2018, Hỷ Lạc Việt đã miệt mài gìn giữ và phát triển nghệ thuật may áo dài truyền thống Việt Nam.
                     </motion.p>
 
                     <motion.p
@@ -156,7 +109,7 @@ export default function BrandStory() {
                         transition={{ duration: 0.6, delay: 0.5 }}
                         viewport={{ once: true }}
                     >
-                        {settings.story_content || 'Mỗi đường kim mũi chỉ là tâm huyết của những nghệ nhân lành nghề, những người đã dành cả đời để hoàn thiện kỹ thuật thêu tay tinh xảo. Chúng tôi tin rằng áo dài không chỉ là trang phục — mà là di sản văn hóa cần được trân trọng và gìn giữ.'}
+                        Mỗi đường kim mũi chỉ là tâm huyết của những nghệ nhân lành nghề, những người đã dành cả đời để hoàn thiện kỹ thuật thêu tay tinh xảo. Chúng tôi tin rằng áo dài không chỉ là trang phục — mà là di sản văn hóa cần được trân trọng và gìn giữ.
                     </motion.p>
 
                     {/* Stats */}
@@ -168,18 +121,18 @@ export default function BrandStory() {
                         viewport={{ once: true }}
                     >
                         <div className="stat">
-                            <span className="stat-number">{settings.story_stat1_value || '500+'}</span>
-                            <span className="stat-label">{settings.story_stat1_label || 'Tác Phẩm'}</span>
+                            <span className="stat-number">500+</span>
+                            <span className="stat-label">Tác Phẩm</span>
                         </div>
                         <div className="stat-divider" />
                         <div className="stat">
-                            <span className="stat-number">{settings.story_stat2_value || '100%'}</span>
-                            <span className="stat-label">{settings.story_stat2_label || 'Thủ Công'}</span>
+                            <span className="stat-number">100%</span>
+                            <span className="stat-label">Thủ Công</span>
                         </div>
                         <div className="stat-divider" />
                         <div className="stat">
-                            <span className="stat-number stat-icon">{settings.story_stat3_value || '❦'}</span>
-                            <span className="stat-label">{settings.story_stat3_label || 'Tâm Huyết'}</span>
+                            <span className="stat-number stat-icon">❦</span>
+                            <span className="stat-label">Tâm Huyết</span>
                         </div>
                     </motion.div>
 

@@ -3,16 +3,10 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import dynamic from 'next/dynamic';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useParams } from 'next/navigation';
+import ImageSlider from '@/components/effects/LiquidSlider';
 import '@/styles/product-detail-v2.css';
-
-// Dynamic import for LiquidSlider (WebGL - client only)
-const LiquidSlider = dynamic(
-    () => import('@/components/effects/LiquidSlider'),
-    { ssr: false, loading: () => <div className="liquid-slider-placeholder" style={{ aspectRatio: '3/4' }}><div className="liquid-loading"><div className="liquid-loading-spinner" /></div></div> }
-);
 
 interface Product {
     id: string;
@@ -61,21 +55,12 @@ const ChevronDownIcon = () => (
     </svg>
 );
 
-const ScissorsIcon = () => (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <circle cx="6" cy="6" r="3" />
-        <circle cx="6" cy="18" r="3" />
-        <path d="M20 4L8.12 15.88M14.47 14.48L20 20M8.12 8.12L12 12" />
-    </svg>
-);
-
 export default function ProductDetailPage() {
     const params = useParams();
     const [product, setProduct] = useState<Product | null>(null);
     const [sizeChart, setSizeChart] = useState<SizeChart | null>(null);
     const [loading, setLoading] = useState(true);
     const [sizeOpen, setSizeOpen] = useState(false);
-    const [showConsultForm, setShowConsultForm] = useState(false);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
     useEffect(() => {
@@ -140,6 +125,8 @@ export default function ProductDetailPage() {
         );
     }
 
+    const zaloUrl = `https://zalo.me/0912503456?text=${encodeURIComponent(`Xin chào, tôi muốn tư vấn về ${product.name}`)}`;
+
     return (
         <section className="product-detail-v2">
             {/* Back Link */}
@@ -160,7 +147,7 @@ export default function ProductDetailPage() {
                     <div className="gallery-wrapper">
                         {/* Main Liquid Slider */}
                         <div style={{ position: 'relative', width: '100%' }}>
-                            <LiquidSlider
+                            <ImageSlider
                                 images={product.images}
                                 currentIndex={currentImageIndex}
                                 aspectRatio={3 / 4}
@@ -262,22 +249,24 @@ export default function ProductDetailPage() {
                         </div>
                     )}
 
-                    {/* CTA Buttons */}
+                    {/* CTA — Zalo only */}
                     <div className="product-cta-v2">
-                        <button
-                            className="cta-primary-v2"
-                            onClick={() => setShowConsultForm(true)}
-                        >
-                            <ScissorsIcon />
-                            Thiết Kế Theo Số Đo Riêng
-                        </button>
                         <a
-                            href="https://zalo.me/0912503456"
+                            href={zaloUrl}
                             target="_blank"
                             rel="noopener noreferrer"
+                            className="cta-primary-v2"
+                        >
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
+                            </svg>
+                            Tư Vấn & Đặt May Qua Zalo
+                        </a>
+                        <a
+                            href="tel:0912503456"
                             className="cta-secondary-v2"
                         >
-                            Hoặc Chat Zalo Tư Vấn
+                            📞 Gọi Ngay: 0912 503 456
                         </a>
                     </div>
                 </motion.div>
@@ -321,142 +310,6 @@ export default function ProductDetailPage() {
                     </div>
                 </div>
             </div>
-
-            {/* Consultation Form Modal */}
-            <AnimatePresence>
-                {showConsultForm && (
-                    <ConsultationModal
-                        product={product}
-                        onClose={() => setShowConsultForm(false)}
-                    />
-                )}
-            </AnimatePresence>
         </section>
-    );
-}
-
-// Consultation Modal Component - Dark Theme
-function ConsultationModal({
-    product,
-    onClose
-}: {
-    product: Product;
-    onClose: () => void;
-}) {
-    const [formData, setFormData] = useState({
-        customer_name: '',
-        customer_phone: '',
-        measurements: '',
-        notes: '',
-    });
-    const [submitting, setSubmitting] = useState(false);
-    const [submitted, setSubmitted] = useState(false);
-
-    async function handleSubmit(e: React.FormEvent) {
-        e.preventDefault();
-        setSubmitting(true);
-
-        try {
-            const res = await fetch('/api/orders', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    ...formData,
-                    product_id: product.id,
-                    product_name: product.name,
-                }),
-            });
-            const data = await res.json();
-            if (data.success) {
-                setSubmitted(true);
-            } else {
-                alert('Có lỗi xảy ra, vui lòng thử lại');
-            }
-        } catch (e) {
-            console.error('Failed to submit:', e);
-            alert('Có lỗi xảy ra, vui lòng thử lại');
-        } finally {
-            setSubmitting(false);
-        }
-    }
-
-    return (
-        <motion.div
-            className="modal-overlay-v2"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={onClose}
-        >
-            <motion.div
-                className="modal-content-v2"
-                initial={{ opacity: 0, scale: 0.95, y: 20 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                onClick={(e) => e.stopPropagation()}
-            >
-                <button className="modal-close-v2" onClick={onClose}>&times;</button>
-
-                {submitted ? (
-                    <div className="modal-success-v2">
-                        <div className="success-icon-v2">✓</div>
-                        <h3>Gửi Thành Công!</h3>
-                        <p>Chúng tôi sẽ liên hệ bạn trong thời gian sớm nhất.</p>
-                        <button className="cta-primary-v2" onClick={onClose}>Đóng</button>
-                    </div>
-                ) : (
-                    <>
-                        <h2>Đặt May: {product.name}</h2>
-                        <form onSubmit={handleSubmit} className="form-v2">
-                            <div className="form-group-v2">
-                                <label>Họ Tên *</label>
-                                <input
-                                    type="text"
-                                    required
-                                    value={formData.customer_name}
-                                    onChange={(e) => setFormData({ ...formData, customer_name: e.target.value })}
-                                    placeholder="Nhập họ tên của bạn"
-                                />
-                            </div>
-                            <div className="form-group-v2">
-                                <label>Số Điện Thoại *</label>
-                                <input
-                                    type="tel"
-                                    required
-                                    value={formData.customer_phone}
-                                    onChange={(e) => setFormData({ ...formData, customer_phone: e.target.value })}
-                                    placeholder="Số điện thoại liên hệ"
-                                />
-                            </div>
-                            <div className="form-group-v2">
-                                <label>Số Đo (Nếu Có)</label>
-                                <textarea
-                                    value={formData.measurements}
-                                    onChange={(e) => setFormData({ ...formData, measurements: e.target.value })}
-                                    placeholder="Ví dụ: Vòng 1: 84cm, Vòng 2: 66cm, Vòng 3: 90cm..."
-                                    rows={3}
-                                />
-                            </div>
-                            <div className="form-group-v2">
-                                <label>Ghi Chú</label>
-                                <textarea
-                                    value={formData.notes}
-                                    onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                                    placeholder="Yêu cầu đặc biệt, màu sắc, chất liệu..."
-                                    rows={2}
-                                />
-                            </div>
-                            <button
-                                type="submit"
-                                className="cta-primary-v2"
-                                disabled={submitting}
-                            >
-                                {submitting ? 'Đang Gửi...' : 'Gửi Yêu Cầu'}
-                            </button>
-                        </form>
-                    </>
-                )}
-            </motion.div>
-        </motion.div>
     );
 }

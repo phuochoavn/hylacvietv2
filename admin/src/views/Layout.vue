@@ -12,8 +12,6 @@ const showProfileMenu = ref(false)
 const menuItems = [
   { path: '/dashboard', name: 'Dashboard', icon: '📊', badge: null },
   { path: '/products', name: 'Sản phẩm', icon: '👘', badge: null },
-  { path: '/categories', name: 'Danh mục', icon: '📁', badge: null },
-  { path: '/orders', name: 'Đơn hàng', icon: '📋', badge: 'new' },
   { path: '/settings', name: 'Cài đặt', icon: '⚙️', badge: null },
 ]
 

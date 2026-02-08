@@ -12,7 +12,7 @@ export const SITE = {
 
 export const NAV_LINKS = [
     { label: 'Trang chủ', href: '/' },
-    { label: 'Sản phẩm', href: '/san-pham' },
+    { label: 'Sản phẩm', href: '/#san-pham' },
     { label: 'May đo', href: '/may-do' },
     { label: 'Câu chuyện', href: '/gioi-thieu' },
     { label: 'Liên hệ', href: '/lien-he' },

@@ -3,7 +3,7 @@
 /* Hero Section - Full Screen Cinematic */
 .bespoke-page {
     min-height: 100vh;
-    background: #0a0908;
+    background: var(--bg-primary);
     position: relative;
 }
 
@@ -48,7 +48,13 @@
     z-index: 2;
     text-align: center;
     max-width: 900px;
-    padding: var(--space-8);
+    padding: var(--space-12) var(--space-10);
+    background: rgba(250, 248, 245, 0.88);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
 }
 
 .bespoke-overline {
@@ -65,7 +71,7 @@
     font-family: var(--font-display);
     font-size: clamp(2.8rem, 8vw, 5.5rem);
     font-weight: 300;
-    color: var(--ivory);
+    color: var(--brand-brown);
     line-height: 1.1;
     margin-bottom: var(--space-6);
     letter-spacing: -0.02em;
@@ -80,7 +86,7 @@
     font-family: var(--font-display);
     font-size: clamp(1rem, 2vw, 1.25rem);
     font-style: italic;
-    color: rgba(255, 255, 240, 0.6);
+    color: var(--text-secondary);
     max-width: 600px;
     margin: 0 auto var(--space-10);
     line-height: 1.8;
@@ -196,7 +202,7 @@
 
 .bespoke-split-text {
     font-size: var(--text-lg);
-    color: rgba(255, 255, 240, 0.7);
+    color: var(--text-secondary);
     line-height: 1.9;
     max-width: 500px;
 }
@@ -218,7 +224,7 @@
     font-family: var(--font-display);
     font-size: clamp(2rem, 5vw, 3.5rem);
     font-weight: 300;
-    color: var(--ivory);
+    color: var(--text-primary);
     margin-bottom: var(--space-4);
 }
 
@@ -231,7 +237,7 @@
     font-family: var(--font-display);
     font-style: italic;
     font-size: var(--text-lg);
-    color: rgba(255, 255, 240, 0.5);
+    color: var(--text-secondary);
 }
 
 /* Timeline Container */
@@ -289,7 +295,7 @@
     align-items: center;
     justify-content: center;
     border: 1px solid rgba(201, 162, 39, 0.4);
-    background: rgba(10, 9, 8, 0.8);
+    background: rgba(250, 248, 245, 0.9);
     position: relative;
 }
 
@@ -302,13 +308,13 @@
     font-family: var(--font-display);
     font-size: var(--text-xl);
     font-weight: 400;
-    color: var(--ivory);
+    color: var(--text-primary);
     margin-bottom: var(--space-3);
 }
 
 .bespoke-step-desc {
     font-size: var(--text-base);
-    color: rgba(255, 255, 240, 0.6);
+    color: var(--text-secondary);
     line-height: 1.7;
 }
 
@@ -374,7 +380,7 @@
     font-family: var(--font-display);
     font-size: clamp(2rem, 5vw, 3.5rem);
     font-weight: 300;
-    color: var(--ivory);
+    color: var(--text-primary);
     margin-bottom: var(--space-4);
     line-height: 1.2;
 }
@@ -388,7 +394,7 @@
     font-family: var(--font-display);
     font-style: italic;
     font-size: var(--text-lg);
-    color: rgba(255, 255, 240, 0.5);
+    color: var(--text-secondary);
     margin-bottom: var(--space-10);
 }
 
@@ -403,7 +409,7 @@
     font-weight: 500;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: var(--charcoal);
+    color: white;
     background: var(--gold);
     border: none;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);

@@ -5,8 +5,8 @@
 
 /* ========== MAIN CONTAINER ========== */
 .about-memoir {
-    background: var(--charcoal);
-    color: var(--cream);
+    background: var(--bg-primary);
+    color: var(--text-primary);
 }
 
 /* ========== HERO SECTION ========== */
@@ -111,20 +111,20 @@
 }
 
 .memoir-section.dark {
-    background: var(--charcoal);
+    background: var(--bg-secondary);
 }
 
 .memoir-section.dark .memoir-heading {
-    color: var(--cream);
+    color: var(--text-primary);
 }
 
 .memoir-section.dark .memoir-drop-cap,
 .memoir-section.dark .memoir-body {
-    color: var(--cream-muted);
+    color: var(--text-secondary);
 }
 
 .memoir-section.dark .memoir-image-caption {
-    color: var(--cream-muted);
+    color: var(--text-tertiary);
 }
 
 .memoir-zigzag {
@@ -186,7 +186,7 @@
     font-family: var(--font-display);
     font-size: clamp(2rem, 4vw, 3rem);
     font-weight: 400;
-    color: var(--charcoal);
+    color: var(--text-primary);
     margin-bottom: var(--space-4);
 }
 
@@ -201,7 +201,7 @@
     font-family: var(--font-body);
     font-size: 1.15rem;
     line-height: 1.9;
-    color: var(--charcoal);
+    color: var(--text-primary);
     margin-bottom: var(--space-6);
     text-align: justify;
 }
@@ -228,7 +228,7 @@
 /* ========== QUOTE SECTION ========== */
 .memoir-quote-section {
     padding: var(--space-32) var(--space-8);
-    background: var(--charcoal);
+    background: var(--bg-secondary);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -266,7 +266,7 @@
     font-size: clamp(1.5rem, 3vw, 2rem);
     font-style: italic;
     font-weight: 400;
-    color: var(--cream);
+    color: var(--text-primary);
     line-height: 1.8;
     position: relative;
     z-index: 1;
@@ -275,7 +275,7 @@
 /* ========== CORE VALUES SECTION ========== */
 .memoir-values {
     padding: var(--space-32) var(--space-8);
-    background: #0a0908;
+    background: var(--bg-primary);
 }
 
 .memoir-values-header {
@@ -287,7 +287,7 @@
     font-family: var(--font-display);
     font-size: clamp(2.5rem, 5vw, 4rem);
     font-weight: 400;
-    color: var(--cream);
+    color: var(--text-primary);
 }
 
 .memoir-values-title em {
@@ -310,7 +310,7 @@
 }
 
 .memoir-value:hover {
-    background: rgba(255, 255, 255, 0.02);
+    background: rgba(0, 0, 0, 0.02);
     transform: translateY(-5px);
 }
 
@@ -331,7 +331,7 @@
     font-family: var(--font-display);
     font-size: 1.3rem;
     font-weight: 400;
-    color: var(--cream);
+    color: var(--text-primary);
     margin-bottom: var(--space-2);
 }
 
@@ -348,7 +348,7 @@
 .value-desc {
     font-family: var(--font-body);
     font-size: 0.9rem;
-    color: var(--cream-muted);
+    color: var(--text-secondary);
     line-height: 1.7;
     margin-bottom: var(--space-6);
 }
@@ -364,9 +364,7 @@
 /* ========== SIGNATURE SECTION ========== */
 .memoir-signature-section {
     padding: var(--space-32) var(--space-8);
-    background: linear-gradient(to bottom,
-            #0a0908 0%,
-            var(--charcoal) 100%);
+    background: var(--bg-secondary);
     text-align: center;
 }
 
@@ -380,7 +378,7 @@
     font-size: 1.1rem;
     font-style: italic;
     line-height: 1.9;
-    color: var(--cream-muted);
+    color: var(--text-secondary);
     margin-bottom: var(--space-12);
 }
 
@@ -418,7 +416,7 @@
     font-size: 0.7rem;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: var(--cream-muted);
+    color: var(--text-tertiary);
     margin-top: var(--space-1);
 }
 
@@ -432,7 +430,7 @@
     font-size: 0.8rem;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: var(--charcoal);
+    color: white;
     text-decoration: none;
     cursor: pointer;
     transition: all 0.5s ease;

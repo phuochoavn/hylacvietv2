@@ -128,6 +128,13 @@
 .hero-text {
     transition: transform 0.3s ease-out;
     will-change: transform;
+    background: rgba(250, 248, 245, 0.88);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-radius: 16px;
+    padding: var(--space-10) var(--space-10) var(--space-8);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
 }
 
 .hero-label {
@@ -178,10 +185,10 @@
     font-size: var(--text-xl);
     font-weight: 400;
     font-style: italic;
-    color: var(--gold-light);
+    color: var(--gold);
     letter-spacing: 0.05em;
     margin-bottom: var(--space-4);
-    opacity: 0.9;
+    opacity: 1;
 }
 
 .hero-description {
@@ -192,7 +199,7 @@
 .hero-description p {
     font-size: var(--text-sm);
     line-height: 1.8;
-    color: rgba(255, 245, 210, 0.85);
+    color: var(--text-secondary);
     font-weight: 300;
 }
 

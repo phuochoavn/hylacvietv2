@@ -5,8 +5,8 @@
 
 /* ========== MAIN CONTAINER ========== */
 .contact-showroom {
-    background: var(--charcoal);
-    color: var(--cream);
+    background: var(--bg-primary);
+    color: var(--text-primary);
 }
 
 /* ========== HERO SECTION - MINIMALIST ========== */
@@ -101,7 +101,7 @@
 .contact-subtitle {
     font-family: var(--font-body);
     font-size: 1rem;
-    color: rgba(255, 255, 240, 0.5);
+    color: var(--text-secondary);
     font-style: italic;
     max-width: 400px;
     margin: 0 auto var(--space-10);
@@ -122,7 +122,7 @@
 /* ========== INVITATION SECTION ========== */
 .contact-invitation {
     padding: var(--space-24) var(--space-8);
-    background: #0a0908;
+    background: var(--bg-secondary);
 }
 
 .invitation-grid {
@@ -143,7 +143,7 @@
     position: relative;
     aspect-ratio: 3/4;
     overflow: hidden;
-    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+    box-shadow: var(--shadow-xl);
 }
 
 .invitation-image-caption {
@@ -152,7 +152,7 @@
     font-family: var(--font-body);
     font-size: 0.85rem;
     font-style: italic;
-    color: var(--cream-muted);
+    color: var(--text-tertiary);
     text-align: center;
     opacity: 0.6;
 }
@@ -167,7 +167,7 @@
     font-family: var(--font-display);
     font-size: clamp(2rem, 4vw, 3rem);
     font-weight: 400;
-    color: var(--cream);
+    color: var(--text-primary);
     margin-bottom: var(--space-4);
 }
 
@@ -216,14 +216,14 @@
     font-size: 0.65rem;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: var(--cream-muted);
+    color: var(--text-tertiary);
     opacity: 0.6;
 }
 
 .detail-value {
     font-family: var(--font-body);
     font-size: 1.1rem;
-    color: var(--cream);
+    color: var(--text-primary);
     text-decoration: none;
     transition: color 0.3s ease;
 }
@@ -236,7 +236,7 @@ a.detail-value:hover {
     font-family: var(--font-body);
     font-size: 0.95rem;
     line-height: 1.8;
-    color: var(--cream-muted);
+    color: var(--text-secondary);
     font-style: italic;
     margin-bottom: var(--space-8);
     padding-left: var(--space-4);
@@ -256,7 +256,7 @@ a.detail-value:hover {
     font-size: 0.8rem;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: var(--charcoal);
+    color: white;
     text-decoration: none;
     cursor: pointer;
     transition: all 0.5s ease;
@@ -270,13 +270,13 @@ a.detail-value:hover {
 .invitation-cta .contact-icon {
     width: 18px;
     height: 18px;
-    color: var(--charcoal);
+    color: white;
 }
 
 /* ========== MAP SECTION ========== */
 .contact-map-section {
     padding: var(--space-24) var(--space-8);
-    background: var(--charcoal);
+    background: var(--bg-primary);
 }
 
 .map-header {
@@ -288,7 +288,7 @@ a.detail-value:hover {
     font-family: var(--font-display);
     font-size: clamp(2rem, 4vw, 3rem);
     font-weight: 400;
-    color: var(--cream);
+    color: var(--text-primary);
 }
 
 .map-title em {
@@ -335,7 +335,7 @@ a.detail-value:hover {
     font-size: 0.75rem;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: var(--cream-muted);
+    color: var(--text-secondary);
     text-decoration: none;
     transition: all 0.3s ease;
 }
@@ -353,9 +353,7 @@ a.detail-value:hover {
 /* ========== CLOSING SECTION ========== */
 .contact-closing {
     padding: var(--space-24) var(--space-8);
-    background: linear-gradient(to bottom,
-            var(--charcoal) 0%,
-            #0a0908 100%);
+    background: var(--bg-secondary);
     text-align: center;
 }
 
@@ -369,7 +367,7 @@ a.detail-value:hover {
     font-size: 1.1rem;
     font-style: italic;
     line-height: 1.9;
-    color: var(--cream-muted);
+    color: var(--text-secondary);
     margin-bottom: var(--space-10);
 }
 
@@ -392,7 +390,7 @@ a.detail-value:hover {
     font-size: 0.65rem;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: var(--cream-muted);
+    color: var(--text-tertiary);
     opacity: 0.6;
 }
 

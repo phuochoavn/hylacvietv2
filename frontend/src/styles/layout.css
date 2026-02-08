@@ -413,37 +413,7 @@
 }
 
 /* ===== Light Mode Header (for light background pages) ===== */
-.header-light {
-    background: transparent !important;
-}
-
-.header-light.header-scrolled {
-    background: rgba(250, 248, 245, 0.95) !important;
-    backdrop-filter: blur(20px);
-    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
-}
-
-.header-light .header-nav-link {
-    color: #3d3830;
-}
-
-.header-light .header-nav-link:hover,
-.header-light .header-nav-link.active {
-    color: var(--gold);
-}
-
-.header-light .header-logo-text {
-    color: var(--gold);
-    text-shadow: none;
-}
-
-.header-light .header-logo-img {
-    filter: none;
-}
-
-.header-light .hamburger span {
-    background: #3d3830;
-}
+/* Header is always light now — remove header-light overrides */
 
 /* ----- FOOTER ----- */
 
@@ -648,7 +618,7 @@
     min-height: 100vh;
     padding-top: calc(var(--header-height) + var(--space-12));
     padding-bottom: var(--space-16);
-    background: var(--charcoal);
+    background: var(--bg-primary);
 }
 
 .page-hero {
@@ -660,13 +630,13 @@
 .page-hero h1 {
     font-family: var(--font-display);
     font-size: clamp(2.5rem, 6vw, 4rem);
-    color: var(--gold);
+    color: var(--text-primary);
     margin-bottom: var(--space-4);
 }
 
 .page-subtitle {
     font-size: var(--text-lg);
-    color: var(--ivory);
+    color: var(--text-secondary);
     opacity: 0.8;
 }
 
@@ -677,23 +647,24 @@
 }
 
 .content-block {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(212, 175, 55, 0.1);
+    background: white;
+    border: 1px solid var(--border-light);
     border-radius: var(--radius-lg);
     padding: var(--space-8);
     margin-bottom: var(--space-6);
+    box-shadow: var(--shadow-sm);
 }
 
 .content-block h2 {
     font-family: var(--font-display);
     font-size: var(--text-2xl);
-    color: var(--gold);
+    color: var(--text-primary);
     margin-bottom: var(--space-4);
 }
 
 .content-block p {
     font-size: var(--text-base);
-    color: var(--ivory);
+    color: var(--text-primary);
     line-height: 1.8;
     margin-bottom: var(--space-4);
 }
@@ -704,9 +675,9 @@
 }
 
 .content-block li {
-    color: var(--ivory);
+    color: var(--text-primary);
     padding: var(--space-2) 0;
-    border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+    border-bottom: 1px solid var(--border-light);
 }
 
 .content-block li:last-child {

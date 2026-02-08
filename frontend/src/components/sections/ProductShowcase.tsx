@@ -15,15 +15,12 @@ interface Product {
     status: string;
 }
 
-/** Convert absolute hylacviet URL to relative path */
 function toRelativeUrl(url: string): string {
     if (!url) return url;
     try {
         const u = new URL(url);
-        if (u.hostname.endsWith('hylacviet.vn')) {
-            return u.pathname + u.search;
-        }
-    } catch { /* not a valid URL, return as-is */ }
+        if (u.hostname.endsWith('hylacviet.vn')) return u.pathname + u.search;
+    } catch { /* not a valid URL */ }
     return url;
 }
 
@@ -31,8 +28,7 @@ function formatPrice(price: number): string {
     return new Intl.NumberFormat('vi-VN').format(price) + 'đ';
 }
 
-// Shimmer placeholder
-const shimmerPlaceholder = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUzMyIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMmEyNDIwIi8+PC9zdmc+';
+const shimmer = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUzMyIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjVmMGViIi8+PC9zdmc+';
 
 export default function ProductShowcase() {
     const [products, setProducts] = useState<Product[]>([]);
@@ -43,12 +39,12 @@ export default function ProductShowcase() {
             try {
                 const res = await fetch('/api/products');
                 const data = await res.json();
-                if (data.success && Array.isArray(data.data)) {
-                    // Take up to 3 active products
-                    const activeProducts = data.data
+                if (data.success && data.data) {
+                    const items = Array.isArray(data.data) ? data.data : (data.data.items || []);
+                    const active = items
                         .filter((p: Product) => p.status === 'active')
-                        .slice(0, 3);
-                    setProducts(activeProducts);
+                        .slice(0, 4);
+                    setProducts(active);
                 }
             } catch (e) {
                 console.error('Failed to fetch products:', e);
@@ -59,100 +55,91 @@ export default function ProductShowcase() {
         fetchProducts();
     }, []);
 
-    if (!isLoaded) return null;
-
-    if (products.length === 0) {
-        return null; // Don't show section if no products
-    }
+    if (!isLoaded || products.length === 0) return null;
 
     return (
-        <section className="product-showcase">
-            <div className="showcase-container">
-                {/* Header */}
+        <section className="product-showcase" id="san-pham">
+            <div className="product-showcase-inner">
+                {/* Section Header */}
                 <motion.div
-                    className="showcase-header"
-                    initial={{ opacity: 0, y: 40 }}
+                    className="product-showcase-header"
+                    initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8 }}
-                    viewport={{ once: true }}
+                    transition={{ duration: 0.7 }}
+                    viewport={{ once: true, margin: '-50px' }}
                 >
-                    <span className="section-label-premium">Sản Phẩm</span>
-                    <h2 className="showcase-title">
-                        Bộ Sưu Tập<br />
-                        <span className="title-accent">Nổi Bật</span>
+                    <span className="product-showcase-label">Sản Phẩm</span>
+                    <h2 className="product-showcase-title">
+                        Bộ Sưu Tập <em>Nổi Bật</em>
                     </h2>
+                    <p className="product-showcase-subtitle">
+                        Mỗi tác phẩm là sự kết hợp giữa truyền thống và nghệ thuật đương đại
+                    </p>
                 </motion.div>
 
-                {/* Products Grid */}
+                {/* Products Grid 2×2 */}
                 <div className="product-showcase-grid">
                     {products.map((product, index) => {
-                        const mainImage = product.images && product.images.length > 0
-                            ? toRelativeUrl(product.images[0])
-                            : null;
+                        const img = product.images?.[0] ? toRelativeUrl(product.images[0]) : null;
 
                         return (
-                            <motion.article
+                            <motion.div
                                 key={product.id}
                                 className="product-showcase-card"
                                 initial={{ opacity: 0, y: 40 }}
                                 whileInView={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.6, delay: index * 0.15 }}
-                                viewport={{ once: true, margin: '-50px' }}
+                                transition={{ duration: 0.6, delay: index * 0.1 }}
+                                viewport={{ once: true, margin: '-30px' }}
                             >
-                                <Link href={`/san-pham/${product.id}`} className="product-showcase-link">
+                                <Link
+                                    href={`/san-pham/${product.id}`}
+                                    className="product-showcase-link"
+                                >
+                                    {/* Image */}
                                     <div className="product-showcase-image">
-                                        {mainImage ? (
+                                        {img ? (
                                             <Image
-                                                src={mainImage}
+                                                src={img}
                                                 alt={product.name}
                                                 fill
-                                                sizes="(max-width: 768px) 100vw, 33vw"
-                                                className="product-img"
+                                                sizes="(max-width: 768px) 90vw, 45vw"
                                                 placeholder="blur"
-                                                blurDataURL={shimmerPlaceholder}
+                                                blurDataURL={shimmer}
                                                 style={{ objectFit: 'cover' }}
                                             />
                                         ) : (
-                                            <div className="product-placeholder">
+                                            <div className="product-showcase-placeholder">
                                                 <span>📷</span>
-                                                <p>Ảnh sắp có</p>
                                             </div>
                                         )}
-                                        <div className="product-overlay">
-                                            <span className="view-detail-btn">
-                                                Xem Chi Tiết
-                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                                    <path d="M5 12h14M12 5l7 7-7 7" />
-                                                </svg>
-                                            </span>
+                                        {/* Hover overlay */}
+                                        <div className="product-showcase-overlay">
+                                            <span>Xem Chi Tiết</span>
                                         </div>
                                     </div>
+
+                                    {/* Info */}
                                     <div className="product-showcase-info">
-                                        <h3 className="product-name">{product.name}</h3>
-                                        {product.description && (
-                                            <p className="product-desc">{product.description}</p>
-                                        )}
-                                        <div className="product-price-row">
-                                            <span className="product-price">{formatPrice(product.price)}</span>
-                                        </div>
+                                        <h3 className="product-showcase-name">{product.name}</h3>
+                                        <p className="product-showcase-price">{formatPrice(product.price)}</p>
                                     </div>
                                 </Link>
-                            </motion.article>
+                            </motion.div>
                         );
                     })}
                 </div>
 
-                {/* View All CTA */}
+                {/* CTA */}
                 <motion.div
-                    className="showcase-cta"
+                    className="product-showcase-cta"
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: 0.3 }}
+                    transition={{ duration: 0.5, delay: 0.3 }}
                     viewport={{ once: true }}
                 >
-                    <Link href="/san-pham" className="btn-explore">
-                        <span>Xem Tất Cả Sản Phẩm</span>
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <Link href="/san-pham" className="product-showcase-cta-link">
+                        Khám Phá Bộ Sưu Tập
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                             <path d="M5 12h14M12 5l7 7-7 7" />
                         </svg>
                     </Link>
