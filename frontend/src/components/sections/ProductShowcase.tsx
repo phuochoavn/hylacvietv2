@@ -154,7 +154,8 @@ export default function ProductShowcase() {
                             centeredSlides
                             slidesPerView={1.35}
                             spaceBetween={0}
-                            loop={products.length > 2}
+                            loop={false}
+                            rewind={true}
                             coverflowEffect={{
                                 rotate: 0,
                                 stretch: 0,
