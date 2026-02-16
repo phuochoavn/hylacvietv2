@@ -132,10 +132,14 @@ function formatPrice(price: number) {
 
 function getImageUrl(path: string | undefined): string {
   if (!path) return '/placeholder.jpg'
-  if (path.startsWith('http://') || path.startsWith('https://')) return path
-  if (path.startsWith('/uploads/') || path.startsWith('/images/')) {
-    return `https://hylacviet.vn${path}`
+  // Convert absolute hylacviet.vn URLs to relative (admin nginx proxies /uploads/)
+  if (path.startsWith('https://hylacviet.vn/')) {
+    return path.replace('https://hylacviet.vn', '')
   }
+  if (path.startsWith('http://hylacviet.vn/')) {
+    return path.replace('http://hylacviet.vn', '')
+  }
+  // /uploads/ and /images/ paths work as-is via admin nginx proxy
   return path
 }
 </script>

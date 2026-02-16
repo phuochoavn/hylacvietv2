@@ -326,39 +326,37 @@ export default function Preloader() {
                     </motion.svg>
 
                     {/* Website Logo - Zoom + Spin Animation */}
-                    {settings.logo_url && (
-                        <motion.div
-                            className="preloader-website-logo"
-                            initial={{
-                                opacity: 0,
-                                scale: 0.1,
-                                rotate: -180,
-                                filter: 'blur(8px)'
-                            }}
-                            animate={{
-                                opacity: 1,
-                                scale: 1,
-                                rotate: 0,
-                                filter: 'blur(0px)'
-                            }}
-                            transition={{
-                                delay: 0.3,
-                                duration: LOGO_ANIMATION_MS / 1000,
-                                ease: [0.34, 1.56, 0.64, 1] // Custom spring-like ease
-                            }}
-                            style={{ marginBottom: '16px' }}
-                        >
-                            <Image
-                                src={settings.logo_url}
-                                alt="Logo"
-                                width={180}
-                                height={72}
-                                style={{ objectFit: 'contain' }}
-                                onLoad={handleLogoLoad}
-                                priority
-                            />
-                        </motion.div>
-                    )}
+                    <motion.div
+                        className="preloader-website-logo"
+                        initial={{
+                            opacity: 0,
+                            scale: 0.1,
+                            rotate: -180,
+                            filter: 'blur(8px)'
+                        }}
+                        animate={{
+                            opacity: 1,
+                            scale: 1,
+                            rotate: 0,
+                            filter: 'blur(0px)'
+                        }}
+                        transition={{
+                            delay: 0.3,
+                            duration: LOGO_ANIMATION_MS / 1000,
+                            ease: [0.34, 1.56, 0.64, 1] // Custom spring-like ease
+                        }}
+                        style={{ marginBottom: '16px' }}
+                    >
+                        <Image
+                            src="/images/logo.png"
+                            alt="Logo"
+                            width={180}
+                            height={180}
+                            style={{ objectFit: 'contain' }}
+                            onLoad={handleLogoLoad}
+                            priority
+                        />
+                    </motion.div>
 
                     {/* Brand name - Stroke Drawing Animation */}
                     <motion.div
