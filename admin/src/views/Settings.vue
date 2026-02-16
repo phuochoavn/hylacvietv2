@@ -1037,7 +1037,7 @@ function generateSlug(name: string): string {
                 <input 
                   v-model="settings.craft_step3" 
                   type="text" 
-                  placeholder="May Thêu Tỉ Mỉ"
+                  placeholder="Hoàn Thiện"
                   class="form-input"
                 />
               </div>
@@ -1053,32 +1053,6 @@ function generateSlug(name: string): string {
                   <div v-if="settings.craft_step3_image" class="upload-actions mini">
                     <label class="change-btn"><input type="file" accept="image/*" @change="uploadBrandImage('craft_step3_image', $event)" />🔄</label>
                     <button @click="settings.craft_step3_image = ''" class="delete-btn">🗑️</button>
-                  </div>
-                </div>
-              </div>
-              
-              <!-- Step 4 -->
-              <div class="form-group">
-                <label>Bước 4 - Tên</label>
-                <input 
-                  v-model="settings.craft_step4" 
-                  type="text" 
-                  placeholder="Hoàn Thiện Giao Hàng"
-                  class="form-input"
-                />
-              </div>
-              <div class="form-group">
-                <label>Bước 4 - Ảnh</label>
-                <div class="upload-preview-single" style="max-width: 150px; position: relative;">
-                  <img v-if="settings.craft_step4_image" :src="settings.craft_step4_image" alt="Step 4" style="width: 100%; border-radius: 8px;" />
-                  <label v-else class="upload-placeholder small">
-                    <input type="file" accept="image/*" @change="uploadBrandImage('craft_step4_image', $event)" :disabled="uploadingStep4" />
-                    <span v-if="uploadingStep4">⏳</span>
-                    <span v-else>📷 Ảnh bước 4</span>
-                  </label>
-                  <div v-if="settings.craft_step4_image" class="upload-actions mini">
-                    <label class="change-btn"><input type="file" accept="image/*" @change="uploadBrandImage('craft_step4_image', $event)" />🔄</label>
-                    <button @click="settings.craft_step4_image = ''" class="delete-btn">🗑️</button>
                   </div>
                 </div>
               </div>
@@ -1901,16 +1875,16 @@ function generateSlug(name: string): string {
                 <div class="form-row">
                   <div class="form-group">
                     <label>Tiêu đề bước 3</label>
-                    <input v-model="settings.step3_title" type="text" placeholder="May Đo" class="form-input" />
+                    <input v-model="settings.step3_title" type="text" placeholder="Hoàn Thiện" class="form-input" />
                   </div>
                   <div class="form-group">
                     <label>Tiếng Anh</label>
-                    <input v-model="settings.step3_subtitle" type="text" placeholder="TAILORING" class="form-input" />
+                    <input v-model="settings.step3_subtitle" type="text" placeholder="FINISHING" class="form-input" />
                   </div>
                 </div>
                 <div class="form-group full">
                   <label>Mô tả</label>
-                  <textarea v-model="settings.step3_desc" rows="2" placeholder="Thực hiện may đo theo số đo..." class="form-textarea"></textarea>
+                  <textarea v-model="settings.step3_desc" rows="2" placeholder="Kiểm tra, hoàn thiện và giao tác phẩm..." class="form-textarea"></textarea>
                 </div>
                 <!-- Step 3 Image -->
                 <div class="form-group full">
@@ -1925,43 +1899,6 @@ function generateSlug(name: string): string {
                     <div v-if="settings.step3_image" class="step-image-actions">
                       <label class="change-btn small"><input type="file" accept="image/*" @change="uploadBrandImage('step3_image', $event)" />🔄</label>
                       <button @click="settings.step3_image = ''" class="remove-btn small">🗑️</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <!-- Step 4 -->
-            <div class="process-step-card">
-              <div class="step-number">04</div>
-              <div class="step-content">
-                <div class="form-row">
-                  <div class="form-group">
-                    <label>Tiêu đề bước 4</label>
-                    <input v-model="settings.step4_title" type="text" placeholder="Hoàn Thiện" class="form-input" />
-                  </div>
-                  <div class="form-group">
-                    <label>Tiếng Anh</label>
-                    <input v-model="settings.step4_subtitle" type="text" placeholder="FINISHING" class="form-input" />
-                  </div>
-                </div>
-                <div class="form-group full">
-                  <label>Mô tả</label>
-                  <textarea v-model="settings.step4_desc" rows="2" placeholder="Kiểm tra, hoàn thiện và giao tác phẩm..." class="form-textarea"></textarea>
-                </div>
-                <!-- Step 4 Image -->
-                <div class="form-group full">
-                  <label>Ảnh minh họa (350x450px)</label>
-                  <div class="step-image-upload">
-                    <img v-if="settings.step4_image" :src="settings.step4_image" alt="Step 4" class="step-image-preview" />
-                    <label v-else class="step-upload-btn">
-                      <input type="file" accept="image/*" @change="uploadBrandImage('step4_image', $event)" :disabled="uploadingStep4" />
-                      <span v-if="uploadingStep4">⏳</span>
-                      <span v-else>📷 Tải ảnh</span>
-                    </label>
-                    <div v-if="settings.step4_image" class="step-image-actions">
-                      <label class="change-btn small"><input type="file" accept="image/*" @change="uploadBrandImage('step4_image', $event)" />🔄</label>
-                      <button @click="settings.step4_image = ''" class="remove-btn small">🗑️</button>
                     </div>
                   </div>
                 </div>

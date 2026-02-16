@@ -1,10 +1,27 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import Image from 'next/image';
 import { motion, useScroll, useTransform } from 'framer-motion';
 
-const steps = [
+interface StepData {
+    number: string;
+    title: string;
+    titleEn: string;
+    desc: string;
+    image: string;
+}
+
+function toRelativeUrl(url: string): string {
+    if (!url) return url;
+    try {
+        const u = new URL(url);
+        if (u.hostname.endsWith('hylacviet.vn')) return u.pathname + u.search;
+    } catch { /* not a valid URL */ }
+    return url;
+}
+
+const defaultSteps: StepData[] = [
     {
         number: '01',
         title: 'Tư Vấn',
@@ -30,6 +47,50 @@ const steps = [
 
 export default function Craftsmanship() {
     const containerRef = useRef<HTMLElement>(null);
+    const [steps, setSteps] = useState<StepData[]>(defaultSteps);
+
+    useEffect(() => {
+        async function fetchSettings() {
+            try {
+                const res = await fetch('/api/settings');
+                const data = await res.json();
+                if (data.success && data.data) {
+                    const s: Record<string, string> = {};
+                    for (const item of data.data) {
+                        s[item.key] = item.value;
+                    }
+
+                    const fetched: StepData[] = [
+                        {
+                            number: '01',
+                            title: s.step1_title || defaultSteps[0].title,
+                            titleEn: s.step1_subtitle || defaultSteps[0].titleEn,
+                            desc: s.step1_desc || defaultSteps[0].desc,
+                            image: s.step1_image ? toRelativeUrl(s.step1_image) : defaultSteps[0].image,
+                        },
+                        {
+                            number: '02',
+                            title: s.step2_title || defaultSteps[1].title,
+                            titleEn: s.step2_subtitle || defaultSteps[1].titleEn,
+                            desc: s.step2_desc || defaultSteps[1].desc,
+                            image: s.step2_image ? toRelativeUrl(s.step2_image) : defaultSteps[1].image,
+                        },
+                        {
+                            number: '03',
+                            title: s.step3_title || defaultSteps[2].title,
+                            titleEn: s.step3_subtitle || defaultSteps[2].titleEn,
+                            desc: s.step3_desc || defaultSteps[2].desc,
+                            image: s.step3_image ? toRelativeUrl(s.step3_image) : defaultSteps[2].image,
+                        },
+                    ];
+                    setSteps(fetched);
+                }
+            } catch (e) {
+                console.error('Failed to fetch craftsmanship settings:', e);
+            }
+        }
+        fetchSettings();
+    }, []);
 
     const { scrollYProgress } = useScroll({
         target: containerRef,

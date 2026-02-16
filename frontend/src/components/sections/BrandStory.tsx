@@ -1,11 +1,44 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import Image from 'next/image';
 import { motion, useScroll, useTransform } from 'framer-motion';
 
+function toRelativeUrl(url: string): string {
+    if (!url) return url;
+    try {
+        const u = new URL(url);
+        if (u.hostname.endsWith('hylacviet.vn')) return u.pathname + u.search;
+    } catch { /* not a valid URL */ }
+    return url;
+}
+
 export default function BrandStory() {
     const containerRef = useRef<HTMLElement>(null);
+    const [mainImage, setMainImage] = useState('/images/craft-measuring.webp');
+    const [accentImage, setAccentImage] = useState('/images/craft-embroidery.webp');
+
+    useEffect(() => {
+        async function fetchSettings() {
+            try {
+                const res = await fetch('/api/settings');
+                const data = await res.json();
+                if (data.success && data.data) {
+                    for (const item of data.data) {
+                        if (item.key === 'story_main_image' && item.value) {
+                            setMainImage(toRelativeUrl(item.value));
+                        }
+                        if (item.key === 'story_accent_image' && item.value) {
+                            setAccentImage(toRelativeUrl(item.value));
+                        }
+                    }
+                }
+            } catch (e) {
+                console.error('Failed to fetch story settings:', e);
+            }
+        }
+        fetchSettings();
+    }, []);
 
     const { scrollYProgress } = useScroll({
         target: containerRef,
@@ -29,7 +62,7 @@ export default function BrandStory() {
                     <div className="story-image-wrapper">
                         <div className="story-image-frame">
                             <Image
-                                src="/images/craft-measuring.webp"
+                                src={mainImage}
                                 alt="Nghệ nhân Hỷ Lạc Việt đang thêu tay"
                                 fill
                                 sizes="(max-width: 1024px) 100vw, 50vw"
@@ -47,7 +80,7 @@ export default function BrandStory() {
                             viewport={{ once: true }}
                         >
                             <Image
-                                src="/images/craft-embroidery.webp"
+                                src={accentImage}
                                 alt="Chi tiết vải lụa"
                                 width={200}
                                 height={250}
