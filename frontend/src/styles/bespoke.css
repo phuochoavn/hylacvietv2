@@ -133,8 +133,15 @@
 
 .bespoke-split-image {
     position: relative;
+    padding-top: 133.33%;
     aspect-ratio: 3/4;
     overflow: hidden;
+}
+
+@supports (aspect-ratio: 3 / 4) {
+    .bespoke-split-image {
+        padding-top: 0;
+    }
 }
 
 .bespoke-split-image img {

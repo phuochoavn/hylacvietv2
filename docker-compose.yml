@@ -37,6 +37,7 @@ services:
     restart: unless-stopped
     environment:
       - API_HOST=hylacviet-api:3000
+      - API_URL=http://hylacviet-api:3000
     depends_on:
       - api
     networks:

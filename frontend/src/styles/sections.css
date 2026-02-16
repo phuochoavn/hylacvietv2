@@ -83,12 +83,19 @@
 
 .story-image-frame {
     position: relative;
+    padding-top: 125%;
     aspect-ratio: 4/5;
     border-radius: var(--radius-lg);
     overflow: hidden;
     box-shadow:
         0 30px 60px rgba(0, 0, 0, 0.15),
         0 0 0 1px rgba(201, 162, 39, 0.1);
+}
+
+@supports (aspect-ratio: 4 / 5) {
+    .story-image-frame {
+        padding-top: 0;
+    }
 }
 
 .story-main-image {

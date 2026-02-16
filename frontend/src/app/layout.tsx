@@ -37,7 +37,6 @@ export async function generateMetadata(): Promise<Metadata> {
         ogImage: 'https://hylacviet.vn/images/og-image.jpg',
     };
 
-    /* 
     try {
         // Fetch settings from API
         const res = await fetch(`${API_URL}/api/settings`, {
@@ -97,7 +96,6 @@ export async function generateMetadata(): Promise<Metadata> {
     } catch (error) {
         console.error('Failed to fetch metadata settings:', error);
     }
-    */
 
     // Return default metadata on error
     return {

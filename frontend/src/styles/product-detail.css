@@ -122,8 +122,15 @@
 .pd-main-image {
     position: relative;
     width: 100%;
+    padding-top: 133.33%;
     aspect-ratio: 3 / 4;
     cursor: zoom-in;
+}
+
+@supports (aspect-ratio: 3 / 4) {
+    .pd-main-image {
+        padding-top: 0;
+    }
 }
 
 .pd-zoom-hint {
@@ -155,6 +162,7 @@
 .pd-thumb {
     position: relative;
     width: 100%;
+    padding-top: 133.33%;
     aspect-ratio: 3 / 4;
     border-radius: 4px;
     overflow: hidden;
@@ -162,6 +170,12 @@
     opacity: 0.5;
     cursor: pointer;
     transition: all 0.3s ease;
+}
+
+@supports (aspect-ratio: 3 / 4) {
+    .pd-thumb {
+        padding-top: 0;
+    }
 }
 
 .pd-thumb.active,
@@ -370,10 +384,17 @@
 .pd-related-image {
     position: relative;
     width: 100%;
+    padding-top: 133.33%;
     aspect-ratio: 3 / 4;
     border-radius: 6px;
     overflow: hidden;
     background: #f2ece3;
+}
+
+@supports (aspect-ratio: 3 / 4) {
+    .pd-related-image {
+        padding-top: 0;
+    }
 }
 
 .pd-related-image img {
