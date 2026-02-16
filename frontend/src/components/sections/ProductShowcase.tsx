@@ -46,7 +46,7 @@ function CardImageSlider({ product }: { product: Product }) {
         if (images.length <= 1) return;
         const timer = setInterval(() => {
             setCurrentIdx(prev => (prev + 1) % images.length);
-        }, 3000);
+        }, 2000);
         return () => clearInterval(timer);
     }, [images.length]);
 
