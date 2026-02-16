@@ -169,8 +169,8 @@ export default function ProductShowcase() {
                             }}
                             className="product-coverflow"
                         >
-                            {/* Duplicate products to ensure enough slides for loop */}
-                            {[...products, ...products].map((product, idx) => (
+                            {/* Triple products to ensure enough slides for bidirectional loop */}
+                            {[...products, ...products, ...products].map((product, idx) => (
                                 <SwiperSlide key={`${product.id}-${idx}`}>
                                     <Link href={`/san-pham/${product.id}`} className="product-coverflow-link">
                                         <div className="product-coverflow-card">
