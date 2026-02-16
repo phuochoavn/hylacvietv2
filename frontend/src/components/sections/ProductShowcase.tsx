@@ -154,8 +154,8 @@ export default function ProductShowcase() {
                             centeredSlides
                             slidesPerView={1.35}
                             spaceBetween={0}
-                            loop={false}
-                            rewind={true}
+                            loop={true}
+                            loopAdditionalSlides={3}
                             coverflowEffect={{
                                 rotate: 0,
                                 stretch: 0,
@@ -169,8 +169,9 @@ export default function ProductShowcase() {
                             }}
                             className="product-coverflow"
                         >
-                            {products.map((product) => (
-                                <SwiperSlide key={product.id}>
+                            {/* Duplicate products to ensure enough slides for loop */}
+                            {[...products, ...products].map((product, idx) => (
+                                <SwiperSlide key={`${product.id}-${idx}`}>
                                     <Link href={`/san-pham/${product.id}`} className="product-coverflow-link">
                                         <div className="product-coverflow-card">
                                             <CardImageSlider product={product} />
