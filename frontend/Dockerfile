@@ -14,6 +14,8 @@ COPY . .
 
 # Build the application
 ENV NEXT_TELEMETRY_DISABLED=1
+ARG API_HOST=localhost:3000
+ENV API_HOST=${API_HOST}
 RUN npm run build
 
 # Production stage

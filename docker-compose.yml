@@ -29,9 +29,16 @@ services:
 
   # Frontend (Astro + Nginx)
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      args:
+        API_HOST: hylacviet-api:3000
     container_name: hylacviet-frontend
     restart: unless-stopped
+    environment:
+      - API_HOST=hylacviet-api:3000
+    depends_on:
+      - api
     networks:
       - traefik-network
     labels:

@@ -38,14 +38,15 @@ const nextConfig: NextConfig = {
   allowedDevOrigins: ['http://72.62.249.214:3001', 'http://72.62.249.214', '72.62.249.214'],
   // Rewrites for API proxy — point to local backend
   async rewrites() {
+    const apiHost = process.env.API_HOST || 'localhost:3000';
     return [
       {
         source: '/api/:path*',
-        destination: 'http://localhost:3000/api/:path*',
+        destination: `http://${apiHost}/api/:path*`,
       },
       {
         source: '/uploads/:path*',
-        destination: 'http://localhost:3000/uploads/:path*',
+        destination: `http://${apiHost}/uploads/:path*`,
       },
     ];
   },
