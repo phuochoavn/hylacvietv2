@@ -489,6 +489,14 @@
         padding: 100px var(--space-5) 120px;
     }
 
+    .hero-title-main {
+        overflow: hidden;
+    }
+
+    .brand-logo-text {
+        max-width: calc(100vw - 40px) !important;
+    }
+
     .hero-cta-group {
         flex-direction: column;
         align-items: stretch;
