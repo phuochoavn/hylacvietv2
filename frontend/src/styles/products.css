@@ -589,7 +589,22 @@
     transition: opacity 0.8s ease;
 }
 
+/* First image visible by default (needed for Swiper loop clones without React state) */
+.card-slide:first-child {
+    opacity: 1;
+}
+
 .card-slide.active {
+    opacity: 1;
+}
+
+/* Hide first-child when another slide is active (React has taken over) */
+.card-slide:first-child:not(.active) {
+    opacity: 0;
+}
+
+/* But if no slide has .active class (clone), keep first-child visible */
+.card-image-slider:not(:has(.card-slide.active)) .card-slide:first-child {
     opacity: 1;
 }
 
