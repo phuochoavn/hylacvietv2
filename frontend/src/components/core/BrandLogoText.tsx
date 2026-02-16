@@ -58,7 +58,9 @@ export default function BrandLogoText({
                 style={{
                     display: 'inline-block',
                     width: `${width}px`,
-                    height: `${height}px`,
+                    maxWidth: '100%',
+                    aspectRatio: `${aspectRatio}`,
+                    height: 'auto',
                     backgroundColor: fill || 'currentColor',
                     WebkitMaskImage: 'url(/images/brand-logo-text.svg)',
                     WebkitMaskSize: 'contain',
@@ -79,13 +81,13 @@ export default function BrandLogoText({
             className={`brand-logo-text ${className}`}
             role="img"
             aria-label="Hỷ Lạc Việt"
-            style={{ display: 'inline-block', width: `${width}px`, height: `${height}px` }}
+            style={{ display: 'inline-block', width: `${width}px`, maxWidth: '100%', aspectRatio: `${aspectRatio}`, height: 'auto' }}
         >
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 1731 417"
-                width={width}
-                height={height}
+                width="100%"
+                height="100%"
                 style={{ display: 'block' }}
             >
                 <g transform="translate(0,417) scale(0.1,-0.1)">
