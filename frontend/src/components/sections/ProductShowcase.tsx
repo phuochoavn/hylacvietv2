@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import Image from 'next/image';
+// Using native <img> for old iOS compatibility (Next.js Image forces WebP)
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -38,7 +38,7 @@ const shimmer = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUzM
 function CardImageSlider({ product }: { product: Product }) {
     const images = product.images?.length > 0
         ? product.images.map(toRelativeUrl)
-        : ['/images/placeholder.webp'];
+        : ['/images/placeholder.png'];
 
     const [currentIdx, setCurrentIdx] = useState(0);
 
@@ -57,15 +57,11 @@ function CardImageSlider({ product }: { product: Product }) {
                     key={idx}
                     className={`card-slide ${idx === currentIdx ? 'active' : ''}`}
                 >
-                    <Image
+                    <img
                         src={img}
                         alt={`${product.name} - ${idx + 1}`}
-                        fill
-                        sizes="(max-width: 768px) 70vw, 50vw"
-                        placeholder="blur"
-                        blurDataURL={shimmer}
-                        style={{ objectFit: 'cover' }}
-                        priority={idx === 0}
+                        style={{ objectFit: 'cover', width: '100%', height: '100%', position: 'absolute', inset: 0 }}
+                        loading={idx === 0 ? 'eager' : 'lazy'}
                     />
                 </div>
             ))}
@@ -202,14 +198,11 @@ export default function ProductShowcase() {
                             <Link href={`/san-pham/${featured.id}`} className="product-showcase-link">
                                 <div className="product-card-image featured-image">
                                     {featured.images?.[0] ? (
-                                        <Image
+                                        <img
                                             src={toRelativeUrl(featured.images[0])}
                                             alt={featured.name}
-                                            fill
-                                            sizes="(max-width: 768px) 90vw, 55vw"
-                                            placeholder="blur"
-                                            blurDataURL={shimmer}
-                                            style={{ objectFit: 'cover' }}
+                                            style={{ objectFit: 'cover', width: '100%', height: '100%', position: 'absolute', inset: 0 }}
+                                            loading="lazy"
                                         />
                                     ) : (
                                         <div className="product-showcase-placeholder"><span>📷</span></div>
@@ -245,14 +238,11 @@ export default function ProductShowcase() {
                                         <Link href={`/san-pham/${product.id}`} className="product-showcase-link">
                                             <div className="product-card-image secondary-image">
                                                 {img ? (
-                                                    <Image
+                                                    <img
                                                         src={img}
                                                         alt={product.name}
-                                                        fill
-                                                        sizes="(max-width: 768px) 90vw, 40vw"
-                                                        placeholder="blur"
-                                                        blurDataURL={shimmer}
-                                                        style={{ objectFit: 'cover' }}
+                                                        style={{ objectFit: 'cover', width: '100%', height: '100%', position: 'absolute', inset: 0 }}
+                                                        loading="lazy"
                                                     />
                                                 ) : (
                                                     <div className="product-showcase-placeholder"><span>📷</span></div>

@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState, useEffect } from 'react';
-import Image from 'next/image';
+// Using native <img> for old iOS compatibility (Next.js Image forces WebP)
 import { motion, useScroll, useTransform } from 'framer-motion';
 
 function toRelativeUrl(url: string): string {
@@ -15,8 +15,8 @@ function toRelativeUrl(url: string): string {
 
 export default function BrandStory() {
     const containerRef = useRef<HTMLElement>(null);
-    const [mainImage, setMainImage] = useState('/images/craft-measuring.webp');
-    const [accentImage, setAccentImage] = useState('/images/craft-embroidery.webp');
+    const [mainImage, setMainImage] = useState('/images/craft-measuring.png');
+    const [accentImage, setAccentImage] = useState('/images/craft-embroidery.png');
 
     useEffect(() => {
         async function fetchSettings() {
@@ -62,13 +62,13 @@ export default function BrandStory() {
                 >
                     <div className="story-image-wrapper">
                         <div className="story-image-frame">
-                            <Image
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
                                 src={mainImage}
                                 alt="Nghệ nhân Hỷ Lạc Việt đang thêu tay"
-                                fill
-                                sizes="(max-width: 1024px) 100vw, 50vw"
                                 className="story-main-image"
-                                style={{ objectFit: 'cover' }}
+                                style={{ objectFit: 'cover', width: '100%', height: '100%', position: 'absolute', inset: 0 }}
+                                loading="lazy"
                             />
                         </div>
 
@@ -80,11 +80,13 @@ export default function BrandStory() {
                             transition={{ duration: 0.8, delay: 0.3 }}
                             viewport={{ once: true }}
                         >
-                            <Image
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
                                 src={accentImage}
                                 alt="Chi tiết vải lụa"
                                 width={200}
                                 height={250}
+                                loading="lazy"
                             />
                         </motion.div>
                     </div>

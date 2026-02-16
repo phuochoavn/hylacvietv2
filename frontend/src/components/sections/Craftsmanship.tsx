@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState, useEffect } from 'react';
-import Image from 'next/image';
+// Using native <img> for old iOS compatibility (Next.js Image forces WebP)
 import { motion, useScroll, useTransform } from 'framer-motion';
 
 interface StepData {
@@ -27,21 +27,21 @@ const defaultSteps: StepData[] = [
         title: 'Tư Vấn',
         titleEn: 'Consultation',
         desc: 'Lắng nghe mong muốn, tư vấn kiểu dáng và chất liệu phù hợp với vóc dáng.',
-        image: '/images/craft-fabric.webp',
+        image: '/images/craft-fabric.png',
     },
     {
         number: '02',
         title: 'Thiết Kế',
         titleEn: 'Design',
         desc: 'Phác thảo mẫu riêng, chọn họa tiết thêu và phối màu theo ý tưởng.',
-        image: '/images/craft-embroidery.webp',
+        image: '/images/craft-embroidery.png',
     },
     {
         number: '03',
         title: 'Hoàn Thiện',
         titleEn: 'Finishing',
         desc: 'Kiểm tra chất lượng, điều chỉnh size và bàn giao tác phẩm.',
-        image: '/images/craft-final.webp',
+        image: '/images/craft-final.png',
     },
 ];
 
@@ -154,12 +154,14 @@ export default function Craftsmanship() {
                                 </div>
                             </div>
                             <div className="step-image">
-                                <Image
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img
                                     src={step.image}
                                     alt={step.title}
                                     width={350}
                                     height={450}
                                     className="step-img"
+                                    loading="lazy"
                                 />
                             </div>
                             <div className="step-dot" />
