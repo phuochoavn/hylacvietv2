@@ -13,6 +13,11 @@
 @import './sections.css';
 @import './products.css';
 @import './showroom.css';
+@import './about.css';
+@import './bespoke.css';
+@import './contact.css';
+@import './floating-contact.css';
+@import './product-detail.css';
 
 /* Custom Font - Cotta Free (brand name font, must be after @imports) */
 @font-face {
@@ -40,39 +45,43 @@
     align-items: center;
     justify-content: center;
     gap: var(--space-2);
-    padding: var(--space-3) var(--space-6);
+    padding: var(--space-4) var(--space-8);
     font-family: var(--font-body);
     font-size: var(--text-sm);
     font-weight: 500;
     line-height: 1;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.08em;
     border-radius: var(--border-radius-full);
-    transition: all var(--duration-normal) var(--ease-out);
+    transition: all 0.4s var(--ease-out-expo);
     cursor: pointer;
+    text-decoration: none;
 }
 
 .btn-primary {
-    background: var(--gold);
-    color: var(--charcoal);
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+    color: white;
     border: 1px solid var(--gold);
+    box-shadow: 0 2px 8px rgba(201, 162, 39, 0.2);
 }
 
 .btn-primary:hover {
-    background: var(--gold-light);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-gold);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(201, 162, 39, 0.35);
 }
 
 .btn-outline {
     background: transparent;
     color: var(--gold);
-    border: 1px solid var(--gold);
+    border: 1px solid rgba(201, 162, 39, 0.4);
 }
 
 .btn-outline:hover {
     background: var(--gold);
-    color: var(--charcoal);
+    color: white;
+    border-color: var(--gold);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(201, 162, 39, 0.25);
 }
 
 .btn-ghost {
@@ -169,6 +178,7 @@
 .preloader {
     position: fixed;
     inset: 0;
+    /* Preloader with solid background */
     background: var(--preloader-bg);
     display: flex;
     flex-direction: column;

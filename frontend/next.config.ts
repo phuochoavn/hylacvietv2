@@ -36,16 +36,16 @@ const nextConfig: NextConfig = {
   compress: true,
   // Allow dev origins for hot reload
   allowedDevOrigins: ['http://72.62.249.214:3001', 'http://72.62.249.214', '72.62.249.214'],
-  // Rewrites for API proxy in development
+  // Rewrites for API proxy — point to local backend
   async rewrites() {
     return [
       {
         source: '/api/:path*',
-        destination: 'https://hylacviet.vn/api/:path*',
+        destination: 'http://localhost:3000/api/:path*',
       },
       {
         source: '/uploads/:path*',
-        destination: 'https://hylacviet.vn/uploads/:path*',
+        destination: 'http://localhost:3000/uploads/:path*',
       },
     ];
   },

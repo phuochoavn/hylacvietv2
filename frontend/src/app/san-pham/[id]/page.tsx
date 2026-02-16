@@ -1,12 +1,18 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
 import { useParams } from 'next/navigation';
-import ImageSlider from '@/components/effects/LiquidSlider';
-import '@/styles/product-detail-v2.css';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Thumbs, Pagination } from 'swiper/modules';
+import type { Swiper as SwiperType } from 'swiper';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/thumbs';
+import 'swiper/css/pagination';
+import '@/styles/product-detail.css';
+import { SITE } from '@/lib/constants';
 
 interface Product {
     id: string;
@@ -18,65 +24,54 @@ interface Product {
     status: string;
 }
 
-interface SizeChart {
-    [key: string]: {
-        weight: string;
-        bust: string;
-        ao_dai: string;
-        tay: string;
-        quan: string;
-    };
-}
-
 const categoryLabels: Record<string, string> = {
-    'ao_dai_ngu_than': 'Áo Dài Ngũ Thân Cách Tân',
-    'ao_dai_4_ta': 'Áo Dài Truyền Thống 4 Tà',
-    'ao_dai_2_ta': 'Áo Dài Truyền Thống 2 Tà',
-    'phap_phuc_linen': 'Pháp Phục Linen Cao Cấp',
+    'ao_dai_ngu_than': 'Áo Dài Ngũ Thân',
+    'ao_dai_bon_ta': 'Áo Dài Bốn Tà',
+    'ao_dai_4_ta': 'Áo Dài Bốn Tà',
+    'ao_dai_2_ta': 'Áo Dài Hai Tà',
+    'phap_phuc_linen': 'Pháp Phục Linen',
 };
 
-// Icons
-const ArrowLeftIcon = () => (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <path d="M19 12H5M12 19l-7-7 7-7" />
-    </svg>
-);
-
-const RulerIcon = () => (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-        <path d="M2 12h4M6 8v8M10 12h2M14 12h2M18 8v8M18 12h4" />
-        <rect x="2" y="8" width="20" height="8" rx="1" />
-    </svg>
-);
-
-const ChevronDownIcon = () => (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="accordion-icon-v2">
-        <path d="M6 9l6 6 6-6" />
-    </svg>
-);
+function formatPrice(price: number) {
+    return new Intl.NumberFormat('vi-VN').format(price) + 'đ';
+}
 
 export default function ProductDetailPage() {
     const params = useParams();
     const [product, setProduct] = useState<Product | null>(null);
-    const [sizeChart, setSizeChart] = useState<SizeChart | null>(null);
+    const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
-    const [sizeOpen, setSizeOpen] = useState(false);
-    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
+    const [activeIndex, setActiveIndex] = useState(0);
+    const [lightboxOpen, setLightboxOpen] = useState(false);
+    const [lightboxIndex, setLightboxIndex] = useState(0);
 
     useEffect(() => {
         if (params.id) {
             fetchProduct(params.id as string);
-            fetchSizeChart();
         }
     }, [params.id]);
 
     async function fetchProduct(id: string) {
         setLoading(true);
         try {
-            const res = await fetch(`/api/products/${id}`);
-            const data = await res.json();
-            if (data.success) {
-                setProduct(data.data);
+            const [productRes, allRes] = await Promise.all([
+                fetch(`/api/products/${id}`),
+                fetch('/api/products'),
+            ]);
+            const productData = await productRes.json();
+            const allData = await allRes.json();
+
+            if (productData.success) {
+                setProduct(productData.data);
+            }
+
+            if (allData.success) {
+                const items = Array.isArray(allData.data) ? allData.data : (allData.data.items || []);
+                const related = items
+                    .filter((p: Product) => p.status === 'active' && p.id !== id)
+                    .slice(0, 2);
+                setRelatedProducts(related);
             }
         } catch (e) {
             console.error('Failed to fetch product:', e);
@@ -85,231 +80,253 @@ export default function ProductDetailPage() {
         }
     }
 
-    async function fetchSizeChart() {
-        try {
-            const res = await fetch('/api/settings/size_chart');
-            const data = await res.json();
-            if (data.success) {
-                setSizeChart(JSON.parse(data.data.value));
-            }
-        } catch (e) {
-            console.error('Failed to fetch size chart:', e);
-        }
+    // Lightbox handlers
+    function openLightbox(index: number) {
+        setLightboxIndex(index);
+        setLightboxOpen(true);
+        document.body.style.overflow = 'hidden';
     }
 
-    function formatPrice(price: number) {
-        return new Intl.NumberFormat('vi-VN').format(price) + '₫';
+    function closeLightbox() {
+        setLightboxOpen(false);
+        document.body.style.overflow = '';
     }
 
+    // Loading state
     if (loading) {
         return (
-            <section className="product-detail-v2">
-                <div className="loading-v2">
-                    <div className="loading-spinner-v2" />
-                    <p>Đang tải tác phẩm...</p>
+            <main className="pd-page">
+                <div className="pd-loading">
+                    <div className="pd-spinner" />
+                    <p>Đang tải sản phẩm...</p>
                 </div>
-            </section>
+            </main>
         );
     }
 
+    // Not found
     if (!product) {
         return (
-            <section className="product-detail-v2">
-                <div className="loading-v2">
-                    <p>Không tìm thấy sản phẩm</p>
-                    <Link href="/san-pham" className="back-link-v2">
-                        <ArrowLeftIcon /> Quay lại bộ sưu tập
+            <main className="pd-page">
+                <div className="pd-loading">
+                    <p className="pd-not-found">Không tìm thấy sản phẩm</p>
+                    <Link href="/san-pham" className="pd-back-link">
+                        ← Quay lại bộ sưu tập
                     </Link>
                 </div>
-            </section>
+            </main>
         );
     }
 
-    const zaloUrl = `https://zalo.me/0912503456?text=${encodeURIComponent(`Xin chào, tôi muốn tư vấn về ${product.name}`)}`;
+    const zaloUrl = `${SITE.zalo}?text=${encodeURIComponent(`Xin chào, tôi muốn tư vấn về ${product.name}`)}`;
+    const images = product.images.length > 0 ? product.images : ['/images/placeholder.webp'];
 
     return (
-        <section className="product-detail-v2">
-            {/* Back Link */}
-            <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 var(--space-8)' }}>
-                <Link href="/san-pham" className="back-link-v2">
-                    <ArrowLeftIcon /> Bộ Sưu Tập
-                </Link>
-            </div>
+        <main className="pd-page">
+            {/* Breadcrumb */}
+            <nav className="pd-breadcrumb">
+                <div className="pd-container">
+                    <Link href="/">Trang chủ</Link>
+                    <span className="pd-breadcrumb-sep">/</span>
+                    <Link href="/san-pham">Sản phẩm</Link>
+                    <span className="pd-breadcrumb-sep">/</span>
+                    <span className="pd-breadcrumb-current">{product.name}</span>
+                </div>
+            </nav>
 
-            <div className="product-detail-layout-v2">
-                {/* LEFT: Gallery with Thumbnails + Main Image */}
-                <motion.div
-                    className="product-gallery-v2"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.6 }}
-                >
-                    <div className="gallery-wrapper">
-                        {/* Main Liquid Slider */}
-                        <div style={{ position: 'relative', width: '100%' }}>
-                            <ImageSlider
-                                images={product.images}
-                                currentIndex={currentImageIndex}
-                                aspectRatio={3 / 4}
-                            />
-                            <span className="liquid-counter">
-                                {currentImageIndex + 1} / {product.images.length}
-                            </span>
+            {/* Product Section */}
+            <section className="pd-product">
+                <div className="pd-container pd-grid">
+                    {/* LEFT: Gallery */}
+                    <div className="pd-gallery">
+                        {/* Main Swiper */}
+                        <div className="pd-gallery-main">
+                            <Swiper
+                                modules={[Navigation, Thumbs, Pagination]}
+                                thumbs={{ swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null }}
+                                navigation
+                                pagination={{ type: 'fraction' }}
+                                onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
+                                className="pd-main-swiper"
+                            >
+                                {images.map((img, idx) => (
+                                    <SwiperSlide key={idx}>
+                                        <div
+                                            className="pd-main-image"
+                                            onClick={() => openLightbox(idx)}
+                                        >
+                                            <Image
+                                                src={img}
+                                                alt={`${product.name} - Ảnh ${idx + 1}`}
+                                                fill
+                                                sizes="(max-width: 768px) 100vw, 55vw"
+                                                quality={85}
+                                                priority={idx === 0}
+                                                style={{ objectFit: 'cover' }}
+                                            />
+                                            <div className="pd-zoom-hint">
+                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                                    <circle cx="11" cy="11" r="8" />
+                                                    <path d="M21 21l-4.35-4.35M11 8v6M8 11h6" />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </SwiperSlide>
+                                ))}
+                            </Swiper>
                         </div>
 
-                        {/* Thumbnails - Below main image */}
-                        {product.images.length > 1 && (
-                            <div className="liquid-thumbnails">
-                                {product.images.map((img, idx) => (
-                                    <button
-                                        key={idx}
-                                        className={`liquid-thumb ${currentImageIndex === idx ? 'active' : ''}`}
-                                        onMouseEnter={() => setCurrentImageIndex(idx)}
-                                        onClick={() => setCurrentImageIndex(idx)}
-                                    >
-                                        <Image
-                                            src={img}
-                                            alt={`Thumbnail ${idx + 1}`}
-                                            fill
-                                            sizes="70px"
-                                        />
-                                    </button>
+                        {/* Thumbnail Swiper */}
+                        {images.length > 1 && (
+                            <Swiper
+                                modules={[Thumbs]}
+                                onSwiper={setThumbsSwiper}
+                                slidesPerView={Math.min(images.length, 5)}
+                                spaceBetween={8}
+                                watchSlidesProgress
+                                className="pd-thumbs-swiper"
+                            >
+                                {images.map((img, idx) => (
+                                    <SwiperSlide key={idx}>
+                                        <div className={`pd-thumb ${activeIndex === idx ? 'active' : ''}`}>
+                                            <Image
+                                                src={img}
+                                                alt={`Thumb ${idx + 1}`}
+                                                fill
+                                                sizes="80px"
+                                                style={{ objectFit: 'cover' }}
+                                            />
+                                        </div>
+                                    </SwiperSlide>
                                 ))}
-                            </div>
+                            </Swiper>
                         )}
                     </div>
-                </motion.div>
 
-                {/* RIGHT: Sticky Info Sidebar */}
-                <motion.div
-                    className="product-info-v2"
-                    initial={{ opacity: 0, x: 30 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.6, delay: 0.2 }}
-                >
-                    {/* Category */}
-                    <span className="product-category-v2">
-                        {categoryLabels[product.category] || product.category}
-                    </span>
+                    {/* RIGHT: Product Info */}
+                    <div className="pd-info">
+                        {/* Category Badge */}
+                        <span className="pd-category">
+                            {categoryLabels[product.category] || product.category}
+                        </span>
 
-                    {/* Name */}
-                    <h1 className="product-name-v2">{product.name}</h1>
+                        {/* Product Name */}
+                        <h1 className="pd-name">{product.name}</h1>
 
-                    {/* Price */}
-                    <p className="product-price-v2">{formatPrice(product.price)}</p>
+                        {/* Price */}
+                        <p className="pd-price">{formatPrice(product.price)}</p>
 
-                    {/* Divider */}
-                    <div className="info-divider-v2" />
+                        {/* Divider */}
+                        <hr className="pd-divider" />
 
-                    {/* Description */}
-                    <div className="product-description-v2">
-                        <h3>Mô Tả</h3>
-                        <p>{product.description || 'Tác phẩm được thực hiện bởi các nghệ nhân lành nghề với chất liệu cao cấp, thêu tay tinh xảo và may theo số đo riêng của quý khách.'}</p>
-                    </div>
+                        {/* Description */}
+                        <div className="pd-description">
+                            <p>{product.description || 'Tác phẩm được thực hiện bởi các nghệ nhân lành nghề với chất liệu cao cấp, thêu tay tinh xảo và may theo số đo riêng.'}</p>
+                        </div>
 
-                    {/* Size Chart Accordion */}
-                    {sizeChart && (
-                        <div className={`size-accordion-v2 ${sizeOpen ? 'open' : ''}`}>
-                            <button
-                                className="size-accordion-trigger-v2"
-                                onClick={() => setSizeOpen(!sizeOpen)}
+                        {/* Features */}
+                        <ul className="pd-features">
+                            <li>
+                                <span className="pd-feature-icon">✦</span>
+                                May đo theo số đo riêng
+                            </li>
+                            <li>
+                                <span className="pd-feature-icon">✦</span>
+                                Chất liệu gấm lụa tơ tằm
+                            </li>
+                            <li>
+                                <span className="pd-feature-icon">✦</span>
+                                Hoàn thành trong 7-10 ngày
+                            </li>
+                            <li>
+                                <span className="pd-feature-icon">✦</span>
+                                Bảo hành 12 tháng đường may
+                            </li>
+                        </ul>
+
+                        {/* CTA */}
+                        <div className="pd-cta">
+                            <a
+                                href={zaloUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="pd-cta-primary"
                             >
-                                <span>
-                                    <RulerIcon />
-                                    Hướng Dẫn Chọn Size
-                                </span>
-                                <ChevronDownIcon />
-                            </button>
-                            <div className="size-accordion-content-v2">
-                                <table className="size-table-v2">
-                                    <thead>
-                                        <tr>
-                                            <th>Size</th>
-                                            <th>Cân Nặng</th>
-                                            <th>3 Vòng</th>
-                                            <th>Dài Áo</th>
-                                            <th>Dài Tay</th>
-                                            <th>Dài Quần</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {Object.entries(sizeChart).map(([size, data]) => (
-                                            <tr key={size}>
-                                                <td className="size-label">{size}</td>
-                                                <td>{data.weight}</td>
-                                                <td>{data.bust}</td>
-                                                <td>{data.ao_dai}</td>
-                                                <td>{data.tay}</td>
-                                                <td>{data.quan}</td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* CTA — Zalo only */}
-                    <div className="product-cta-v2">
-                        <a
-                            href={zaloUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="cta-primary-v2"
-                        >
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
-                            </svg>
-                            Tư Vấn & Đặt May Qua Zalo
-                        </a>
-                        <a
-                            href="tel:0912503456"
-                            className="cta-secondary-v2"
-                        >
-                            📞 Gọi Ngay: 0912 503 456
-                        </a>
-                    </div>
-                </motion.div>
-            </div>
-
-            {/* TẦNG 2: Chi Tiết Sản Phẩm - Below the fold */}
-            <div className="product-details-section">
-                <div className="product-details-container">
-                    <h2 className="details-title">Chi Tiết Sản Phẩm</h2>
-                    <div className="details-grid">
-                        <div className="detail-item">
-                            <span className="detail-icon">🧵</span>
-                            <span className="detail-label">Chất liệu</span>
-                            <span className="detail-value">Gấm lụa tơ tằm cao cấp</span>
-                        </div>
-                        <div className="detail-item">
-                            <span className="detail-icon">🌸</span>
-                            <span className="detail-label">Họa tiết</span>
-                            <span className="detail-value">Thêu tay sen vàng tinh xảo</span>
-                        </div>
-                        <div className="detail-item">
-                            <span className="detail-icon">👗</span>
-                            <span className="detail-label">Kiểu dáng</span>
-                            <span className="detail-value">{categoryLabels[product.category] || 'Áo dài cách tân'}</span>
-                        </div>
-                        <div className="detail-item">
-                            <span className="detail-icon">🎨</span>
-                            <span className="detail-label">Màu sắc</span>
-                            <span className="detail-value">Xanh ngọc bích phối vàng</span>
-                        </div>
-                        <div className="detail-item">
-                            <span className="detail-icon">⏱️</span>
-                            <span className="detail-label">Thời gian may</span>
-                            <span className="detail-value">7-10 ngày làm việc</span>
-                        </div>
-                        <div className="detail-item">
-                            <span className="detail-icon">🛡️</span>
-                            <span className="detail-label">Bảo hành</span>
-                            <span className="detail-value">12 tháng đường may</span>
+                                <svg width="22" height="22" viewBox="0 0 50 50" fill="currentColor">
+                                    <path d="M25 2C12.3 2 2 11.1 2 22.5c0 5.5 2.5 10.5 6.5 14.2L6 47l12-5.5c2.2.6 4.5 1 7 1C37.7 38.5 48 29.4 48 18 48 11.1 37.7 2 25 2zm-4 30l-7-7 2-2 5 5 10-10 2 2-12 12z" />
+                                </svg>
+                                Tư Vấn & Đặt May Qua Zalo
+                            </a>
+                            <a href={`tel:${SITE.phone.replace(/\s/g, '')}`} className="pd-cta-phone">
+                                ☎ Gọi ngay: {SITE.phone}
+                            </a>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
+
+            {/* Related Products */}
+            {relatedProducts.length > 0 && (
+                <section className="pd-related">
+                    <div className="pd-container">
+                        <h2 className="pd-related-title">Sản Phẩm Khác</h2>
+                        <div className="pd-related-grid">
+                            {relatedProducts.map((rp) => (
+                                <Link
+                                    key={rp.id}
+                                    href={`/san-pham/${rp.id}`}
+                                    className="pd-related-card"
+                                >
+                                    <div className="pd-related-image">
+                                        <Image
+                                            src={rp.images[0] || '/images/placeholder.webp'}
+                                            alt={rp.name}
+                                            fill
+                                            sizes="(max-width: 768px) 50vw, 25vw"
+                                            style={{ objectFit: 'cover' }}
+                                        />
+                                    </div>
+                                    <div className="pd-related-info">
+                                        <h3>{rp.name}</h3>
+                                        <p className="pd-related-price">{formatPrice(rp.price)}</p>
+                                    </div>
+                                </Link>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+            )}
+
+            {/* Lightbox */}
+            {lightboxOpen && (
+                <div className="pd-lightbox" onClick={closeLightbox}>
+                    <button className="pd-lightbox-close" onClick={closeLightbox}>✕</button>
+                    <div className="pd-lightbox-content" onClick={(e) => e.stopPropagation()}>
+                        <Swiper
+                            modules={[Navigation, Pagination]}
+                            navigation
+                            pagination={{ type: 'fraction' }}
+                            initialSlide={lightboxIndex}
+                            className="pd-lightbox-swiper"
+                        >
+                            {images.map((img, idx) => (
+                                <SwiperSlide key={idx}>
+                                    <div className="pd-lightbox-image">
+                                        <Image
+                                            src={img}
+                                            alt={`${product.name} - Ảnh ${idx + 1}`}
+                                            fill
+                                            sizes="90vw"
+                                            quality={90}
+                                            style={{ objectFit: 'contain' }}
+                                        />
+                                    </div>
+                                </SwiperSlide>
+                            ))}
+                        </Swiper>
+                    </div>
+                </div>
+            )}
+        </main>
     );
 }

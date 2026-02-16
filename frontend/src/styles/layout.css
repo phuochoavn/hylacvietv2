@@ -40,10 +40,17 @@
     left: var(--space-6);
     display: flex;
     align-items: center;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+.header-logo.logo-hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
 }
 
 .header-logo-img {
-    height: 48px;
+    height: 60px;
     width: auto;
     object-fit: contain;
     margin-top: 4px;
@@ -63,13 +70,13 @@
 
 .header-nav {
     display: flex;
-    gap: var(--space-12);
+    gap: 3.5rem;
 }
 
 .header-nav-link {
     font-family: 'Roboto', var(--font-body);
-    font-size: var(--text-xs);
-    font-weight: 400;
+    font-size: var(--text-sm);
+    font-weight: 500;
     color: var(--header-text);
     letter-spacing: 0.1em;
     position: relative;

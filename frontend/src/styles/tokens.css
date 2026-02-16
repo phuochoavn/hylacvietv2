@@ -5,10 +5,10 @@
     /* ===== COLORS ===== */
     /* Brand Gold */
     --brand-brown: #6B4226;
-    --gold: #8B6914;
-    --gold-light: #C9A227;
-    --gold-dark: #6B5110;
-    --gold-glow: rgba(139, 105, 20, 0.25);
+    --gold: #C9A227;
+    --gold-light: #D4AF37;
+    --gold-dark: #8B6914;
+    --gold-glow: rgba(201, 162, 39, 0.3);
 
     /* Neutrals — Warm Light Palette */
     --cream: #FAF8F5;
@@ -119,18 +119,18 @@
     /* Header */
     --header-bg: rgba(250, 248, 245, 0.97);
     --header-text: #2C2520;
-    --header-accent: #8B6914;
+    --header-accent: #C9A227;
     --header-border: rgba(0, 0, 0, 0.06);
     --header-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
 
     /* Preloader */
     --preloader-bg: #FAF8F5;
     --preloader-text: #2C2520;
-    --preloader-accent: #8B6914;
-    --preloader-bar-track: rgba(139, 105, 20, 0.15);
-    --preloader-bar-fill: #8B6914;
+    --preloader-accent: #C9A227;
+    --preloader-bar-track: rgba(201, 162, 39, 0.15);
+    --preloader-bar-fill: #C9A227;
 
-    /* Hero (homepage — keeps dark overlay on images) */
+    /* Hero (homepage — dark cinematic theme) */
     --hero-overlay-opacity: 0.35;
     --hero-gradient-end: rgba(250, 248, 245, 0.15);
 }

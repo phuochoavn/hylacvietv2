@@ -1,11 +1,13 @@
+import dynamic from 'next/dynamic';
 import Hero from '@/components/sections/Hero';
-import BrandStory from '@/components/sections/BrandStory';
-import Philosophy from '@/components/sections/Philosophy';
-import ProductShowcase from '@/components/sections/ProductShowcase';
-import Craftsmanship from '@/components/sections/Craftsmanship';
-import MeasurementJourney from '@/components/sections/MeasurementJourney';
 
-import ContactCTA from '@/components/sections/ContactCTA';
+// Lazy-load below-fold sections — they won't load JS until scrolled near
+const BrandStory = dynamic(() => import('@/components/sections/BrandStory'), { ssr: true });
+const Philosophy = dynamic(() => import('@/components/sections/Philosophy'), { ssr: true });
+const ProductShowcase = dynamic(() => import('@/components/sections/ProductShowcase'), { ssr: true });
+const Craftsmanship = dynamic(() => import('@/components/sections/Craftsmanship'), { ssr: true });
+const MeasurementJourney = dynamic(() => import('@/components/sections/MeasurementJourney'), { ssr: true });
+const ContactCTA = dynamic(() => import('@/components/sections/ContactCTA'), { ssr: true });
 
 export default function HomePage() {
     return (
@@ -24,7 +26,6 @@ export default function HomePage() {
                 <ProductShowcase />
                 <Craftsmanship />
                 <MeasurementJourney />
-
                 <ContactCTA />
             </div>
         </>

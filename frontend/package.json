@@ -14,7 +14,8 @@
     "next": "16.1.6",
     "nextjs-toploader": "^3.9.17",
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "swiper": "^12.1.0"
   },
   "devDependencies": {
     "@types/node": "^20",

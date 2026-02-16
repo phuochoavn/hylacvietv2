@@ -41,28 +41,28 @@
     object-fit: contain;
 }
 
-/* Zalo - Refined Blue */
+/* Zalo - Warm Brown (Brand) */
 .floating-btn.zalo {
-    background: rgba(0, 104, 255, 0.9);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    background: rgba(93, 64, 55, 0.9);
+    box-shadow: 0 4px 20px rgba(93, 64, 55, 0.25);
 }
 
 .floating-btn.zalo:hover {
-    background: #0068FF;
-    box-shadow: 0 6px 24px rgba(0, 104, 255, 0.4);
+    background: #5D4037;
+    box-shadow: 0 6px 24px rgba(93, 64, 55, 0.4);
     transform: scale(1.08);
     border-color: rgba(255, 255, 255, 0.5);
 }
 
-/* Messenger - Refined Gradient */
+/* Messenger - Gold Gradient (Brand) */
 .floating-btn.messenger {
-    background: linear-gradient(135deg, rgba(0, 120, 255, 0.9) 0%, rgba(168, 85, 247, 0.9) 100%);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(135deg, rgba(139, 105, 20, 0.9) 0%, rgba(93, 64, 55, 0.9) 100%);
+    box-shadow: 0 4px 20px rgba(93, 64, 55, 0.25);
 }
 
 .floating-btn.messenger:hover {
-    background: linear-gradient(135deg, #0078FF 0%, #A855F7 100%);
-    box-shadow: 0 6px 24px rgba(168, 85, 247, 0.4);
+    background: linear-gradient(135deg, #8B6914 0%, #5D4037 100%);
+    box-shadow: 0 6px 24px rgba(139, 105, 20, 0.4);
     transform: scale(1.08);
     border-color: rgba(255, 255, 255, 0.5);
 }

@@ -5,7 +5,6 @@ import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { NAV_LINKS, SITE } from '@/lib/constants';
-import BrandLogoText from '@/components/core/BrandLogoText';
 
 
 /** Convert absolute hylacviet URL to relative path */
@@ -29,7 +28,7 @@ export default function Header() {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [settings, setSettings] = useState<Settings>({});
-    const [logoError, setLogoError] = useState(false); // Added logoError state
+
     const pathname = usePathname();
 
     useEffect(() => {
@@ -84,19 +83,14 @@ export default function Header() {
                 <div className="header-inner container">
                     {/* Logo */}
                     <Link href="/" className="header-logo">
-                        {settings.logo_url && !logoError ? (
-                            <Image
-                                src={settings.logo_url}
-                                alt={siteName}
-                                width={140}
-                                height={50}
-                                className="header-logo-img"
-                                priority
-                                onError={() => setLogoError(true)}
-                            />
-                        ) : (
-                            <span className="header-logo-text"><BrandLogoText height={28} /></span>
-                        )}
+                        <Image
+                            src="/images/logo.png"
+                            alt={siteName}
+                            width={50}
+                            height={50}
+                            className="header-logo-img"
+                            priority
+                        />
                     </Link>
 
                     {/* Desktop Navigation */}
@@ -131,21 +125,14 @@ export default function Header() {
             {/* Mobile Menu - OUTSIDE header to avoid stacking context issues */}
             <div className={`mobile-menu ${isMobileMenuOpen ? 'active' : ''}`}>
                 {/* Mobile Menu Logo */}
-                {settings.logo_url && !logoError ? (
-                    <div className="mobile-menu-logo">
-                        <Image
-                            src={settings.logo_url}
-                            alt={siteName}
-                            width={120}
-                            height={48}
-                            onError={() => setLogoError(true)}
-                        />
-                    </div>
-                ) : (
-                    <div className="mobile-menu-logo">
-                        <BrandLogoText height={36} />
-                    </div>
-                )}
+                <div className="mobile-menu-logo">
+                    <Image
+                        src="/images/logo.png"
+                        alt={siteName}
+                        width={60}
+                        height={60}
+                    />
+                </div>
 
                 {/* Close Button */}
                 <button

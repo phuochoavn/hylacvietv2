@@ -36,3 +36,7 @@ coverage/
 
 # Misc
 .cache/
+
+# Rust build artifacts
+backend/target/
+
