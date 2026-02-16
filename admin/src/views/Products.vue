@@ -82,6 +82,17 @@ async function toggleStatus(product: Product) {
   }
 }
 
+async function deleteProduct(product: Product) {
+  if (!confirm(`Bạn có chắc muốn xóa sản phẩm "${product.name}"? Hành động này không thể hoàn tác.`)) return
+  try {
+    await api.delete(`/api/products/${product.id}`)
+    fetchProducts()
+  } catch (e) {
+    console.error('Failed to delete product:', e)
+    alert('Xóa sản phẩm thất bại')
+  }
+}
+
 async function handleImageUpload(event: Event) {
   const input = event.target as HTMLInputElement
   if (!input.files || input.files.length === 0) return
@@ -203,6 +214,13 @@ function getImageUrl(path: string | undefined): string {
             :title="product.status === 'active' ? 'Ẩn sản phẩm' : 'Hiện sản phẩm'"
           >
             {{ product.status === 'active' ? '👁️ Ẩn' : '🔓 Hiện' }}
+          </button>
+          <button
+            @click="deleteProduct(product)"
+            class="btn-delete"
+            title="Xóa sản phẩm"
+          >
+            🗑️ Xóa
           </button>
         </div>
       </div>
@@ -445,7 +463,7 @@ function getImageUrl(path: string | undefined): string {
   flex-shrink: 0;
 }
 
-.btn-edit, .btn-toggle {
+.btn-edit, .btn-toggle, .btn-delete {
   display: flex;
   align-items: center;
   gap: 0.4rem;
@@ -466,6 +484,12 @@ function getImageUrl(path: string | undefined): string {
 
 .btn-toggle:hover {
   background: #f3f4f6;
+}
+
+.btn-delete:hover {
+  background: #fef2f2;
+  border-color: #ef4444;
+  color: #dc2626;
 }
 
 /* Buttons */
