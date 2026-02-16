@@ -257,7 +257,7 @@ export default function Hero() {
                                 animate={{ opacity: 1, y: 0, clipPath: 'inset(0% 0 0 0)' }}
                                 transition={{ duration: 1.2, delay: 1, ease: [0.22, 1, 0.36, 1] }}
                             >
-                                <span className="title-line"><BrandLogoText height={100} fill="#6B4226" stroke="#C9A227" strokeWidth={6} /></span>
+                                <span className="title-line" style={{ filter: 'drop-shadow(0 2px 8px rgba(90, 58, 26, 0.3))' }}><BrandLogoText height={100} fill="#B8860B" stroke="#5A3A1A" strokeWidth={4} /></span>
                             </motion.h1>
 
                             <motion.p
