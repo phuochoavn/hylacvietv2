@@ -28,6 +28,9 @@ const roboto = Roboto({
 // API URL for server-side fetch
 const API_URL = process.env.API_URL || 'http://hylacviet-api:3000';
 
+// Force dynamic rendering so metadata is always fetched from API
+export const dynamic = 'force-dynamic';
+
 // Dynamic metadata generation
 export async function generateMetadata(): Promise<Metadata> {
     // Default metadata
