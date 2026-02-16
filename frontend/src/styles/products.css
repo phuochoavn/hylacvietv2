@@ -526,3 +526,132 @@
     margin: 0 auto var(--space-4);
     animation: spin 1s linear infinite;
 }
+
+
+/* ===== Mobile Coverflow Product Swiper ===== */
+
+.product-coverflow-wrapper {
+    padding: var(--space-6) 0;
+    overflow: visible;
+}
+
+.product-coverflow {
+    overflow: visible !important;
+    padding: var(--space-4) 0;
+}
+
+.product-coverflow .swiper-slide {
+    transition: transform 0.4s ease, opacity 0.4s ease;
+    opacity: 0.5;
+}
+
+.product-coverflow .swiper-slide-active {
+    opacity: 1;
+}
+
+.product-coverflow-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.product-coverflow-card {
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--bg-primary, #FDFBF7);
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.1),
+        0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.4s ease;
+}
+
+.product-coverflow .swiper-slide-active .product-coverflow-card {
+    box-shadow:
+        0 16px 48px rgba(0, 0, 0, 0.15),
+        0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+/* Inner image slider */
+.card-image-slider {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-top: 133.33%;
+    /* 3:4 aspect ratio */
+    overflow: hidden;
+    background: #f2ece3;
+}
+
+.card-slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+}
+
+.card-slide.active {
+    opacity: 1;
+}
+
+/* Dot indicators */
+.card-dots {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 6px;
+    z-index: 5;
+}
+
+.card-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    transition: all 0.3s ease;
+}
+
+.card-dot.active {
+    width: 18px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.95);
+}
+
+/* Product info below image */
+.product-coverflow-info {
+    padding: var(--space-4) var(--space-4) var(--space-5);
+}
+
+.product-coverflow-name {
+    font-family: var(--font-display);
+    font-size: var(--text-base, 1rem);
+    font-weight: 500;
+    color: var(--text-primary, #3B2412);
+    margin: 0 0 var(--space-2);
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.product-coverflow-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.product-coverflow-price {
+    font-family: var(--font-display);
+    font-size: var(--text-base, 1rem);
+    font-weight: 500;
+    color: var(--gold, #C9A227);
+}
+
+.product-coverflow-action {
+    font-family: var(--font-body);
+    font-size: var(--text-sm, 0.875rem);
+    color: var(--text-secondary, #5C4A3A);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}

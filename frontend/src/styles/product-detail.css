@@ -74,13 +74,32 @@
     }
 }
 
+/* Gallery main container — explicit height prevents Swiper height inflation */
+.pd-gallery-main {
+    height: calc((100vw - 32px) * 4 / 3);
+    /* 3:4 ratio based on container width */
+    max-height: 700px;
+    overflow: hidden;
+}
+
+@media (min-width: 901px) {
+    .pd-gallery-main {
+        height: auto;
+        max-height: none;
+    }
+}
+
 /* Main Swiper */
 .pd-main-swiper {
     border-radius: 6px;
     overflow: hidden;
     background: #f2ece3;
-    /* Fallback height for browsers without aspect-ratio (iOS 14) */
-    min-height: 400px;
+    height: 100%;
+}
+
+.pd-main-swiper .swiper-wrapper,
+.pd-main-swiper .swiper-slide {
+    height: 100% !important;
 }
 
 .pd-main-swiper .swiper-button-prev,
@@ -124,7 +143,7 @@
 .pd-main-image {
     position: relative;
     width: 100%;
-    aspect-ratio: 3 / 4;
+    height: 100%;
     cursor: zoom-in;
 }
 
