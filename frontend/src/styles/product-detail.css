@@ -173,6 +173,14 @@
     margin-top: var(--space-3);
 }
 
+@media (max-width: 900px) {
+
+    /* Hide thumbnails on mobile — users swipe the main gallery */
+    .pd-thumbs-swiper {
+        display: none;
+    }
+}
+
 .pd-thumb {
     position: relative;
     width: 100%;
