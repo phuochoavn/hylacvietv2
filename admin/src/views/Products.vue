@@ -59,10 +59,25 @@ function openEdit(product: Product) {
   showModal.value = true
 }
 
+function openCreate() {
+  editingProduct.value = null
+  form.value = {
+    name: '',
+    description: '',
+    price: 0,
+    images: [],
+    category: '',
+    sort_order: products.value.length
+  }
+  showModal.value = true
+}
+
 async function saveProduct() {
   try {
     if (editingProduct.value) {
       await api.put(`/api/products/${editingProduct.value.id}`, form.value)
+    } else {
+      await api.post('/api/products', form.value)
     }
     showModal.value = false
     fetchProducts()
@@ -161,8 +176,11 @@ function getImageUrl(path: string | undefined): string {
     <div class="page-header">
       <div>
         <h1>Quản Lý Sản Phẩm</h1>
-        <p class="subtitle">Chỉnh sửa thông tin và ảnh cho 3 sản phẩm</p>
+        <p class="subtitle">Quản lý thông tin và ảnh sản phẩm</p>
       </div>
+      <button @click="openCreate" class="btn-primary btn-add">
+        ➕ Thêm Sản Phẩm
+      </button>
     </div>
 
     <!-- Loading -->
@@ -230,7 +248,7 @@ function getImageUrl(path: string | undefined): string {
     <div v-if="showModal" class="modal-overlay" @click.self="showModal = false">
       <div class="modal-content">
         <div class="modal-header">
-          <h2>Sửa Sản Phẩm</h2>
+          <h2>{{ editingProduct ? 'Sửa Sản Phẩm' : 'Thêm Sản Phẩm' }}</h2>
           <button @click="showModal = false" class="modal-close">×</button>
         </div>
 
@@ -315,7 +333,7 @@ function getImageUrl(path: string | undefined): string {
               Hủy
             </button>
             <button type="submit" class="btn-primary">
-              Cập Nhật
+              {{ editingProduct ? 'Cập Nhật' : 'Tạo Mới' }}
             </button>
           </div>
         </form>
@@ -333,6 +351,9 @@ function getImageUrl(path: string | undefined): string {
 
 /* Header */
 .page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 2rem;
 }
 
@@ -770,5 +791,122 @@ function getImageUrl(path: string | undefined): string {
 
 .upload-icon {
   font-size: 1.5rem;
+}
+
+/* ===== Mobile Responsive ===== */
+@media (max-width: 768px) {
+  .products-page {
+    padding: 0.75rem;
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .page-header h1 {
+    font-size: 1.25rem;
+  }
+
+  .btn-add {
+    width: 100%;
+    justify-content: center;
+    padding: 0.6rem 1rem;
+    font-size: 0.85rem;
+  }
+
+  .product-row {
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    align-items: stretch;
+  }
+
+  .row-image {
+    width: 100%;
+    height: 200px;
+    border-radius: 0.5rem;
+  }
+
+  .row-header {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .row-header h3 {
+    font-size: 1rem;
+    width: 100%;
+  }
+
+  .row-actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .btn-edit, .btn-toggle, .btn-delete {
+    flex: 1;
+    min-width: 0;
+    justify-content: center;
+    padding: 0.6rem 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  /* Modal mobile */
+  .modal-overlay {
+    padding: 0;
+    align-items: flex-end;
+  }
+
+  .modal-content {
+    border-radius: 1.25rem 1.25rem 0 0;
+    max-height: 95vh;
+    max-width: 100%;
+  }
+
+  .modal-header {
+    padding: 1rem;
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 1;
+  }
+
+  .modal-body {
+    padding: 1rem;
+  }
+
+  .images-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+  }
+
+  .image-actions button {
+    padding: 6px;
+    font-size: 0.9rem;
+  }
+
+  .modal-footer {
+    flex-direction: column;
+    gap: 0.5rem;
+    position: sticky;
+    bottom: 0;
+    background: white;
+    padding: 1rem;
+    margin-top: 1rem;
+  }
+
+  .modal-footer button {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    font-size: 16px; /* Prevents iOS zoom on focus */
+  }
 }
 </style>
