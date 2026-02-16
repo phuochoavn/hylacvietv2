@@ -66,21 +66,21 @@ export default function Craftsmanship() {
                             title: s.step1_title || defaultSteps[0].title,
                             titleEn: s.step1_subtitle || defaultSteps[0].titleEn,
                             desc: s.step1_desc || defaultSteps[0].desc,
-                            image: s.step1_image ? toRelativeUrl(s.step1_image) : defaultSteps[0].image,
+                            image: toRelativeUrl(s.craft_step1_image || s.step1_image || '') || defaultSteps[0].image,
                         },
                         {
                             number: '02',
                             title: s.step2_title || defaultSteps[1].title,
                             titleEn: s.step2_subtitle || defaultSteps[1].titleEn,
                             desc: s.step2_desc || defaultSteps[1].desc,
-                            image: s.step2_image ? toRelativeUrl(s.step2_image) : defaultSteps[1].image,
+                            image: toRelativeUrl(s.craft_step2_image || s.step2_image || '') || defaultSteps[1].image,
                         },
                         {
                             number: '03',
                             title: s.step3_title || defaultSteps[2].title,
                             titleEn: s.step3_subtitle || defaultSteps[2].titleEn,
                             desc: s.step3_desc || defaultSteps[2].desc,
-                            image: s.step3_image ? toRelativeUrl(s.step3_image) : defaultSteps[2].image,
+                            image: toRelativeUrl(s.craft_step3_image || s.step3_image || '') || defaultSteps[2].image,
                         },
                     ];
                     setSteps(fetched);

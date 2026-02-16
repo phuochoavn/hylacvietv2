@@ -24,14 +24,15 @@ export default function BrandStory() {
                 const res = await fetch('/api/settings');
                 const data = await res.json();
                 if (data.success && data.data) {
+                    const s: Record<string, string> = {};
                     for (const item of data.data) {
-                        if (item.key === 'story_main_image' && item.value) {
-                            setMainImage(toRelativeUrl(item.value));
-                        }
-                        if (item.key === 'story_accent_image' && item.value) {
-                            setAccentImage(toRelativeUrl(item.value));
-                        }
+                        if (item.value) s[item.key] = item.value;
                     }
+                    // Prefer story_image (files exist on disk) over story_main_image (files may be missing)
+                    const main = s.story_image || s.story_main_image;
+                    const accent = s.story_image_2 || s.story_accent_image;
+                    if (main) setMainImage(toRelativeUrl(main));
+                    if (accent) setAccentImage(toRelativeUrl(accent));
                 }
             } catch (e) {
                 console.error('Failed to fetch story settings:', e);
