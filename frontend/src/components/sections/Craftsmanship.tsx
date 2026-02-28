@@ -1,7 +1,6 @@
 'use client';
 
 import { useRef, useState, useEffect } from 'react';
-import Image from 'next/image';
 import { motion, useScroll, useTransform } from 'framer-motion';
 
 interface StepData {
@@ -154,14 +153,12 @@ export default function Craftsmanship() {
                                 </div>
                             </div>
                             <div className="step-image">
-                                <Image
+                                <img
                                     src={step.image}
                                     alt={step.title}
-                                    width={350}
-                                    height={450}
                                     className="step-img"
-                                    quality={80}
-                                    sizes="(max-width: 768px) 280px, 350px"
+                                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                    loading="lazy"
                                 />
                             </div>
                             <div className="step-dot" />

@@ -1,7 +1,6 @@
 'use client';
 
 import { useRef, useState, useEffect } from 'react';
-import Image from 'next/image';
 import { motion, useScroll, useTransform } from 'framer-motion';
 
 function toRelativeUrl(url: string): string {
@@ -62,14 +61,12 @@ export default function BrandStory() {
                 >
                     <div className="story-image-wrapper">
                         <div className="story-image-frame">
-                            <Image
+                            <img
                                 src={mainImage}
                                 alt="Nghệ nhân Hỷ Lạc Việt đang thêu tay"
                                 className="story-main-image"
-                                fill
-                                style={{ objectFit: 'cover' }}
-                                quality={80}
-                                sizes="(max-width: 768px) 100vw, 50vw"
+                                style={{ objectFit: 'cover', width: '100%', height: '100%', position: 'absolute', inset: 0 }}
+                                loading="lazy"
                             />
                         </div>
 
@@ -81,13 +78,11 @@ export default function BrandStory() {
                             transition={{ duration: 0.8, delay: 0.3 }}
                             viewport={{ once: true }}
                         >
-                            <Image
+                            <img
                                 src={accentImage}
                                 alt="Chi tiết vải lụa"
-                                width={200}
-                                height={250}
-                                quality={80}
-                                sizes="200px"
+                                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                loading="lazy"
                             />
                         </motion.div>
                     </div>
