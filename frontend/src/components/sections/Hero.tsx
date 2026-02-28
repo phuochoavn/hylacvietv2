@@ -40,6 +40,16 @@ interface HeroProps {
     serverSettings?: Record<string, string> | null;
 }
 
+/** Convert absolute hylacviet.vn URL to relative path */
+function toRelativeUrl(url: string): string {
+    if (!url) return url;
+    try {
+        const u = new URL(url);
+        if (u.hostname.endsWith('hylacviet.vn')) return u.pathname + u.search;
+    } catch { /* not a valid URL, keep as-is */ }
+    return url;
+}
+
 /** Parse image gallery JSON from settings */
 function parseImages(json: string): { id: number; image: string }[] {
     try {
@@ -47,7 +57,7 @@ function parseImages(json: string): { id: number; image: string }[] {
             .filter((item: any) => item.image)
             .map((item: any) => ({
                 id: item.id,
-                image: item.image.startsWith('http') ? item.image : `https://hylacviet.vn${item.image}`,
+                image: toRelativeUrl(item.image),
             }));
     } catch {
         return [];
