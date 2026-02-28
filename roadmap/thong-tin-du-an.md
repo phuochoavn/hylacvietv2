@@ -1,4 +1,4 @@
-# Thông Tin Dự Án - Hỷ Lạc Việt v4
+# Thông Tin Dự Án - Hỷ Lạc Việt
 
 ## Tổng Quan
 Website thương mại cho thương hiệu áo dài & pháp phục cao cấp.
@@ -12,16 +12,18 @@ Website thương mại cho thương hiệu áo dài & pháp phục cao cấp.
 ### Frontend (Customer Website)
 | Công nghệ | Phiên bản | Mục đích |
 |-----------|-----------|----------|
-| **Astro** | 5.x | Static Site Generator, SSG |
+| **Next.js** | 14 (App Router) | SSR/SSG Framework |
 | **TypeScript** | 5.x | Type-safe JavaScript |
-| **HTML5/CSS3** | - | Cấu trúc và styling |
-| **Vanilla JS** | ES6+ | Interactivity, animations |
+| **Framer Motion** | 11.x | Animations |
+| **Swiper** | 11.x | Carousel/Slider |
+| **CSS Vanilla** | - | Styling (Design System) |
 
 ### Fonts
-| Font | CDN | Sử dụng |
-|------|-----|---------|
-| **Noto Serif** | Google Fonts | Headings, thanh lịch |
-| **Be Vietnam Pro** | Google Fonts | Body text, dễ đọc |
+| Font | Nguồn | Sử dụng |
+|------|-------|---------|
+| **Cormorant Garamond** | next/font (Google) | Headings |
+| **Roboto** | next/font (Google) | Body text |
+| **Cotta Free** | Custom @font-face | Brand name |
 
 ### Backend API
 | Công nghệ | Phiên bản | Mục đích |
@@ -35,8 +37,8 @@ Website thương mại cho thương hiệu áo dài & pháp phục cao cấp.
 ### Admin Panel
 | Công nghệ | Phiên bản | Mục đích |
 |-----------|-----------|----------|
-| **SvelteKit** | 2.x | Full-stack framework |
-| **Svelte** | 5.x | UI components |
+| **Vue** | 3.x | UI framework |
+| **Vite** | 5.x | Build tool |
 | **TypeScript** | 5.x | Type safety |
 
 ### Infrastructure
@@ -46,7 +48,6 @@ Website thương mại cho thương hiệu áo dài & pháp phục cao cấp.
 | **Docker Compose** | - | Multi-container orchestration |
 | **Traefik** | v2.11 | Reverse proxy, SSL, routing |
 | **Let's Encrypt** | - | Free SSL certificates |
-| **Nginx** | Alpine | Static file serving |
 
 ### Deployment
 | Thành phần | Chi tiết |
@@ -69,8 +70,8 @@ Website thương mại cho thương hiệu áo dài & pháp phục cao cấp.
            ▼              ▼              ▼
 ┌─────────────┐  ┌─────────────┐  ┌─────────────┐
 │  Frontend   │  │   Backend   │  │    Admin    │
-│   (Astro)   │  │   (Rust)    │  │ (SvelteKit) │
-│   :80       │  │   :8080     │  │   :3000     │
+│  (Next.js)  │  │   (Rust)    │  │   (Vue 3)   │
+│   :3001     │  │   :3000     │  │   :80       │
 └─────────────┘  └─────────────┘  └─────────────┘
                        │
                        ▼
@@ -86,25 +87,32 @@ Website thương mại cho thương hiệu áo dài & pháp phục cao cấp.
 
 ```
 /opt/hylacviet/
-├── frontend/           # Astro customer website
+├── frontend/           # Next.js 14 customer website
 │   ├── src/
-│   │   ├── pages/      # .astro pages
-│   │   ├── layouts/    # Layout components
-│   │   └── styles/     # Global CSS
-│   └── public/         # Static assets (images)
-├── backend/            # Rust API
+│   │   ├── app/        # App Router pages
+│   │   ├── components/ # React components
+│   │   ├── lib/        # Constants, utilities
+│   │   └── styles/     # CSS files
+│   └── public/         # Static assets (images, fonts)
+├── backend/            # Rust API (Axum)
 │   ├── src/
 │   │   ├── main.rs
 │   │   ├── handlers/
 │   │   ├── models/
 │   │   └── db/
 │   └── Cargo.toml
-├── admin/              # SvelteKit admin panel
+├── admin/              # Vue 3 admin panel
 │   ├── src/
-│   │   └── routes/
+│   │   └── views/
 │   └── package.json
 ├── docker-compose.yml  # Container orchestration
+├── traefik/            # Traefik config
 └── roadmap/            # Documentation
+    ├── thong-tin-du-an.md
+    ├── roadmap.md
+    ├── nhat-ky.md
+    ├── spec-driven.md
+    └── _archive/
 ```
 
 ---
@@ -128,5 +136,9 @@ docker compose restart frontend
 ---
 
 ## Liên Hệ
-- **Zalo**: 0912 50 3456
+- **Zalo**: 0912 503 456
 - **Email**: contact@hylacviet.vn
+
+---
+
+*Cập nhật: Sprint SEO — 2026-02-28*

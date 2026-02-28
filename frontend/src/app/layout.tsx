@@ -164,6 +164,36 @@ export default function RootLayout({
                         opacity: 1 !important;
                     }
                 ` }} />
+                {/* JSON-LD Organization Schema */}
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{
+                        __html: JSON.stringify({
+                            '@context': 'https://schema.org',
+                            '@type': 'Organization',
+                            name: 'Hỷ Lạc Việt',
+                            url: 'https://hylacviet.vn',
+                            logo: 'https://hylacviet.vn/images/logo.png',
+                            description: 'Áo dài & pháp phục cao cấp — may đo thủ công từ lụa tơ tằm, gấm nhung.',
+                            contactPoint: {
+                                '@type': 'ContactPoint',
+                                telephone: '+84-912-503-456',
+                                contactType: 'customer service',
+                                availableLanguage: 'Vietnamese',
+                            },
+                            address: {
+                                '@type': 'PostalAddress',
+                                addressLocality: 'Hà Nội',
+                                addressCountry: 'VN',
+                            },
+                            sameAs: [
+                                'https://facebook.com/hylacviet',
+                                'https://instagram.com/hylacviet',
+                                'https://youtube.com/hylacviet',
+                            ],
+                        }),
+                    }}
+                />
             </head>
             <body>
                 {/* Page Transition Loading Bar - Gold */}

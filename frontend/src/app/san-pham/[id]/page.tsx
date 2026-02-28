@@ -134,6 +134,31 @@ export default function ProductDetailPage() {
                 </div>
             </nav>
 
+            {/* JSON-LD Product Schema */}
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify({
+                        '@context': 'https://schema.org',
+                        '@type': 'Product',
+                        name: product.name,
+                        description: product.description || 'Tác phẩm áo dài cao cấp Hỷ Lạc Việt — may đo thủ công từ lụa tơ tằm.',
+                        image: product.images.length > 0 ? product.images[0] : undefined,
+                        brand: {
+                            '@type': 'Brand',
+                            name: 'Hỷ Lạc Việt',
+                        },
+                        offers: {
+                            '@type': 'Offer',
+                            price: product.price,
+                            priceCurrency: 'VND',
+                            availability: 'https://schema.org/InStock',
+                            url: `https://hylacviet.vn/san-pham/${product.id}`,
+                        },
+                    }),
+                }}
+            />
+
             {/* Product Section */}
             <section className="pd-product">
                 <div className="pd-container pd-grid">

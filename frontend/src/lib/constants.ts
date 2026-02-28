@@ -3,10 +3,10 @@ export const SITE = {
     name: 'Hỷ Lạc Việt',
     tagline: 'Áo Dài & Pháp Phục Cao Cấp',
     description: 'Nơi nghệ thuật áo dài truyền thống hội tụ cùng tâm huyết của những nghệ nhân lành nghề',
-    url: 'https://hylacviet.com',
+    url: 'https://hylacviet.vn',
     phone: '0912 503 456',
     zalo: 'https://zalo.me/0912503456',
-    email: 'info@hylacviet.com',
+    email: 'contact@hylacviet.vn',
     address: '123 Nguyễn Huệ, Quận 1, TP.HCM',
 };
 
