@@ -1,10 +1,19 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import Image from 'next/image';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import '@/styles/about.css';
 import '@/styles/showroom.css';
+
+function toRelativeUrl(url: string): string {
+    if (!url) return url;
+    try {
+        const u = new URL(url);
+        if (u.hostname.endsWith('hylacviet.vn')) return u.pathname + u.search;
+    } catch { /* not a valid URL */ }
+    return url;
+}
 
 // SVG Icons for Core Values
 const ValueIcon = ({ type }: { type: 'fabric' | 'craft' | 'heart' | 'heritage' }) => {
@@ -68,6 +77,34 @@ const coreValues = [
 
 export default function AboutPage() {
     const containerRef = useRef<HTMLElement>(null);
+    const [heroImage, setHeroImage] = useState('/images/craft-embroidery.webp');
+    const [storyImage1, setStoryImage1] = useState('/images/craft-measuring.webp');
+    const [storyImage2, setStoryImage2] = useState('/images/craft-embroidery.webp');
+
+    useEffect(() => {
+        async function fetchSettings() {
+            try {
+                const res = await fetch('/api/settings');
+                const data = await res.json();
+                if (data.success && data.data) {
+                    const s: Record<string, string> = {};
+                    for (const item of data.data) {
+                        if (item.value) s[item.key] = item.value;
+                    }
+                    // Use real uploaded images from API settings
+                    const hero = s.story_image || s.craft_step1_image || s.step1_image;
+                    const img1 = s.story_image_2 || s.craft_step2_image || s.step2_image;
+                    const img2 = s.craft_step3_image || s.step3_image;
+                    if (hero) setHeroImage(toRelativeUrl(hero));
+                    if (img1) setStoryImage1(toRelativeUrl(img1));
+                    if (img2) setStoryImage2(toRelativeUrl(img2));
+                }
+            } catch (e) {
+                console.error('Failed to fetch settings:', e);
+            }
+        }
+        fetchSettings();
+    }, []);
 
     const { scrollYProgress } = useScroll({
         target: containerRef,
@@ -86,8 +123,8 @@ export default function AboutPage() {
             >
                 <div className="memoir-hero-bg">
                     <Image
-                        src="/images/craft-embroidery.webp"
-                        alt="Nghệ nhân thêu tay"
+                        src={heroImage}
+                        alt="Nghệ nhân Hỷ Lạc Việt"
                         fill
                         style={{ objectFit: 'cover' }}
                         priority
@@ -131,7 +168,7 @@ export default function AboutPage() {
                     >
                         <div className="memoir-image-frame">
                             <Image
-                                src="/images/craft-measuring.webp"
+                                src={storyImage1}
                                 alt="Những ngày đầu tiên"
                                 fill
                                 style={{ objectFit: 'cover' }}
@@ -156,7 +193,7 @@ export default function AboutPage() {
                             mà bằng chính đôi tay, bằng từng sợi tơ, và bằng tâm hồn người thợ may.
                         </p>
                         <p className="memoir-body">
-                            Khi ngành may mặc công nghiệp nuốt chửng sự tinh tế, khi "nhanh" và "rẻ"
+                            Khi ngành may mặc công nghiệp nuốt chửng sự tinh tế, khi &quot;nhanh&quot; và &quot;rẻ&quot;
                             trở thành tiêu chí, chúng tôi chọn đi ngược dòng. Chậm rãi. Tỉ mỉ. Và trân trọng.
                         </p>
                     </motion.div>
@@ -175,8 +212,8 @@ export default function AboutPage() {
                     >
                         <div className="memoir-image-frame">
                             <Image
-                                src="/images/craft-embroidery.webp"
-                                alt="Nghệ nhân thêu tay"
+                                src={storyImage2}
+                                alt="Nghệ nhân tại xưởng"
                                 fill
                                 style={{ objectFit: 'cover' }}
                             />
@@ -216,16 +253,16 @@ export default function AboutPage() {
                     viewport={{ once: true }}
                     transition={{ duration: 1 }}
                 >
-                    <span className="quote-mark">"</span>
+                    <span className="quote-mark">&quot;</span>
                     <p>
                         Một bộ áo dài hoàn hảo không chỉ đo bằng thước,<br />
                         mà đo bằng cảm xúc khi người mặc soi gương.
                     </p>
-                    <span className="quote-mark end">"</span>
+                    <span className="quote-mark end">&quot;</span>
                 </motion.blockquote>
             </section>
 
-            {/* SECTION 4: Đạo Của Nghề - Core Values (Philosophy Style) */}
+            {/* SECTION 4: Đạo Của Nghề - Core Values */}
             <section className="memoir-values">
                 <motion.div
                     className="memoir-values-header"

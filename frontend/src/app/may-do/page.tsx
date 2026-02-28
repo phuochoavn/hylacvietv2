@@ -1,9 +1,54 @@
 'use client';
-// REBUILD TRIGGER: 2026-02-05T08:54
 
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import Image from 'next/image';
 import '@/styles/bespoke.css';
+
+function toRelativeUrl(url: string): string {
+    if (!url) return url;
+    try {
+        const u = new URL(url);
+        if (u.hostname.endsWith('hylacviet.vn')) return u.pathname + u.search;
+    } catch { /* not a valid URL */ }
+    return url;
+}
+
+interface SplitSection {
+    number: string;
+    heading: string;
+    headingLine2: string;
+    text: string;
+    image: string;
+    alt: string;
+}
+
+const defaultSplits: SplitSection[] = [
+    {
+        number: '01',
+        heading: 'Nghệ Thuật',
+        headingLine2: 'Của Sự Vừa Vặn',
+        text: 'Với hơn 20 năm kinh nghiệm, đội ngũ nghệ nhân Hỷ Lạc Việt hiểu rằng mỗi nét đường cong đều là duy nhất. Chúng tôi không may áo — chúng tôi kiến tạo tác phẩm nghệ thuật mang hơi thở và linh hồn của người mặc.',
+        image: '/images/craft-measuring.webp',
+        alt: 'Nghệ nhân đo số',
+    },
+    {
+        number: '02',
+        heading: 'Chất Liệu',
+        headingLine2: 'Thượng Hạng',
+        text: 'Lựa chọn từ bộ sưu tập lụa tơ tằm, gấm nhung và linen cao cấp nhất. Mỗi loại vải kể một câu chuyện riêng — vì da thịt chỉ xứng với tinh hoa.',
+        image: '/images/craft-fabric.webp',
+        alt: 'Chất liệu cao cấp',
+    },
+    {
+        number: '03',
+        heading: 'Hoàn Thiện',
+        headingLine2: 'Tác Phẩm',
+        text: 'Sau hai lần thử đồ và điều chỉnh tỉ mỉ, tác phẩm độc bản của bạn được hoàn thiện. Mỗi đường kim cuối cùng là lời cam kết của nghệ nhân — sẵn sàng tỏa sáng.',
+        image: '/images/craft-final.webp',
+        alt: 'Tác phẩm hoàn thiện',
+    },
+];
 
 const journeySteps = [
     {
@@ -23,12 +68,12 @@ const journeySteps = [
     },
     {
         number: '04',
-        title: 'Thêu & Nung Nọt',
-        desc: 'Nghệ nhân tỉ mỉ thêu tay từng họa tiết, từng đường kim. Đây là nơi nghệ thuật và tâm hồn hòa quyện.'
+        title: 'May & Hoàn Thiện',
+        desc: 'Nghệ nhân tỉ mỉ cắt may từng chi tiết, kiểm tra chất lượng qua nhiều công đoạn. Đây là nơi nghệ thuật và tâm hồn hòa quyện.'
     },
     {
         number: '05',
-        title: 'Hoàn Thiện Tác Phẩm',
+        title: 'Bàn Giao Tác Phẩm',
         desc: 'Sau hai lần thử đồ và điều chỉnh, tác phẩm độc bản của bạn được hoàn thiện — sẵn sàng tỏa sáng.'
     }
 ];
@@ -47,6 +92,38 @@ const fadeUp = {
 };
 
 export default function MayDoPage() {
+    const [splits, setSplits] = useState<SplitSection[]>(defaultSplits);
+
+    useEffect(() => {
+        async function fetchSettings() {
+            try {
+                const res = await fetch('/api/settings');
+                const data = await res.json();
+                if (data.success && data.data) {
+                    const s: Record<string, string> = {};
+                    for (const item of data.data) {
+                        if (item.value) s[item.key] = item.value;
+                    }
+
+                    // Use craft_step images from API (same as homepage process section)
+                    const updated = [...defaultSplits];
+                    const img1 = s.craft_step1_image || s.step1_image;
+                    const img2 = s.craft_step3_image || s.step3_image || s.story_image;
+                    const img3 = s.craft_step4_image || s.step4_image || s.story_image_2;
+
+                    if (img1) updated[0] = { ...updated[0], image: toRelativeUrl(img1) };
+                    if (img2) updated[1] = { ...updated[1], image: toRelativeUrl(img2) };
+                    if (img3) updated[2] = { ...updated[2], image: toRelativeUrl(img3) };
+
+                    setSplits(updated);
+                }
+            } catch (e) {
+                console.error('Failed to fetch settings:', e);
+            }
+        }
+        fetchSettings();
+    }, []);
+
     return (
         <main className="bespoke-page">
             {/* Hero Section */}
@@ -78,71 +155,39 @@ export default function MayDoPage() {
                 </div>
             </section>
 
-            {/* Split Section - The Philosophy */}
-            <motion.section
-                className="bespoke-split"
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: "-100px" }}
-                variants={containerVariants}
-            >
-                <div className="bespoke-split-container">
-                    <motion.div className="bespoke-split-image" variants={fadeUp}>
-                        <Image
-                            src="/images/craft-measuring.webp"
-                            alt="Nghệ nhân đo số"
-                            fill
-                            style={{ objectFit: 'cover' }}
-                            sizes="(max-width: 1024px) 100vw, 50vw"
-                        />
-                    </motion.div>
-                    <motion.div className="bespoke-split-content" variants={fadeUp}>
-                        <span className="bespoke-split-number">01</span>
-                        <h2 className="bespoke-split-heading">
-                            Nghệ Thuật<br />
-                            Của Sự Vừa Vặn
-                        </h2>
-                        <p className="bespoke-split-text">
-                            Với hơn 20 năm kinh nghiệm, đội ngũ nghệ nhân Hỷ Lạc Việt hiểu rằng
-                            mỗi nét đường cong đều là duy nhất. Chúng tôi không may áo —
-                            chúng tôi kiến tạo tác phẩm nghệ thuật mang hơi thở và linh hồn của người mặc.
-                        </p>
-                    </motion.div>
-                </div>
-            </motion.section>
-
-            {/* Split Section - Reverse */}
-            <motion.section
-                className="bespoke-split"
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: "-100px" }}
-                variants={containerVariants}
-            >
-                <div className="bespoke-split-container reverse">
-                    <motion.div className="bespoke-split-image" variants={fadeUp}>
-                        <Image
-                            src="/images/craft-embroidery.webp"
-                            alt="Thêu tay tinh xảo"
-                            fill
-                            style={{ objectFit: 'cover' }}
-                            sizes="(max-width: 1024px) 100vw, 50vw"
-                        />
-                    </motion.div>
-                    <motion.div className="bespoke-split-content" variants={fadeUp}>
-                        <span className="bespoke-split-number">02</span>
-                        <h2 className="bespoke-split-heading">
-                            Thêu Tay —<br />
-                            Di Sản Thủ Công
-                        </h2>
-                        <p className="bespoke-split-text">
-                            Mỗi họa tiết thêu là hàng nghìn đường kim, là sự kiên nhẫn và
-                            lòng trân trọng nghề thủ công truyền thống. Không có hai tác phẩm
-                            giống nhau — vì mỗi tác phẩm mang dấu ấn riêng của nghệ nhân.
-                        </p>
-                    </motion.div>
-                </div>
-            </motion.section>
+            {/* Split Sections - Dynamic from API */}
+            {splits.map((split, index) => (
+                <motion.section
+                    key={split.number}
+                    className="bespoke-split"
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: "-100px" }}
+                    variants={containerVariants}
+                >
+                    <div className={`bespoke-split-container ${index % 2 !== 0 ? 'reverse' : ''}`}>
+                        <motion.div className="bespoke-split-image" variants={fadeUp}>
+                            <Image
+                                src={split.image}
+                                alt={split.alt}
+                                fill
+                                style={{ objectFit: 'cover' }}
+                                sizes="(max-width: 1024px) 100vw, 50vw"
+                            />
+                        </motion.div>
+                        <motion.div className="bespoke-split-content" variants={fadeUp}>
+                            <span className="bespoke-split-number">{split.number}</span>
+                            <h2 className="bespoke-split-heading">
+                                {split.heading}<br />
+                                {split.headingLine2}
+                            </h2>
+                            <p className="bespoke-split-text">
+                                {split.text}
+                            </p>
+                        </motion.div>
+                    </div>
+                </motion.section>
+            ))}
 
             {/* Journey Timeline */}
             <section className="bespoke-journey">
@@ -168,7 +213,7 @@ export default function MayDoPage() {
                     viewport={{ once: true }}
                     variants={containerVariants}
                 >
-                    {journeySteps.map((step, index) => (
+                    {journeySteps.map((step) => (
                         <motion.div
                             key={step.number}
                             className="bespoke-step"

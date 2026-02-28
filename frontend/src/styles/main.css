@@ -9,6 +9,7 @@
 @import './utilities.css';
 @import './animations.css';
 @import './layout.css';
+@import './contact.css';
 
 /* Page-specific CSS is imported per-page/component:
  * hero.css         → page.tsx (homepage)

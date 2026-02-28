@@ -4,6 +4,50 @@
 
 ---
 
+## Sprint: Sub-Page Homogenization — 2026-02-28
+
+### Mục tiêu
+- Thống nhất ảnh dynamic (từ API) trên tất cả sub-pages
+- Sửa CSS bị lỗi trên `/san-pham` và `/lien-he`
+
+### Đã hoàn thành
+
+#### `/san-pham` — CSS Fix
+- ✅ **Thêm `import showroom.css`** — bị mất sau CSS per-page splitting, page dùng class `showroom-*` nhưng không import CSS
+
+#### `/may-do` — Dynamic Images + Content Update
+- ✅ **Ảnh API** — `craft_step1_image`, `craft_step3_image` thay ảnh tĩnh
+- ✅ **Bỏ phần "Thêu Tay"** — thay bằng nội dung dựa trên quy trình trang chủ
+- ✅ **Cập nhật journey step 4** — nội dung chính xác hơn
+
+#### `/gioi-thieu` — Full API Images
+- ✅ **Tất cả ảnh từ API** — hero (`story_image`), story section 1 (`story_image_2`), section 2 (`craft_step3_image`)
+
+#### `/lien-he` — Full Rewrite + Cloudflare Fix
+- ✅ **Viết lại hoàn toàn** — bỏ SVG icon components, framer-motion, useScroll/useTransform
+- ✅ **Ảnh API** — hero (`craft_step4_image`), showroom (`story_image_2`)
+- ✅ **Fix Cloudflare negative 522 cache** — CSS chunk hash `073610e85429ce6e` bị Cloudflare cache lỗi 522. Thêm CSS rule mới để buộc hash mới (`873bb509821ef5c9`)
+- ✅ **Thêm `contact.css` vào global `main.css`** — redundancy, tránh lỗi tương tự
+
+### Root Cause Analysis — Lỗi CSS `/lien-he`
+| Vấn đề | Nguyên nhân | Fix |
+|--------|-------------|-----|
+| SVG icons render khổng lồ | SVG có `viewBox` nhưng không có `width`/`height` HTML attrs | Viết lại page, bỏ SVG icons |
+| CSS không load qua Cloudflare | Cloudflare negative cache 522 trên hash cũ | Thay đổi CSS content → hash mới |
+| Các trang khác không bị | Không có standalone SVG icons, dùng `<Image>` component | — |
+
+### Files thay đổi
+| File | Thay đổi |
+|------|----------|
+| `san-pham/page.tsx` | Thêm `import showroom.css` |
+| `may-do/page.tsx` | Rewrite: ảnh API, bỏ Thêu Tay, journey step 4 |
+| `gioi-thieu/page.tsx` | Ảnh API cho hero + story sections |
+| `lien-he/page.tsx` | **REWRITE** — bỏ SVG icons, framer-motion, dùng emoji + CSS thuần |
+| `contact.css` | Thêm `.contact-page-v2` rule (cache bust) |
+| `main.css` | Thêm `@import './contact.css'` (global bundling) |
+
+---
+
 ## Sprint: Accessibility Fixes — 2026-02-28
 
 ### Mục tiêu

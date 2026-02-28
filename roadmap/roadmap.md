@@ -1,7 +1,7 @@
 # Roadmap - Hỷ Lạc Việt
 
 > Cập nhật sau mỗi sprint.  
-> Phiên bản: v1.1 — 2026-02-28 (Mobile Perf + A11y)
+> Phiên bản: v1.2 — 2026-02-28 (Sub-Page Homogenization)
 
 ---
 
@@ -69,7 +69,30 @@ Phase 4: E-commerce Expansion (tương lai)
 ### Accessibility Fixes
 - [x] Fix color contrast: section-label, title-accent → `--gold-dark`
 - [x] Fix footer copyright-sub opacity 0.25 → 0.55
-- [x] Fix heading hierarchy: `<h4>Showroom</h4>` → `<h3>`
+- [x] Fix heading hierarchy: `<h4>Showroom</h4>` → `<h3>` + update CSS selector `.info-text h4` → `.info-text h3`
+
+---
+
+## Phase 2.6: Sub-Page Homogenization ✅
+
+> Dynamic API images + CSS fix trên 4 sub-pages
+
+### Sản phẩm `/san-pham`
+- [x] Fix CSS — thêm `import showroom.css` bị thiếu sau CSS splitting
+
+### May đo `/may-do`
+- [x] Thay ảnh tĩnh → ảnh API (`craft_step1_image`, `craft_step3_image`)
+- [x] Bỏ phần "Thêu Tay" → thay nội dung dựa trên quy trình trang chủ
+- [x] Cập nhật journey step 4
+
+### Giới thiệu `/gioi-thieu`
+- [x] Tất cả ảnh (hero, story section 1 & 2) → ảnh API
+
+### Liên hệ `/lien-he`
+- [x] Viết lại hoàn toàn page — bỏ SVG icons, framer-motion
+- [x] Ảnh hero + showroom → ảnh API
+- [x] Fix Cloudflare negative 522 cache trên CSS chunk hash
+- [x] Thêm `contact.css` vào global `main.css` (redundancy)
 
 ---
 

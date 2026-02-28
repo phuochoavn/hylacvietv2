@@ -1,9 +1,14 @@
 /* =========================================
    CONTACT PAGE - SHOWROOM INVITATION STYLE
    "Ghé Thăm Atelier" - Luxury Invitation
+   v2.0 - Rewritten 2026-02-28
    ========================================= */
 
 /* ========== MAIN CONTAINER ========== */
+.contact-page-v2 {
+    display: contents;
+}
+
 .contact-showroom {
     background: var(--bg-primary);
     color: var(--text-primary);
