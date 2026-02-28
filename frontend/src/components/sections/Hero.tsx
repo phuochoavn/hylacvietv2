@@ -257,17 +257,17 @@ export default function Hero({ serverSettings }: HeroProps) {
                                 {content.tagline}
                             </p>
 
-                            {/* Below-title content uses delayed CSS entrance */}
-                            <div className="hero-description hero-anim hero-anim-3">
+                            {/* ALL hero content renders IMMEDIATELY for fast LCP */}
+                            <div className="hero-description">
                                 <p>{content.description}</p>
                             </div>
 
-                            <span className="hero-label hero-anim hero-anim-4">
+                            <span className="hero-label">
                                 <span className="hero-label-line" />
                                 {content.label}
                             </span>
 
-                            <div className="hero-cta-group hero-anim hero-anim-5">
+                            <div className="hero-cta-group">
                                 <Button href="/san-pham" variant="primary" size="lg" className="btn-glow">
                                     <svg className="btn-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                                         <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" strokeLinecap="round" strokeLinejoin="round" />
