@@ -519,3 +519,180 @@
         height: 50px;
     }
 }
+
+
+/* ===== CSS ANIMATIONS — replace framer-motion for Hero ===== */
+
+/* First bg image: render immediately for fast LCP */
+.hero-bg-visible {
+    opacity: 1 !important;
+}
+
+/* Slow Ken Burns zoom (replaces framer-motion scale animation) */
+.hero-bg-zoom {
+    animation: hero-ken-burns 20s ease-in-out infinite alternate;
+}
+
+@keyframes hero-ken-burns {
+    0% {
+        transform: scale(1);
+    }
+
+    100% {
+        transform: scale(1.08);
+    }
+}
+
+/* Entrance animation base — fade + slide up */
+@keyframes hero-fade-in-up {
+    0% {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Animation base class */
+.hero-anim {
+    opacity: 0;
+    animation: hero-fade-in-up 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Staggered delays — match original framer-motion delays */
+.hero-anim-1 {
+    animation-delay: 0.1s;
+}
+
+.hero-anim-2 {
+    animation-delay: 0.3s;
+}
+
+.hero-anim-3 {
+    animation-delay: 0.5s;
+}
+
+.hero-anim-4 {
+    animation-delay: 0.7s;
+}
+
+.hero-anim-5 {
+    animation-delay: 0.9s;
+}
+
+.hero-anim-gallery {
+    animation-delay: 0.4s;
+    animation-duration: 1s;
+}
+
+.hero-anim-scroll {
+    animation-delay: 1.5s;
+}
+
+/* Scroll line pulse animation */
+.scroll-line-animate {
+    animation: scroll-line-pulse 2s ease-in-out infinite;
+}
+
+@keyframes scroll-line-pulse {
+
+    0%,
+    100% {
+        transform: scaleY(0.6);
+        opacity: 0.3;
+    }
+
+    50% {
+        transform: scaleY(1);
+        opacity: 1;
+    }
+}
+
+/* Marquee infinite scroll animations (replaces framer-motion) */
+.marquee-scroll-up {
+    animation: marquee-scroll-up 25s linear infinite;
+}
+
+.marquee-scroll-down {
+    animation: marquee-scroll-down 25s linear infinite;
+}
+
+@keyframes marquee-scroll-up {
+    0% {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(-50%);
+    }
+}
+
+@keyframes marquee-scroll-down {
+    0% {
+        transform: translateY(-50%);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
+}
+
+/* Reduce animations on mobile for performance */
+@media (max-width: 768px) {
+    .hero-anim {
+        animation-duration: 0.5s;
+    }
+
+    .hero-anim-1 {
+        animation-delay: 0s;
+    }
+
+    .hero-anim-2 {
+        animation-delay: 0.15s;
+    }
+
+    .hero-anim-3 {
+        animation-delay: 0.3s;
+    }
+
+    .hero-anim-4 {
+        animation-delay: 0.45s;
+    }
+
+    .hero-anim-5 {
+        animation-delay: 0.6s;
+    }
+
+    .hero-anim-scroll {
+        animation-delay: 0.8s;
+    }
+
+    .hero-bg-zoom {
+        animation: none;
+        /* Skip Ken Burns on mobile */
+    }
+}
+
+/* Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+    .hero-anim {
+        opacity: 1;
+        animation: none;
+    }
+
+    .hero-bg-zoom {
+        animation: none;
+    }
+
+    .marquee-scroll-up,
+    .marquee-scroll-down {
+        animation: none;
+    }
+
+    .scroll-line-animate {
+        animation: none;
+    }
+}

@@ -2,7 +2,7 @@
 
 import { useRef, useEffect, useState, useCallback } from 'react';
 import Image from 'next/image';
-import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion';
 import Button from '@/components/core/Button';
 import BrandLogoText from '@/components/core/BrandLogoText';
 import { SITE } from '@/lib/constants';
@@ -55,7 +55,7 @@ function parseImages(json: string): { id: number; image: string }[] {
     }
 }
 
-/** Build hero state from settings (shared between server-props and client-fetch paths) */
+/** Build hero state from settings */
 function buildHeroState(settings: Record<string, string>) {
     const content: HeroContent = {
         label: settings.hero_label || defaultContent.label,
@@ -92,21 +92,39 @@ export default function Hero({ serverSettings }: HeroProps) {
     const containerRef = useRef<HTMLElement>(null);
     const [currentSlide, setCurrentSlide] = useState(0);
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+    const [isMobile, setIsMobile] = useState(false);
 
-    // Initialize from server settings if available, otherwise use defaults
+    // Initialize from server settings if available
     const initialState = serverSettings ? buildHeroState(serverSettings) : null;
 
     const [heroSlides, setHeroSlides] = useState<HeroSlide[]>(initialState?.heroSlides || defaultSlides);
     const [content, setContent] = useState<HeroContent>(initialState?.content || defaultContent);
-    const [isLoaded, setIsLoaded] = useState(!!serverSettings); // Loaded immediately if server data
+    const [isLoaded, setIsLoaded] = useState(!!serverSettings);
 
     const [heroBackgrounds, setHeroBackgrounds] = useState<{ id: number; image: string }[]>(initialState?.heroBackgrounds || []);
     const [marqueeCol1, setMarqueeCol1] = useState<{ id: number; image: string }[]>(initialState?.marqueeCol1 || []);
     const [marqueeCol2, setMarqueeCol2] = useState<{ id: number; image: string }[]>(initialState?.marqueeCol2 || []);
 
-    // Only fetch client-side if server didn't provide settings (non-homepage usage)
+    // Track if first slide has been shown (for animation purposes)
+    const [hasShownFirst, setHasShownFirst] = useState(false);
+
+    // Detect mobile
     useEffect(() => {
-        if (serverSettings) return; // Already have server data
+        const checkMobile = () => setIsMobile(window.innerWidth < 768);
+        checkMobile();
+        window.addEventListener('resize', checkMobile, { passive: true });
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
+    // Mark first slide shown after mount
+    useEffect(() => {
+        const timer = setTimeout(() => setHasShownFirst(true), 100);
+        return () => clearTimeout(timer);
+    }, []);
+
+    // Only fetch client-side if no server settings
+    useEffect(() => {
+        if (serverSettings) return;
         const fetchData = async () => {
             try {
                 const res = await fetch('/api/settings');
@@ -134,12 +152,11 @@ export default function Hero({ serverSettings }: HeroProps) {
         fetchData();
     }, [serverSettings]);
 
-    // Parallax scroll
+    // Scroll parallax — lightweight, keep framer-motion for this
     const { scrollYProgress } = useScroll({
         target: containerRef,
         offset: ['start start', 'end start'],
     });
-
     const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
 
     // Auto-rotate slides
@@ -150,11 +167,12 @@ export default function Hero({ serverSettings }: HeroProps) {
         return () => clearInterval(interval);
     }, [heroSlides.length]);
 
-    // Mouse parallax effect — throttled to ~15fps for performance
+    // Mouse parallax — desktop only, throttled
     useEffect(() => {
+        if (isMobile) return; // Skip on mobile — no mouse, saves CPU
         let rafId: number;
         let lastTime = 0;
-        const THROTTLE_MS = 66; // ~15fps
+        const THROTTLE_MS = 66;
 
         const handleMouseMove = (e: MouseEvent) => {
             const now = performance.now();
@@ -172,64 +190,71 @@ export default function Hero({ serverSettings }: HeroProps) {
             window.removeEventListener('mousemove', handleMouseMove);
             cancelAnimationFrame(rafId);
         };
-    }, []);
+    }, [isMobile]);
 
-    // Only split title if it's a short brand name (2-3 words like "Hỷ Lạc Việt")
-    const titleWords = content.title.split(' ');
-    const isShortTitle = titleWords.length >= 2 && titleWords.length <= 3;
+    // Get current hero bg image URL
+    const getHeroBgImage = (slideIdx: number) => {
+        if (heroBackgrounds.length > 0) return heroBackgrounds[slideIdx % heroBackgrounds.length]?.image;
+        return heroSlides[slideIdx]?.image || defaultSlides[0].image;
+    };
 
     return (
         <>
             <section ref={containerRef} className="hero-premium">
-                {/* Background Layer with Parallax */}
-                <motion.div
+                {/* Background Layer — no framer-motion for mouse parallax on mobile */}
+                <div
                     className="hero-bg-layer"
-                    style={{
-                        x: mousePosition.x * -0.5,
-                        y: mousePosition.y * -0.5,
-                    }}
+                    style={!isMobile ? {
+                        transform: `translate(${mousePosition.x * -0.5}px, ${mousePosition.y * -0.5}px)`,
+                        transition: 'transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+                    } : undefined}
                 >
-                    <AnimatePresence mode="sync">
-                        {isLoaded && (
+                    {/* FIRST IMAGE: render immediately with opacity:1 for fast LCP */}
+                    {currentSlide === 0 && (
+                        <div className="hero-bg-image hero-bg-visible hero-bg-zoom">
+                            <Image
+                                src={getHeroBgImage(0)}
+                                alt={heroSlides[0]?.title || 'Hero'}
+                                fill
+                                priority
+                                quality={75}
+                                className="hero-bg-img"
+                                sizes="100vw"
+                                style={{ objectFit: 'cover' }}
+                            />
+                        </div>
+                    )}
+
+                    {/* SUBSEQUENT SLIDES: use AnimatePresence for crossfade */}
+                    {hasShownFirst && currentSlide > 0 && (
+                        <AnimatePresence mode="sync">
                             <motion.div
                                 key={currentSlide}
                                 className="hero-bg-image"
-                                initial={{ opacity: 0, scale: 1 }}
-                                animate={{
-                                    opacity: 1,
-                                    scale: [1, 1.08, 1],
-                                }}
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
-                                transition={{
-                                    opacity: { duration: 1.5, ease: [0.22, 1, 0.36, 1] },
-                                    scale: {
-                                        duration: 20,
-                                        repeat: Infinity,
-                                        repeatType: "reverse",
-                                        ease: "easeInOut",
-                                    },
-                                }}
+                                transition={{ opacity: { duration: 1.2, ease: [0.22, 1, 0.36, 1] } }}
                             >
                                 <Image
-                                    src={(heroBackgrounds.length > 0 ? heroBackgrounds[currentSlide % heroBackgrounds.length]?.image : heroSlides[currentSlide]?.image) || defaultSlides[0].image}
+                                    src={getHeroBgImage(currentSlide)}
                                     alt={heroSlides[currentSlide]?.title || 'Hero'}
                                     fill
-                                    priority
                                     quality={75}
                                     className="hero-bg-img"
                                     sizes="100vw"
                                     style={{ objectFit: 'cover' }}
                                 />
                             </motion.div>
-                        )}
-                    </AnimatePresence>
+                        </AnimatePresence>
+                    )}
 
                     {/* Gradient Overlays */}
                     <div className="hero-gradient-overlay" />
                     <div className="hero-vignette" />
-                </motion.div>
+                </div>
 
-                {/* Floating Particles — pure CSS, no JS animation */}
+                {/* Floating Particles — hidden on mobile via CSS */}
                 <div className="hero-particles" aria-hidden="true">
                     <span className="particle" style={{ left: '15%', top: '20%', animationDelay: '0s' }} />
                     <span className="particle" style={{ left: '35%', top: '60%', animationDelay: '0.8s' }} />
@@ -241,65 +266,40 @@ export default function Hero({ serverSettings }: HeroProps) {
                     <span className="particle" style={{ left: '65%', top: '25%', animationDelay: '5.6s' }} />
                 </div>
 
-                {/* Main Content */}
+                {/* Main Content — CSS animations replace framer-motion */}
                 <motion.div
                     className="hero-content-wrapper"
                     style={{ opacity }}
                 >
                     <div className="hero-content-inner">
-                        {/* Left: Typography */}
-                        <motion.div
-                            className="hero-text"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ duration: 1, delay: 0.5 }}
-                            style={{
+                        {/* Left: Typography — CSS entrance animations */}
+                        <div
+                            className="hero-text hero-text-animate"
+                            style={!isMobile ? {
                                 transform: `translate(${mousePosition.x * 0.5}px, ${mousePosition.y * 0.5}px)`,
-                            }}
+                                transition: 'transform 0.3s ease-out',
+                            } : undefined}
                         >
-                            <motion.h1
-                                className="hero-title-main"
-                                initial={{ opacity: 0, y: 60, clipPath: 'inset(100% 0 0 0)' }}
-                                animate={{ opacity: 1, y: 0, clipPath: 'inset(0% 0 0 0)' }}
-                                transition={{ duration: 1.2, delay: 1, ease: [0.22, 1, 0.36, 1] }}
-                            >
-                                <span className="title-line" style={{ filter: 'drop-shadow(0 2px 8px rgba(90, 58, 26, 0.3))' }}><BrandLogoText height={100} fill="#B8860B" stroke="#5A3A1A" strokeWidth={4} /></span>
-                            </motion.h1>
+                            <h1 className="hero-title-main hero-anim hero-anim-1">
+                                <span className="title-line" style={{ filter: 'drop-shadow(0 2px 8px rgba(90, 58, 26, 0.3))' }}>
+                                    <BrandLogoText height={100} fill="#B8860B" stroke="#5A3A1A" strokeWidth={4} />
+                                </span>
+                            </h1>
 
-                            <motion.p
-                                className="hero-tagline"
-                                initial={{ opacity: 0, y: 30 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.8, delay: 1.4 }}
-                            >
+                            <p className="hero-tagline hero-anim hero-anim-2">
                                 {content.tagline}
-                            </motion.p>
+                            </p>
 
-                            <motion.div
-                                className="hero-description"
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.8, delay: 1.6 }}
-                            >
+                            <div className="hero-description hero-anim hero-anim-3">
                                 <p>{content.description}</p>
-                            </motion.div>
+                            </div>
 
-                            <motion.span
-                                className="hero-label"
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.8, delay: 1.7 }}
-                            >
+                            <span className="hero-label hero-anim hero-anim-4">
                                 <span className="hero-label-line" />
                                 {content.label}
-                            </motion.span>
+                            </span>
 
-                            <motion.div
-                                className="hero-cta-group"
-                                initial={{ opacity: 0, y: 30 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.8, delay: 1.8 }}
-                            >
+                            <div className="hero-cta-group hero-anim hero-anim-5">
                                 <Button href="/san-pham" variant="primary" size="lg" className="btn-glow">
                                     <svg className="btn-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                                         <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" strokeLinecap="round" strokeLinejoin="round" />
@@ -312,32 +312,15 @@ export default function Hero({ serverSettings }: HeroProps) {
                                     </svg>
                                     Tư vấn Zalo
                                 </Button>
-                            </motion.div>
-                        </motion.div>
+                            </div>
+                        </div>
 
-                        {/* Right: Bi-directional Vertical Marquee Gallery */}
-                        {isLoaded && (marqueeCol1.length > 0 || marqueeCol2.length > 0) && (
-                            <motion.div
-                                className="hero-marquee-gallery"
-                                initial={{ opacity: 0, x: 200, rotate: 0 }}
-                                animate={{ opacity: 1, x: 0, rotate: 12 }}
-                                transition={{ duration: 1.2, delay: 0.8, ease: [0.22, 1, 0.36, 1] }}
-                            >
+                        {/* Right: Marquee Gallery — desktop only, hidden on <=1024px via CSS */}
+                        {!isMobile && isLoaded && (marqueeCol1.length > 0 || marqueeCol2.length > 0) && (
+                            <div className="hero-marquee-gallery hero-anim hero-anim-gallery">
                                 {/* Column 1 - Scrolling Up */}
                                 <div className="marquee-column">
-                                    <motion.div
-                                        className="marquee-track marquee-up"
-                                        animate={{ y: ['0%', '-50%'] }}
-                                        transition={{
-                                            y: {
-                                                duration: 20,
-                                                repeat: Infinity,
-                                                repeatType: 'loop',
-                                                ease: 'linear',
-                                            },
-                                        }}
-                                    >
-                                        {/* Duplicate slides for seamless loop */}
+                                    <div className="marquee-track marquee-up marquee-scroll-up">
                                         {[...(marqueeCol1.length > 0 ? marqueeCol1 : heroSlides), ...(marqueeCol1.length > 0 ? marqueeCol1 : heroSlides)].map((slide, idx) => {
                                             const itemsLen = marqueeCol1.length > 0 ? marqueeCol1.length : heroSlides.length;
                                             return (
@@ -365,24 +348,12 @@ export default function Hero({ serverSettings }: HeroProps) {
                                                 </div>
                                             );
                                         })}
-                                    </motion.div>
+                                    </div>
                                 </div>
 
                                 {/* Column 2 - Scrolling Down */}
                                 <div className="marquee-column">
-                                    <motion.div
-                                        className="marquee-track marquee-down"
-                                        animate={{ y: ['-50%', '0%'] }}
-                                        transition={{
-                                            y: {
-                                                duration: 25,
-                                                repeat: Infinity,
-                                                repeatType: 'loop',
-                                                ease: 'linear',
-                                            },
-                                        }}
-                                    >
-                                        {/* Duplicate and reverse for variety */}
+                                    <div className="marquee-track marquee-down marquee-scroll-down">
                                         {[...(marqueeCol2.length > 0 ? marqueeCol2 : heroSlides), ...(marqueeCol2.length > 0 ? marqueeCol2 : heroSlides)].reverse().map((slide, idx) => {
                                             const itemsLen = marqueeCol2.length > 0 ? marqueeCol2.length : heroSlides.length;
                                             return (
@@ -406,26 +377,17 @@ export default function Hero({ serverSettings }: HeroProps) {
                                                 </div>
                                             );
                                         })}
-                                    </motion.div>
+                                    </div>
                                 </div>
-                            </motion.div>
+                            </div>
                         )}
                     </div>
 
-                    {/* Scroll Indicator */}
-                    <motion.div
-                        className="hero-scroll-indicator"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 1, delay: 2.5 }}
-                    >
+                    {/* Scroll Indicator — CSS animation */}
+                    <div className="hero-scroll-indicator hero-anim hero-anim-scroll">
                         <span>Cuộn xuống</span>
-                        <motion.div
-                            className="scroll-line"
-                            animate={{ scaleY: [0, 1, 0] }}
-                            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-                        />
-                    </motion.div>
+                        <div className="scroll-line scroll-line-animate" />
+                    </div>
                 </motion.div>
 
                 {/* Corner Decorations */}

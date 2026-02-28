@@ -5,10 +5,7 @@ import '@/styles/main.css';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 
-import CustomCursor from '@/components/effects/CustomCursor';
-import SmoothScroll from '@/components/effects/SmoothScroll';
-import ScrollProgress from '@/components/effects/ScrollProgress';
-import FloatingContactButtons from '@/components/ui/FloatingContactButtons';
+import LayoutEffects from '@/components/layout/LayoutEffects';
 
 // Configure Google Fonts with next/font for optimized loading
 const cormorant = Cormorant_Garamond({
@@ -209,13 +206,10 @@ export default function RootLayout({
                     shadow="0 0 10px #D4AF37, 0 0 5px #D4AF37"
                 />
 
-                <CustomCursor />
-                <SmoothScroll />
-                <ScrollProgress />
+                <LayoutEffects />
                 <Header />
                 <main>{children}</main>
                 <Footer />
-                <FloatingContactButtons />
             </body>
         </html>
     );
