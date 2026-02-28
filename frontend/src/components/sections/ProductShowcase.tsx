@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-// Using native <img> for old iOS compatibility (Next.js Image forces WebP)
+import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -57,11 +57,13 @@ function CardImageSlider({ product }: { product: Product }) {
                     key={idx}
                     className={`card-slide ${idx === currentIdx ? 'active' : ''}`}
                 >
-                    <img
+                    <Image
                         src={img}
                         alt={`${product.name} - ${idx + 1}`}
-                        style={{ objectFit: 'cover', width: '100%', height: '100%', position: 'absolute', inset: 0 }}
-                        loading={idx === 0 ? 'eager' : 'lazy'}
+                        fill
+                        sizes="270px"
+                        style={{ objectFit: 'cover' }}
+                        quality={75}
                     />
                 </div>
             ))}
@@ -198,11 +200,13 @@ export default function ProductShowcase() {
                             <Link href={`/san-pham/${featured.id}`} className="product-showcase-link">
                                 <div className="product-card-image featured-image">
                                     {featured.images?.[0] ? (
-                                        <img
+                                        <Image
                                             src={toRelativeUrl(featured.images[0])}
                                             alt={featured.name}
-                                            style={{ objectFit: 'cover', width: '100%', height: '100%', position: 'absolute', inset: 0 }}
-                                            loading="lazy"
+                                            fill
+                                            sizes="(max-width: 768px) 95vw, 600px"
+                                            style={{ objectFit: 'cover' }}
+                                            quality={75}
                                         />
                                     ) : (
                                         <div className="product-showcase-placeholder"><span>📷</span></div>
@@ -238,11 +242,13 @@ export default function ProductShowcase() {
                                         <Link href={`/san-pham/${product.id}`} className="product-showcase-link">
                                             <div className="product-card-image secondary-image">
                                                 {img ? (
-                                                    <img
+                                                    <Image
                                                         src={img}
                                                         alt={product.name}
-                                                        style={{ objectFit: 'cover', width: '100%', height: '100%', position: 'absolute', inset: 0 }}
-                                                        loading="lazy"
+                                                        fill
+                                                        sizes="400px"
+                                                        style={{ objectFit: 'cover' }}
+                                                        quality={75}
                                                     />
                                                 ) : (
                                                     <div className="product-showcase-placeholder"><span>📷</span></div>

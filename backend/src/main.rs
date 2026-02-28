@@ -98,7 +98,23 @@ async fn main() {
     let app = Router::new()
         .merge(public_routes)
         .merge(protected_routes)
-        .nest_service("/uploads", ServeDir::new("uploads"))
+        .nest_service(
+            "/uploads",
+            ServeDir::new("uploads").precompressed_gzip(),
+        )
+        .layer(axum::middleware::map_response(|mut response: Response| async move {
+            // Add cache headers for upload files (7 days)
+            if let Some(ct) = response.headers().get(header::CONTENT_TYPE) {
+                let ct_str = ct.to_str().unwrap_or("");
+                if ct_str.starts_with("image/") {
+                    response.headers_mut().insert(
+                        header::CACHE_CONTROL,
+                        "public, max-age=604800, stale-while-revalidate=86400".parse().unwrap(),
+                    );
+                }
+            }
+            response
+        }))
         .layer(DefaultBodyLimit::max(100 * 1024 * 1024)) // 100MB limit
         .layer(cors)
         .with_state(db);
