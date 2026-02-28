@@ -21,10 +21,10 @@ const nextConfig: NextConfig = {
         pathname: '/uploads/**',
       },
     ],
-    // Enable modern image formats
-    formats: ['image/webp'],
-    // Responsive device sizes
-    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048],
+    // Enable modern image formats (AVIF is 50%+ smaller than WebP)
+    formats: ['image/avif', 'image/webp'],
+    // Responsive device sizes — removed 2048 (unnecessary)
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     // Allowed quality values
     qualities: [75, 85, 90],

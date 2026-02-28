@@ -2,7 +2,6 @@
 
 import { useRef, useEffect, useState, useCallback } from 'react';
 import Image from 'next/image';
-import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion';
 import Button from '@/components/core/Button';
 import BrandLogoText from '@/components/core/BrandLogoText';
 import { SITE } from '@/lib/constants';
@@ -91,7 +90,6 @@ function buildHeroState(settings: Record<string, string>) {
 export default function Hero({ serverSettings }: HeroProps) {
     const containerRef = useRef<HTMLElement>(null);
     const [currentSlide, setCurrentSlide] = useState(0);
-    const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
     const [isMobile, setIsMobile] = useState(false);
 
     // Initialize from server settings if available
@@ -105,8 +103,8 @@ export default function Hero({ serverSettings }: HeroProps) {
     const [marqueeCol1, setMarqueeCol1] = useState<{ id: number; image: string }[]>(initialState?.marqueeCol1 || []);
     const [marqueeCol2, setMarqueeCol2] = useState<{ id: number; image: string }[]>(initialState?.marqueeCol2 || []);
 
-    // Track if first slide has been shown (for animation purposes)
-    const [hasShownFirst, setHasShownFirst] = useState(false);
+    // Track previous slide for crossfade
+    const [prevSlide, setPrevSlide] = useState(-1);
 
     // Detect mobile
     useEffect(() => {
@@ -114,12 +112,6 @@ export default function Hero({ serverSettings }: HeroProps) {
         checkMobile();
         window.addEventListener('resize', checkMobile, { passive: true });
         return () => window.removeEventListener('resize', checkMobile);
-    }, []);
-
-    // Mark first slide shown after mount
-    useEffect(() => {
-        const timer = setTimeout(() => setHasShownFirst(true), 100);
-        return () => clearTimeout(timer);
     }, []);
 
     // Only fetch client-side if no server settings
@@ -152,45 +144,45 @@ export default function Hero({ serverSettings }: HeroProps) {
         fetchData();
     }, [serverSettings]);
 
-    // Scroll parallax — lightweight, keep framer-motion for this
-    const { scrollYProgress } = useScroll({
-        target: containerRef,
-        offset: ['start start', 'end start'],
-    });
-    const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+    // Scroll-based fade - pure CSS with Intersection Observer fallback
+    useEffect(() => {
+        const container = containerRef.current;
+        if (!container) return;
+
+        const handleScroll = () => {
+            const rect = container.getBoundingClientRect();
+            const viewportHeight = window.innerHeight;
+            // Calculate how much we've scrolled past the hero
+            const scrollRatio = Math.max(0, Math.min(1, -rect.top / (rect.height * 0.8)));
+            const opacity = 1 - scrollRatio;
+            const contentWrapper = container.querySelector('.hero-content-wrapper') as HTMLElement;
+            if (contentWrapper) {
+                contentWrapper.style.opacity = String(Math.max(0, opacity));
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
     // Auto-rotate slides
     useEffect(() => {
         const interval = setInterval(() => {
-            setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+            setCurrentSlide((prev) => {
+                setPrevSlide(prev);
+                return (prev + 1) % heroSlides.length;
+            });
         }, 5000);
         return () => clearInterval(interval);
     }, [heroSlides.length]);
 
-    // Mouse parallax — desktop only, throttled
+    // Clear previous slide after crossfade transition completes
     useEffect(() => {
-        if (isMobile) return; // Skip on mobile — no mouse, saves CPU
-        let rafId: number;
-        let lastTime = 0;
-        const THROTTLE_MS = 66;
-
-        const handleMouseMove = (e: MouseEvent) => {
-            const now = performance.now();
-            if (now - lastTime < THROTTLE_MS) return;
-            lastTime = now;
-            cancelAnimationFrame(rafId);
-            rafId = requestAnimationFrame(() => {
-                const x = (e.clientX / window.innerWidth - 0.5) * 20;
-                const y = (e.clientY / window.innerHeight - 0.5) * 20;
-                setMousePosition({ x, y });
-            });
-        };
-        window.addEventListener('mousemove', handleMouseMove, { passive: true });
-        return () => {
-            window.removeEventListener('mousemove', handleMouseMove);
-            cancelAnimationFrame(rafId);
-        };
-    }, [isMobile]);
+        if (prevSlide >= 0) {
+            const timer = setTimeout(() => setPrevSlide(-1), 1200);
+            return () => clearTimeout(timer);
+        }
+    }, [prevSlide]);
 
     // Get current hero bg image URL
     const getHeroBgImage = (slideIdx: number) => {
@@ -201,22 +193,15 @@ export default function Hero({ serverSettings }: HeroProps) {
     return (
         <>
             <section ref={containerRef} className="hero-premium">
-                {/* Background Layer — no framer-motion for mouse parallax on mobile */}
-                <div
-                    className="hero-bg-layer"
-                    style={!isMobile ? {
-                        transform: `translate(${mousePosition.x * -0.5}px, ${mousePosition.y * -0.5}px)`,
-                        transition: 'transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-                    } : undefined}
-                >
-                    {/* FIRST IMAGE: render immediately with opacity:1 for fast LCP */}
-                    {currentSlide === 0 && (
-                        <div className="hero-bg-image hero-bg-visible hero-bg-zoom">
+                {/* Background Layer */}
+                <div className="hero-bg-layer">
+                    {/* Previous slide — fading out via CSS transition */}
+                    {prevSlide >= 0 && prevSlide !== currentSlide && (
+                        <div className="hero-bg-image hero-bg-fade-out">
                             <Image
-                                src={getHeroBgImage(0)}
-                                alt={heroSlides[0]?.title || 'Hero'}
+                                src={getHeroBgImage(prevSlide)}
+                                alt={heroSlides[prevSlide]?.title || 'Hero'}
                                 fill
-                                priority
                                 quality={75}
                                 className="hero-bg-img"
                                 sizes="100vw"
@@ -225,29 +210,19 @@ export default function Hero({ serverSettings }: HeroProps) {
                         </div>
                     )}
 
-                    {/* SUBSEQUENT SLIDES: use AnimatePresence for crossfade */}
-                    {hasShownFirst && currentSlide > 0 && (
-                        <AnimatePresence mode="sync">
-                            <motion.div
-                                key={currentSlide}
-                                className="hero-bg-image"
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                exit={{ opacity: 0 }}
-                                transition={{ opacity: { duration: 1.2, ease: [0.22, 1, 0.36, 1] } }}
-                            >
-                                <Image
-                                    src={getHeroBgImage(currentSlide)}
-                                    alt={heroSlides[currentSlide]?.title || 'Hero'}
-                                    fill
-                                    quality={75}
-                                    className="hero-bg-img"
-                                    sizes="100vw"
-                                    style={{ objectFit: 'cover' }}
-                                />
-                            </motion.div>
-                        </AnimatePresence>
-                    )}
+                    {/* Current slide — always visible */}
+                    <div className={`hero-bg-image hero-bg-visible ${!isMobile ? 'hero-bg-zoom' : ''}`}>
+                        <Image
+                            src={getHeroBgImage(currentSlide)}
+                            alt={heroSlides[currentSlide]?.title || 'HỶ LẠC VIỆT'}
+                            fill
+                            priority
+                            quality={75}
+                            className="hero-bg-img"
+                            sizes="100vw"
+                            style={{ objectFit: 'cover' }}
+                        />
+                    </div>
 
                     {/* Gradient Overlays */}
                     <div className="hero-gradient-overlay" />
@@ -266,30 +241,23 @@ export default function Hero({ serverSettings }: HeroProps) {
                     <span className="particle" style={{ left: '65%', top: '25%', animationDelay: '5.6s' }} />
                 </div>
 
-                {/* Main Content — CSS animations replace framer-motion */}
-                <motion.div
-                    className="hero-content-wrapper"
-                    style={{ opacity }}
-                >
+                {/* Main Content — no framer-motion, pure CSS + scroll JS */}
+                <div className="hero-content-wrapper">
                     <div className="hero-content-inner">
-                        {/* Left: Typography — CSS entrance animations */}
-                        <div
-                            className="hero-text hero-text-animate"
-                            style={!isMobile ? {
-                                transform: `translate(${mousePosition.x * 0.5}px, ${mousePosition.y * 0.5}px)`,
-                                transition: 'transform 0.3s ease-out',
-                            } : undefined}
-                        >
-                            <h1 className="hero-title-main hero-anim hero-anim-1">
+                        {/* Left: Typography */}
+                        <div className="hero-text hero-text-animate">
+                            {/* Title + tagline render IMMEDIATELY (no opacity:0) for fast LCP */}
+                            <h1 className="hero-title-main">
                                 <span className="title-line" style={{ filter: 'drop-shadow(0 2px 8px rgba(90, 58, 26, 0.3))' }}>
                                     <BrandLogoText height={100} fill="#B8860B" stroke="#5A3A1A" strokeWidth={4} />
                                 </span>
                             </h1>
 
-                            <p className="hero-tagline hero-anim hero-anim-2">
+                            <p className="hero-tagline">
                                 {content.tagline}
                             </p>
 
+                            {/* Below-title content uses delayed CSS entrance */}
                             <div className="hero-description hero-anim hero-anim-3">
                                 <p>{content.description}</p>
                             </div>
@@ -367,7 +335,7 @@ export default function Hero({ serverSettings }: HeroProps) {
                                                             src={slide.image}
                                                             alt={'Marquee ' + idx}
                                                             fill
-                                                            sizes="500px"
+                                                            sizes="180px"
                                                             className="marquee-img"
                                                             loading="lazy"
                                                             quality={70}
@@ -388,7 +356,7 @@ export default function Hero({ serverSettings }: HeroProps) {
                         <span>Cuộn xuống</span>
                         <div className="scroll-line scroll-line-animate" />
                     </div>
-                </motion.div>
+                </div>
 
                 {/* Corner Decorations */}
                 <div className="hero-corner hero-corner-tl" />

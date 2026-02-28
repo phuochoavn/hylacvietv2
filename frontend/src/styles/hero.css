@@ -528,6 +528,23 @@
     opacity: 1 !important;
 }
 
+/* Crossfade: previous slide fading out (replaces framer-motion AnimatePresence) */
+.hero-bg-fade-out {
+    opacity: 1;
+    animation: hero-fade-out 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    z-index: 0;
+}
+
+@keyframes hero-fade-out {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
 /* Slow Ken Burns zoom (replaces framer-motion scale animation) */
 .hero-bg-zoom {
     animation: hero-ken-burns 20s ease-in-out infinite alternate;
