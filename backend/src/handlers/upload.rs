@@ -109,6 +109,7 @@ pub async fn upload_image(
         }
 
         // For raster images (PNG, JPG, WebP): resize + convert to WebP
+        let original_size = data.len();
         let processed = tokio::task::spawn_blocking(move || -> Result<Vec<u8>, String> {
             use image::ImageReader;
             use std::io::Cursor;
@@ -148,7 +149,7 @@ pub async fn upload_image(
         let filename = format!("{}.webp", Uuid::new_v4());
         let file_path = format!("uploads/{}", filename);
 
-        println!("Processed: {} bytes -> {} bytes WebP", data.len(), webp_data.len());
+        println!("Processed: {} bytes -> {} bytes WebP", original_size, webp_data.len());
 
         if let Err(e) = fs::write(&file_path, &webp_data).await {
             eprintln!("Failed to write file: {}", e);
