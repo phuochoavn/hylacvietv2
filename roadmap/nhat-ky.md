@@ -4,6 +4,24 @@
 
 ---
 
+## Sprint: Performance Optimization Round 3 — 2026-02-28
+
+### Mục tiêu
+- LCP 21.9s → <4s bằng cách fix root cause: `opacity: 0` trên text, framer-motion
+
+### Đã hoàn thành
+- ✅ **Xóa hoàn toàn framer-motion** khỏi Hero.tsx (0 imports, ~45KB JS)
+- ✅ **Title/tagline render ngay** — không `opacity: 0` → text = LCP element
+- ✅ **CSS crossfade** thay AnimatePresence cho slide transition
+- ✅ **Vanilla JS scroll** thay useScroll/useTransform
+- ✅ **AVIF format support** trong next.config.ts
+- ✅ **Bỏ 2048 deviceSize** (không cần thiết)
+
+### Commit
+- `f0992aa` — perf(round3): remove framer-motion from Hero, fix LCP
+
+---
+
 ## Sprint: Performance Optimization Round 2 — 2026-02-28
 
 ### Mục tiêu
