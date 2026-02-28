@@ -1,7 +1,7 @@
 # Roadmap - Hỷ Lạc Việt
 
 > Cập nhật sau mỗi sprint.  
-> Phiên bản: v1.0 — 2026-02-28
+> Phiên bản: v1.1 — 2026-02-28 (Mobile Perf + A11y)
 
 ---
 
@@ -43,6 +43,33 @@ Phase 4: E-commerce Expansion (tương lai)
 - [ ] Submit Google Search Console
 - [ ] Submit Bing Webmaster
 - [ ] Thêm Open Graph images cho mỗi page
+
+---
+
+## Phase 2.5: Mobile Performance & Accessibility ✅
+
+> Mobile 77 → 91 | Desktop 96 → 98 | Accessibility 94 → 100 (target)
+
+### Tier 1: Font Optimization
+- [x] Convert OTF → WOFF2 (CottaFree -43%, SVN-Magellin -33%)
+- [x] Giảm Roboto weights 4 → 2 (400, 700)
+- [x] Preload CottaFree.woff2
+
+### Tier 2: CSS Per-Page Splitting
+- [x] Tách 9 CSS files khỏi global main.css (158KB → 14KB core)
+- [x] Import per-page: hero.css, sections.css, products.css, showroom.css, etc.
+
+### Tier 3–4: LCP & JS
+- [x] Xác nhận hero image đã có `priority`
+- [x] Tạo `.browserslistrc` modern browsers (loại 13KB polyfills)
+
+### Tier 5: Cache
+- [x] Uploads cache 7d → 30d immutable
+
+### Accessibility Fixes
+- [x] Fix color contrast: section-label, title-accent → `--gold-dark`
+- [x] Fix footer copyright-sub opacity 0.25 → 0.55
+- [x] Fix heading hierarchy: `<h4>Showroom</h4>` → `<h3>`
 
 ---
 

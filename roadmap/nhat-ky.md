@@ -4,6 +4,72 @@
 
 ---
 
+## Sprint: Accessibility Fixes — 2026-02-28
+
+### Mục tiêu
+- Accessibility score 94 → 100
+
+### Đã hoàn thành
+- ✅ **Color contrast** — `section-label-premium.light` và `title-accent` đổi từ `--gold-light`/`--gold` → `--gold-dark` (#8B6914) cho WCAG AA
+- ✅ **Footer copyright-sub** — opacity 0.25 → 0.55 (text gần invisible trước đó)
+- ✅ **Heading hierarchy** — `<h4>Showroom</h4>` → `<h3>` + update CSS selector `.info-text h4` → `.info-text h3`
+
+### Files thay đổi
+| File | Thay đổi |
+|------|----------|
+| `sections.css` | Contrast fix: `.section-label-premium.light`, `.title-accent`, `.info-text h3` |
+| `layout.css` | `.copyright-sub` opacity 0.25 → 0.55 |
+| `ContactCTA.tsx` | `<h4>` → `<h3>` |
+
+### Commit
+- `d45576d` — a11y: fix color contrast and heading hierarchy for accessibility score
+
+---
+
+## Sprint: Mobile Performance Optimization — 2026-02-28
+
+### Mục tiêu
+- Mobile PageSpeed 77 → 90+ (đạt 91 ✅)
+- Desktop 96 → 98 ✅
+
+### Đã hoàn thành
+
+#### Tier 1: Font Optimization
+- ✅ **OTF → WOFF2** — CottaFree (14KB→8KB, -43%), SVN-Magellin (45KB→30KB, -33%)
+- ✅ **Giảm Google Font weights** — Roboto 4 weights → 2 weights (400, 700), tiết kiệm ~25KB
+- ✅ **Font preload** — `<link preload>` cho CottaFree.woff2
+
+#### Tier 2: CSS Per-Page Splitting (tác động lớn nhất)
+- ✅ **Tách 9 CSS files** khỏi global `main.css` — render-blocking CSS giảm từ 158KB → 14KB core
+- ✅ **Per-page imports** — hero.css, sections.css, products.css, showroom.css, etc. chỉ load khi cần
+
+#### Tier 3–4: LCP & JS
+- ✅ **Hero image priority** — đã có sẵn `priority` attribute
+- ✅ **`.browserslistrc`** — chỉ modern browsers, loại ~13KB polyfills không cần thiết
+
+#### Tier 5: Cache
+- ✅ **Uploads cache** — 7 days → 30 days immutable (images là WebP bất biến)
+
+### Files thay đổi
+| File | Thay đổi |
+|------|----------|
+| `main.css` | Xóa 9 page-specific CSS imports, font-face WOFF2 primary |
+| `layout.tsx` | Roboto weights 4→2, preload CottaFree.woff2 |
+| `page.tsx` | Thêm `import hero.css` |
+| `BelowFoldSections.tsx` | Thêm `import sections.css`, `products.css` |
+| `san-pham/page.tsx` | Thêm `import products.css` |
+| `gioi-thieu/page.tsx` | Thêm `import showroom.css` |
+| `next.config.ts` | Uploads cache 7d → 30d immutable |
+| `.browserslistrc` | **MỚI** — modern browsers only |
+| `CottaFree.woff2` | **MỚI** — converted from OTF |
+| `SVN-Magellin.woff2` | **MỚI** — converted from OTF |
+
+### Commits
+- `9f31cb9` — perf: mobile optimization - font WOFF2, CSS per-page split, browserslist, cache headers
+- `3b9e3c6` — fix: add products.css import to BelowFoldSections for homepage ProductShowcase
+
+---
+
 ## Sprint: Performance Optimization Round 3 — 2026-02-28
 
 ### Mục tiêu
