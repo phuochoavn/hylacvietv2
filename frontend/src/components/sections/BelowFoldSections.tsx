@@ -2,6 +2,7 @@
 
 import dynamic from 'next/dynamic';
 import '@/styles/sections.css';
+import '@/styles/products.css';
 
 // Smart SSR: text-heavy sections SSR for scroll, image-heavy sections lazy for perf
 const BrandStory = dynamic(() => import('@/components/sections/BrandStory'), { ssr: false });
