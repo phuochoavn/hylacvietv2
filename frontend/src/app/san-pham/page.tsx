@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import '@/styles/products.css';
+import '@/styles/showroom.css';
 
 interface Product {
     id: string;
