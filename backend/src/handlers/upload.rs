@@ -67,24 +67,6 @@ pub async fn upload_image(
             return Err((StatusCode::BAD_REQUEST, Json(ApiResponse::<()>::error(&format!("Only image files are allowed, got: {}", content_type)))));
         }
 
-        // Get extension from content type or filename
-        let ext = if content_type.starts_with("image/") {
-            match content_type.as_str() {
-                "image/jpeg" => "jpg",
-                "image/png" => "png",
-                "image/gif" => "gif",
-                "image/webp" => "webp",
-                "image/svg+xml" => "svg",
-                _ => {
-                    // Try to get from original filename
-                    original_filename.rsplit('.').next().unwrap_or("jpg")
-                }
-            }
-        } else {
-            // Get from filename
-            original_filename.rsplit('.').next().unwrap_or("jpg")
-        };
-
         // Read bytes
         let data = match field.bytes().await {
             Ok(d) => d,
@@ -106,12 +88,69 @@ pub async fn upload_image(
             return Err((StatusCode::BAD_REQUEST, Json(ApiResponse::<()>::error("Empty file"))));
         }
 
-        // Generate unique filename
-        let filename = format!("{}.{}", Uuid::new_v4(), ext);
+        // For SVG and GIF: save as-is (no processing)
+        let is_svg = content_type == "image/svg+xml" || original_filename.to_lowercase().ends_with(".svg");
+        let is_gif = content_type == "image/gif" || original_filename.to_lowercase().ends_with(".gif");
+
+        if is_svg || is_gif {
+            let ext = if is_svg { "svg" } else { "gif" };
+            let filename = format!("{}.{}", Uuid::new_v4(), ext);
+            let file_path = format!("uploads/{}", filename);
+            if let Err(e) = fs::write(&file_path, &data).await {
+                eprintln!("Failed to write file: {}", e);
+                return Err((StatusCode::INTERNAL_SERVER_ERROR, Json(ApiResponse::<()>::error(&e.to_string()))));
+            }
+            println!("Upload success (no processing): {}", filename);
+            let response = UploadResponse {
+                url: format!("/uploads/{}", filename),
+                filename,
+            };
+            return Ok((StatusCode::OK, Json(ApiResponse::success(response))));
+        }
+
+        // For raster images (PNG, JPG, WebP): resize + convert to WebP
+        let processed = tokio::task::spawn_blocking(move || -> Result<Vec<u8>, String> {
+            use image::ImageReader;
+            use std::io::Cursor;
+
+            // Decode image
+            let reader = ImageReader::new(Cursor::new(&data))
+                .with_guessed_format()
+                .map_err(|e| format!("Failed to read image format: {}", e))?;
+            let img = reader.decode()
+                .map_err(|e| format!("Failed to decode image: {}", e))?;
+
+            // Resize if wider than 1200px (preserve aspect ratio)
+            let max_width = 1200u32;
+            let resized = if img.width() > max_width {
+                println!("Resizing from {}x{} to max width {}", img.width(), img.height(), max_width);
+                img.resize(max_width, u32::MAX, image::imageops::FilterType::Lanczos3)
+            } else {
+                img
+            };
+
+            // Encode to WebP quality 85
+            let mut buf = Cursor::new(Vec::new());
+            resized.write_to(&mut buf, image::ImageFormat::WebP)
+                .map_err(|e| format!("Failed to encode WebP: {}", e))?;
+
+            Ok(buf.into_inner())
+        }).await.map_err(|e| {
+            eprintln!("Image processing task failed: {}", e);
+            (StatusCode::INTERNAL_SERVER_ERROR, Json(ApiResponse::<()>::error(&e.to_string())))
+        })?;
+
+        let webp_data = processed.map_err(|e| {
+            eprintln!("Image processing error: {}", e);
+            (StatusCode::INTERNAL_SERVER_ERROR, Json(ApiResponse::<()>::error(&e)))
+        })?;
+
+        let filename = format!("{}.webp", Uuid::new_v4());
         let file_path = format!("uploads/{}", filename);
 
-        // Write file
-        if let Err(e) = fs::write(&file_path, &data).await {
+        println!("Processed: {} bytes -> {} bytes WebP", data.len(), webp_data.len());
+
+        if let Err(e) = fs::write(&file_path, &webp_data).await {
             eprintln!("Failed to write file: {}", e);
             return Err((StatusCode::INTERNAL_SERVER_ERROR, Json(ApiResponse::<()>::error(&e.to_string()))));
         }

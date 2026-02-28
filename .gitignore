@@ -40,3 +40,5 @@ coverage/
 # Rust build artifacts
 backend/target/
 
+uploads_backup/
+uploads/
