@@ -4,6 +4,35 @@
 
 ---
 
+## Sprint: Performance Optimization Round 2 — 2026-02-28
+
+### Mục tiêu
+- LCP 21.6s → giảm mạnh bằng cách render Hero image ngay lập tức
+- Giảm JS bundle ~60KB+ (framer-motion deferred)
+
+### Đã hoàn thành
+- ✅ **Hero LCP instant** — First bg image `opacity: 1` ngay, không chờ animation
+- ✅ **CSS animations thay framer-motion** — hero-anim-* keyframes cho text entrance
+- ✅ **CSS Ken Burns zoom** — thay framer-motion scale animation (20s infinite)
+- ✅ **CSS marquee scroll** — thay framer-motion infinite scroll cho gallery
+- ✅ **Lazy-load layout effects** — ScrollProgress, CustomCursor, SmoothScroll, FloatingContactButtons dùng `ssr: false` qua `LayoutEffects.tsx`
+- ✅ **Mobile: tắt Ken Burns** — giảm GPU trên mobile
+- ✅ **prefers-reduced-motion** — tôn trọng accessibility
+- ✅ **Mouse parallax disabled on mobile** — tiết kiệm CPU
+
+### Files thay đổi
+| File | Thay đổi |
+|------|----------|
+| `Hero.tsx` | Rewrite: CSS animations, instant LCP image, remove framer-motion entrance |
+| `hero.css` | +110 lines: keyframes, staggered delays, marquee scroll, media queries |
+| `LayoutEffects.tsx` | **MỚI** — lazy-load 4 effects components |
+| `layout.tsx` | Dùng LayoutEffects thay 4 imports riêng lẻ |
+
+### Commit
+- `dce71c2` — perf(round2): CSS animations for Hero LCP, lazy-load layout effects
+
+---
+
 ## Sprint: Performance Optimization — 2026-02-28
 
 ### Mục tiêu
