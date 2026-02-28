@@ -24,15 +24,15 @@
 }
 
 .section-label-premium.light {
-    color: var(--gold-light);
+    color: var(--gold-dark);
 }
 
 .section-label-premium.light::before {
-    background: var(--gold-light);
+    background: var(--gold-dark);
 }
 
 .title-accent {
-    color: var(--gold);
+    color: var(--gold-dark);
     font-style: italic;
 }
 
@@ -800,7 +800,7 @@
     text-align: center;
 }
 
-.info-text h4 {
+.info-text h3 {
     font-family: var(--font-display);
     font-size: var(--text-sm);
     font-weight: 500;

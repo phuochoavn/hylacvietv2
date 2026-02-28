@@ -75,7 +75,7 @@ export default function ContactCTA() {
                                 <circle cx="12" cy="10" r="3" />
                             </svg>
                             <div className="info-text">
-                                <h4>Showroom</h4>
+                                <h3>Showroom</h3>
                                 <p>Hà Nội, Việt Nam</p>
                             </div>
                         </div>
