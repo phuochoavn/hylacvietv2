@@ -2,27 +2,31 @@
 
 /* Note: Google Fonts (Cormorant Garamond, Roboto) are loaded via next/font in layout.tsx */
 
-/* Design System */
+/* Design System — Core (loaded globally) */
 @import './tokens.css';
 @import './reset.css';
 @import './typography.css';
 @import './utilities.css';
 @import './animations.css';
 @import './layout.css';
-@import './hero.css';
-@import './sections.css';
-@import './products.css';
-@import './showroom.css';
-@import './about.css';
-@import './bespoke.css';
-@import './contact.css';
-@import './floating-contact.css';
-@import './product-detail.css';
+
+/* Page-specific CSS is imported per-page/component:
+ * hero.css         → page.tsx (homepage)
+ * sections.css     → BelowFoldSections.tsx
+ * products.css     → /san-pham/page.tsx
+ * showroom.css     → /gioi-thieu/page.tsx
+ * about.css        → /gioi-thieu/page.tsx
+ * bespoke.css      → /may-do/page.tsx
+ * contact.css      → /lien-he/page.tsx
+ * product-detail.css → /san-pham/[id]/page.tsx
+ * floating-contact.css → FloatingContactButtons.tsx
+ */
 
 /* Custom Font - Cotta Free (brand name font, must be after @imports) */
 @font-face {
     font-family: 'Cotta Free';
-    src: url('/fonts/CottaFree.otf') format('opentype');
+    src: url('/fonts/CottaFree.woff2') format('woff2'),
+        url('/fonts/CottaFree.otf') format('opentype');
     font-weight: normal;
     font-style: normal;
     font-display: swap;
@@ -31,7 +35,8 @@
 /* Custom Font - SVN-Magellin (legacy) */
 @font-face {
     font-family: 'SVN-Magellin';
-    src: url('/fonts/SVN-Magellin.otf') format('opentype');
+    src: url('/fonts/SVN-Magellin.woff2') format('woff2'),
+        url('/fonts/SVN-Magellin.otf') format('opentype');
     font-weight: normal;
     font-style: normal;
     font-display: swap;

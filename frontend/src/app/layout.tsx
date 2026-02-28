@@ -17,7 +17,7 @@ const cormorant = Cormorant_Garamond({
 
 const roboto = Roboto({
     subsets: ['latin', 'vietnamese'],
-    weight: ['300', '400', '500', '700'],
+    weight: ['400', '700'],
     variable: '--font-roboto',
     display: 'swap',
 });
@@ -133,6 +133,8 @@ export default function RootLayout({
     return (
         <html lang="vi" className={`${cormorant.variable} ${roboto.variable}`}>
             <head>
+                {/* Preload critical fonts for faster FCP */}
+                <link rel="preload" href="/fonts/CottaFree.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
                 {/* Critical CSS for Mobile Menu - prevents FOUC on iOS WebKit */}
                 <style dangerouslySetInnerHTML={{
                     __html: `

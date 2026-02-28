@@ -1,5 +1,6 @@
 import Hero from '@/components/sections/Hero';
 import BelowFoldSections from '@/components/sections/BelowFoldSections';
+import '@/styles/hero.css';
 
 // API URL for server-side fetch
 const API_URL = process.env.API_URL || 'http://hylacviet-api:3000';

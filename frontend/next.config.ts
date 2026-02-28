@@ -88,12 +88,12 @@ const nextConfig: NextConfig = {
         ],
       },
       {
-        // Cache uploaded content for 7 days
+        // Cache uploaded content for 30 days (images are now immutable WebP)
         source: '/uploads/:path*',
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=604800, stale-while-revalidate=86400',
+            value: 'public, max-age=2592000, immutable',
           },
         ],
       },

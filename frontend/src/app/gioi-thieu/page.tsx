@@ -4,6 +4,7 @@ import { useRef } from 'react';
 import Image from 'next/image';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import '@/styles/about.css';
+import '@/styles/showroom.css';
 
 // SVG Icons for Core Values
 const ValueIcon = ({ type }: { type: 'fabric' | 'craft' | 'heart' | 'heritage' }) => {
