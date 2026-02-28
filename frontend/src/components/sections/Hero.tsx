@@ -302,7 +302,8 @@ export default function Hero({ serverSettings }: HeroProps) {
                                                             src={slide.image}
                                                             alt={'Marquee ' + idx}
                                                             fill
-                                                            sizes="180px"
+                                                            sizes="200px"
+                                                            quality={80}
                                                             className="marquee-img"
                                                             loading="lazy"
                                                             style={{ objectFit: 'cover' }}
@@ -335,10 +336,10 @@ export default function Hero({ serverSettings }: HeroProps) {
                                                             src={slide.image}
                                                             alt={'Marquee ' + idx}
                                                             fill
-                                                            sizes="180px"
+                                                            sizes="500px"
                                                             className="marquee-img"
                                                             loading="lazy"
-                                                            quality={70}
+                                                            quality={85}
                                                             style={{ objectFit: 'cover' }}
                                                         />
                                                     </div>
