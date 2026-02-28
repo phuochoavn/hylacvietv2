@@ -27,16 +27,21 @@ Phase 4: E-commerce Expansion (tương lai)
 
 ---
 
-## Phase 2: SEO & Indexing 🔄
+## Phase 2: SEO & Indexing + Performance ✅
 
 - [x] Tạo sitemap.xml (dynamic)
 - [x] Tạo robots.txt
 - [x] Metadata riêng từng page
 - [x] JSON-LD structured data (Organization + Product)
 - [x] Sửa canonical URLs
+- [x] Tối ưu Core Web Vitals — Performance Sprint (commit `1ee8bc6`)
+  - Loại bỏ Preloader (block LCP 2.8-10s)
+  - Server-side Hero data fetch (ISR, revalidate 60s)
+  - Lazy-load below-fold sections (ssr: false)
+  - Chuyển layout từ `force-dynamic` sang `auto` (ISR)
+  - Tắt particles + Lenis trên mobile
 - [ ] Submit Google Search Console
 - [ ] Submit Bing Webmaster
-- [ ] Tối ưu Core Web Vitals (Lighthouse audit)
 - [ ] Thêm Open Graph images cho mỗi page
 
 ---

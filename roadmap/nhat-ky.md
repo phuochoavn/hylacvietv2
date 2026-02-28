@@ -4,6 +4,33 @@
 
 ---
 
+## Sprint: Performance Optimization — 2026-02-28
+
+### Mục tiêu
+- Mobile PageSpeed score 63 → cải thiện LCP, TBT, CLS
+- Loại bỏ các bottleneck chính: Preloader, client-side waterfall, heavy JS
+
+### Đã hoàn thành
+- ✅ **Loại bỏ Preloader** — block LCP 2.8-10s, thay bằng natural loading
+- ✅ **Server-side Hero fetch** — `page.tsx` async server component, ISR revalidate 60s
+- ✅ **Lazy-load below-fold** — 6 sections dùng `ssr: false` (BelowFoldSections wrapper)
+- ✅ **ISR Layout** — `force-dynamic` → `auto`, metadata ISR với revalidate 60s
+- ✅ **Mobile optimizations** — Tắt particles (CSS media query), Lenis đã skip `<768px`
+
+### Files thay đổi
+| File | Thay đổi |
+|------|----------|
+| `layout.tsx` | Bỏ Preloader, dynamic → auto |
+| `page.tsx` | Async server component, server-side fetch |
+| `BelowFoldSections.tsx` | **MỚI** — client wrapper cho `ssr: false` |
+| `Hero.tsx` | Nhận `serverSettings` prop, skip client fetch |
+| `hero.css` | Thêm `@media (max-width: 768px)` hide particles |
+
+### Commit
+- `1ee8bc6` — perf: remove preloader, server-side hero fetch, lazy-load below-fold, ISR layout, disable particles on mobile
+
+---
+
 ## Sprint: SEO & Indexing — 2026-02-28
 
 ### Mục tiêu

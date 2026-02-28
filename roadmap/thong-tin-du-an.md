@@ -141,4 +141,4 @@ docker compose restart frontend
 
 ---
 
-*Cập nhật: Sprint SEO — 2026-02-28*
+*Cập nhật: Sprint Performance Optimization — 2026-02-28*
