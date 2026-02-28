@@ -11,11 +11,24 @@
     align-items: center;
     background: #0a0908;
     z-index: 1;
+    /* Old WebKit GPU compositing fix */
+    -webkit-transform: translate3d(0, 0, 0);
+    -webkit-backface-visibility: hidden;
+}
+
+/* Fallback for very old browsers (no sticky = no good fixed scroll) */
+@supports not (position: sticky) {
+    .hero-premium {
+        position: absolute;
+    }
 }
 
 /* Spacer to push content below fixed hero */
 .hero-spacer {
     height: 100vh;
+    /* Prevent collapse on old browsers */
+    min-height: 100vh;
+    display: block;
 }
 
 /* Background Layer - Parallax Effect */

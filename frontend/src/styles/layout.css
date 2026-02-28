@@ -5,6 +5,10 @@
     position: relative;
     z-index: 2;
     background: var(--cream, #FAF8F5);
+    /* Old WebKit: force GPU layer for smooth scroll over fixed hero */
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    -webkit-overflow-scrolling: touch;
 }
 
 /* ----- HEADER ----- */
