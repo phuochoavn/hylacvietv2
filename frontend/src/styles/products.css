@@ -622,14 +622,14 @@
 .card-dot {
     width: 6px;
     height: 6px;
-    border-radius: 50%;
+    border-radius: 3px;
     background: rgba(255, 255, 255, 0.5);
-    transition: all 0.3s ease;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    will-change: transform;
 }
 
 .card-dot.active {
-    width: 18px;
-    border-radius: 3px;
+    transform: scaleX(3);
     background: rgba(255, 255, 255, 0.95);
 }
 
