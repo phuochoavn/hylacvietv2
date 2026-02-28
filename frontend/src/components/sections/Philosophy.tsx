@@ -42,7 +42,7 @@ const philosophyItems = [
         iconType: 'stillness' as const,
         title: 'Tĩnh Lặng',
         subtitle: 'Stillness',
-        desc: 'Trong tĩnh lặng, nghệ nhân lắng nghe tiếng thì thầm của lụa — mỗi sợi tơ kể một câu chuyện.',
+        desc: 'Ở nơi tĩnh lặng, nghệ nhân lắng nghe tiếng thì thầm của lụa — mỗi sợi tơ mỗi một câu chuyện.',
     },
     {
         iconType: 'refinement' as const,
@@ -89,11 +89,10 @@ export default function Philosophy() {
                 >
                     <span className="section-label-premium light">Triết Lý</span>
                     <h2 className="philosophy-title">
-                        <span className="title-jp">禅</span>
-                        Imperial Zen
+                        Triết Lý Thương Hiệu
                     </h2>
                     <p className="philosophy-subtitle">
-                        Sự giao thoa giữa vương giả và thiền định
+                        Nơi truyền thống và tâm huyết hội tụ
                     </p>
                 </motion.div>
 
@@ -107,8 +106,8 @@ export default function Philosophy() {
                 >
                     <span className="quote-mark">"</span>
                     <p>
-                        Một bộ áo dài hoàn hảo không chỉ đo bằng thước,
-                        mà đo bằng cảm xúc khi người mặc soi gương.
+                        Mỗi một bộ áo dài hoàn hảo, một bộ pháp phục trang nghiêm không chỉ đo bằng thước,
+                        mà đo bằng cảm xúc khi người mặc nhìn thấy mình trước gương.
                     </p>
                     <span className="quote-mark end">"</span>
                 </motion.blockquote>

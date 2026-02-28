@@ -62,6 +62,13 @@ export async function generateMetadata(): Promise<Metadata> {
                     title,
                     description,
                     keywords: ['áo dài', 'pháp phục', 'áo dài cao cấp', 'áo dài Việt Nam', 'hỷ lạc việt', 'áo dài cưới', 'may áo dài'],
+                    icons: {
+                        icon: [
+                            { url: '/favicon.ico', sizes: '32x32' },
+                            { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
+                        ],
+                        apple: '/apple-touch-icon.png',
+                    },
                     openGraph: {
                         title,
                         description,
@@ -102,6 +109,13 @@ export async function generateMetadata(): Promise<Metadata> {
         title: defaultMeta.title,
         description: defaultMeta.description,
         keywords: ['áo dài', 'pháp phục', 'áo dài cao cấp', 'áo dài Việt Nam', 'hỷ lạc việt', 'áo dài cưới', 'may áo dài'],
+        icons: {
+            icon: [
+                { url: '/favicon.ico', sizes: '32x32' },
+                { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
+            ],
+            apple: '/apple-touch-icon.png',
+        },
         openGraph: {
             title: defaultMeta.title,
             description: defaultMeta.description,

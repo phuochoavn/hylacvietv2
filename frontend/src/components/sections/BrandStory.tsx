@@ -135,7 +135,7 @@ export default function BrandStory() {
                         transition={{ duration: 0.6, delay: 0.4 }}
                         viewport={{ once: true }}
                     >
-                        Từ năm 2018, Hỷ Lạc Việt đã miệt mài gìn giữ và phát triển nghệ thuật may áo dài truyền thống Việt Nam.
+                        Từ năm 2021, Hỷ Lạc Việt đã miệt mài tìm hiểu nghiên cứu nghệ thuật may áo dài truyền thống và pháp phục để có thể lan toả nét đẹp ấy.
                     </motion.p>
 
                     <motion.p
@@ -145,45 +145,9 @@ export default function BrandStory() {
                         transition={{ duration: 0.6, delay: 0.5 }}
                         viewport={{ once: true }}
                     >
-                        Mỗi đường kim mũi chỉ là tâm huyết của những nghệ nhân lành nghề, những người đã dành cả đời để hoàn thiện kỹ thuật thêu tay tinh xảo. Chúng tôi tin rằng áo dài không chỉ là trang phục — mà là di sản văn hóa cần được trân trọng và gìn giữ.
+                        Mỗi đường kim mũi chỉ là tâm huyết của những nghệ nhân lành nghề, những người đã dành cả đời để hoàn thiện kỹ thuật thêu tay may đo thủ công tinh xảo. Chúng tôi tin rằng áo dài, pháp phục không chỉ là trang phục — mà là một nét văn hóa cần được trân quý và gìn giữ.
                     </motion.p>
 
-                    {/* Stats */}
-                    <motion.div
-                        className="story-stats"
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: 0.6 }}
-                        viewport={{ once: true }}
-                    >
-                        <div className="stat">
-                            <span className="stat-number">500+</span>
-                            <span className="stat-label">Tác Phẩm</span>
-                        </div>
-                        <div className="stat-divider" />
-                        <div className="stat">
-                            <span className="stat-number">100%</span>
-                            <span className="stat-label">Thủ Công</span>
-                        </div>
-                        <div className="stat-divider" />
-                        <div className="stat">
-                            <span className="stat-number stat-icon">❦</span>
-                            <span className="stat-label">Tâm Huyết</span>
-                        </div>
-                    </motion.div>
-
-                    {/* Signature */}
-                    <motion.div
-                        className="story-signature"
-                        initial={{ opacity: 0 }}
-                        whileInView={{ opacity: 1 }}
-                        transition={{ duration: 0.8, delay: 0.8 }}
-                        viewport={{ once: true }}
-                    >
-                        <div className="signature-line" />
-                        <span>NTK. Hân Hân</span>
-                        <span className="signature-title">Founder & Creative Director</span>
-                    </motion.div>
                 </motion.div>
             </div>
         </section>
