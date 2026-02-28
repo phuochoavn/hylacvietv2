@@ -1,18 +1,37 @@
-import dynamic from 'next/dynamic';
 import Hero from '@/components/sections/Hero';
+import BelowFoldSections from '@/components/sections/BelowFoldSections';
 
-// Lazy-load below-fold sections — they won't load JS until scrolled near
-const BrandStory = dynamic(() => import('@/components/sections/BrandStory'), { ssr: true });
-const Philosophy = dynamic(() => import('@/components/sections/Philosophy'), { ssr: true });
-const ProductShowcase = dynamic(() => import('@/components/sections/ProductShowcase'), { ssr: true });
-const Craftsmanship = dynamic(() => import('@/components/sections/Craftsmanship'), { ssr: true });
-const MeasurementJourney = dynamic(() => import('@/components/sections/MeasurementJourney'), { ssr: true });
-const ContactCTA = dynamic(() => import('@/components/sections/ContactCTA'), { ssr: true });
+// API URL for server-side fetch
+const API_URL = process.env.API_URL || 'http://hylacviet-api:3000';
 
-export default function HomePage() {
+// Server-side fetch hero settings — eliminates client-side waterfall
+async function getHeroSettings() {
+    try {
+        const res = await fetch(`${API_URL}/api/settings`, {
+            next: { revalidate: 60 }, // ISR: refresh every 60s
+        });
+        if (res.ok) {
+            const data = await res.json();
+            if (data.success && Array.isArray(data.data)) {
+                const settings: Record<string, string> = {};
+                for (const item of data.data) {
+                    settings[item.key] = item.value;
+                }
+                return settings;
+            }
+        }
+    } catch (error) {
+        console.error('Failed to fetch hero settings:', error);
+    }
+    return null;
+}
+
+export default async function HomePage() {
+    const settings = await getHeroSettings();
+
     return (
         <>
-            <Hero />
+            <Hero serverSettings={settings} />
             {/* Shape Divider - connects hero to content */}
             <div className="hero-shape-divider">
                 <svg viewBox="0 0 1200 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
@@ -20,14 +39,7 @@ export default function HomePage() {
                     <path d="M0,80 C200,140 400,20 600,80 C800,140 1000,20 1200,80 L1200,120 L0,120 Z" className="shape-fill-secondary" />
                 </svg>
             </div>
-            <div className="main-content">
-                <BrandStory />
-                <Philosophy />
-                <ProductShowcase />
-                <Craftsmanship />
-                <MeasurementJourney />
-                <ContactCTA />
-            </div>
+            <BelowFoldSections />
         </>
     );
 }

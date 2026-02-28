@@ -119,6 +119,13 @@
     }
 }
 
+/* Hide particles on mobile — saves GPU/CPU budget */
+@media (max-width: 768px) {
+    .hero-particles {
+        display: none !important;
+    }
+}
+
 /* Main Content */
 .hero-content-wrapper {
     position: relative;

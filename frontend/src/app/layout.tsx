@@ -4,7 +4,7 @@ import { Cormorant_Garamond, Roboto } from 'next/font/google';
 import '@/styles/main.css';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
-import Preloader from '@/components/effects/Preloader';
+
 import CustomCursor from '@/components/effects/CustomCursor';
 import SmoothScroll from '@/components/effects/SmoothScroll';
 import ScrollProgress from '@/components/effects/ScrollProgress';
@@ -28,8 +28,8 @@ const roboto = Roboto({
 // API URL for server-side fetch
 const API_URL = process.env.API_URL || 'http://hylacviet-api:3000';
 
-// Force dynamic rendering so metadata is always fetched from API
-export const dynamic = 'force-dynamic';
+// Allow Next.js to choose rendering strategy (ISR via revalidate in fetch)
+export const dynamic = 'auto';
 
 // Dynamic metadata generation
 export async function generateMetadata(): Promise<Metadata> {
@@ -208,7 +208,7 @@ export default function RootLayout({
                     speed={200}
                     shadow="0 0 10px #D4AF37, 0 0 5px #D4AF37"
                 />
-                <Preloader />
+
                 <CustomCursor />
                 <SmoothScroll />
                 <ScrollProgress />

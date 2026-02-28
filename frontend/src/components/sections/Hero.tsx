@@ -37,86 +37,92 @@ interface HeroContent {
     ctaText: string;
 }
 
-export default function Hero() {
+interface HeroProps {
+    serverSettings?: Record<string, string> | null;
+}
+
+/** Parse image gallery JSON from settings */
+function parseImages(json: string): { id: number; image: string }[] {
+    try {
+        return JSON.parse(json)
+            .filter((item: any) => item.image)
+            .map((item: any) => ({
+                id: item.id,
+                image: item.image.startsWith('http') ? item.image : `https://hylacviet.vn${item.image}`,
+            }));
+    } catch {
+        return [];
+    }
+}
+
+/** Build hero state from settings (shared between server-props and client-fetch paths) */
+function buildHeroState(settings: Record<string, string>) {
+    const content: HeroContent = {
+        label: settings.hero_label || defaultContent.label,
+        title: settings.hero_title || settings.site_name || defaultContent.title,
+        tagline: settings.hero_tagline || settings.site_tagline || defaultContent.tagline,
+        description: settings.hero_description || defaultContent.description,
+        ctaText: settings.hero_cta_text || defaultContent.ctaText,
+    };
+
+    let heroSlides: HeroSlide[] = defaultSlides;
+    if (settings.hero_slides) {
+        try {
+            const slidesData = JSON.parse(settings.hero_slides);
+            const slides: HeroSlide[] = slidesData
+                .filter((s: any) => s.image)
+                .map((s: any, idx: number) => ({
+                    id: idx + 1,
+                    image: s.image.startsWith('http') ? s.image : `https://hylacviet.vn${s.image}`,
+                    title: s.title || defaultSlides[idx]?.title || 'Hỷ Lạc Việt',
+                    subtitle: s.subtitle || defaultSlides[idx]?.subtitle || '',
+                }));
+            if (slides.length > 0) heroSlides = slides;
+        } catch { }
+    }
+
+    const heroBackgrounds = settings.hero_backgrounds ? parseImages(settings.hero_backgrounds) : [];
+    const marqueeCol1 = settings.marquee_column1 ? parseImages(settings.marquee_column1) : [];
+    const marqueeCol2 = settings.marquee_column2 ? parseImages(settings.marquee_column2) : [];
+
+    return { content, heroSlides, heroBackgrounds, marqueeCol1, marqueeCol2 };
+}
+
+export default function Hero({ serverSettings }: HeroProps) {
     const containerRef = useRef<HTMLElement>(null);
     const [currentSlide, setCurrentSlide] = useState(0);
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-    const [heroSlides, setHeroSlides] = useState<HeroSlide[]>(defaultSlides);
-    const [content, setContent] = useState<HeroContent>(defaultContent);
-    const [isLoaded, setIsLoaded] = useState(false);
 
-    // 3 separate galleries
-    const [heroBackgrounds, setHeroBackgrounds] = useState<{ id: number, image: string }[]>([]);
-    const [marqueeCol1, setMarqueeCol1] = useState<{ id: number, image: string }[]>([]);
-    const [marqueeCol2, setMarqueeCol2] = useState<{ id: number, image: string }[]>([]);
+    // Initialize from server settings if available, otherwise use defaults
+    const initialState = serverSettings ? buildHeroState(serverSettings) : null;
 
-    // Fetch hero content and slides from API
+    const [heroSlides, setHeroSlides] = useState<HeroSlide[]>(initialState?.heroSlides || defaultSlides);
+    const [content, setContent] = useState<HeroContent>(initialState?.content || defaultContent);
+    const [isLoaded, setIsLoaded] = useState(!!serverSettings); // Loaded immediately if server data
+
+    const [heroBackgrounds, setHeroBackgrounds] = useState<{ id: number; image: string }[]>(initialState?.heroBackgrounds || []);
+    const [marqueeCol1, setMarqueeCol1] = useState<{ id: number; image: string }[]>(initialState?.marqueeCol1 || []);
+    const [marqueeCol2, setMarqueeCol2] = useState<{ id: number; image: string }[]>(initialState?.marqueeCol2 || []);
+
+    // Only fetch client-side if server didn't provide settings (non-homepage usage)
     useEffect(() => {
+        if (serverSettings) return; // Already have server data
         const fetchData = async () => {
             try {
-                // Fetch all settings
                 const res = await fetch('/api/settings');
                 if (res.ok) {
                     const data = await res.json();
                     if (data.success && Array.isArray(data.data)) {
-                        const settings: Record<string, string> = {};
+                        const settingsMap: Record<string, string> = {};
                         for (const item of data.data) {
-                            settings[item.key] = item.value;
+                            settingsMap[item.key] = item.value;
                         }
-
-                        // Update content from settings
-                        setContent({
-                            label: settings.hero_label || defaultContent.label,
-                            title: settings.hero_title || settings.site_name || defaultContent.title,
-                            tagline: settings.hero_tagline || settings.site_tagline || defaultContent.tagline,
-                            description: settings.hero_description || defaultContent.description,
-                            ctaText: settings.hero_cta_text || defaultContent.ctaText,
-                        });
-
-                        // Update slides from settings (legacy fallback)
-                        if (settings.hero_slides) {
-                            try {
-                                const slidesData = JSON.parse(settings.hero_slides);
-                                const slides: HeroSlide[] = slidesData
-                                    .filter((s: any) => s.image)
-                                    .map((s: any, idx: number) => ({
-                                        id: idx + 1,
-                                        image: s.image.startsWith('http') ? s.image : `https://hylacviet.vn${s.image}`,
-                                        title: s.title || defaultSlides[idx]?.title || 'Hỷ Lạc Việt',
-                                        subtitle: s.subtitle || defaultSlides[idx]?.subtitle || '',
-                                    }));
-                                if (slides.length > 0) {
-                                    setHeroSlides(slides);
-                                }
-                            } catch (e) {
-                                console.log('Using default slides');
-                            }
-                        }
-
-                        // Load 3 separate galleries
-                        const parseImages = (json: string) => {
-                            try {
-                                return JSON.parse(json)
-                                    .filter((item: any) => item.image)
-                                    .map((item: any) => ({
-                                        id: item.id,
-                                        image: item.image.startsWith('http') ? item.image : `https://hylacviet.vn${item.image}`
-                                    }));
-                            } catch { return []; }
-                        };
-
-                        if (settings.hero_backgrounds) {
-                            const bgs = parseImages(settings.hero_backgrounds);
-                            if (bgs.length > 0) setHeroBackgrounds(bgs);
-                        }
-                        if (settings.marquee_column1) {
-                            const col1 = parseImages(settings.marquee_column1);
-                            if (col1.length > 0) setMarqueeCol1(col1);
-                        }
-                        if (settings.marquee_column2) {
-                            const col2 = parseImages(settings.marquee_column2);
-                            if (col2.length > 0) setMarqueeCol2(col2);
-                        }
+                        const state = buildHeroState(settingsMap);
+                        setContent(state.content);
+                        setHeroSlides(state.heroSlides);
+                        setHeroBackgrounds(state.heroBackgrounds);
+                        setMarqueeCol1(state.marqueeCol1);
+                        setMarqueeCol2(state.marqueeCol2);
                     }
                 }
             } catch (error) {
@@ -126,7 +132,7 @@ export default function Hero() {
             }
         };
         fetchData();
-    }, []);
+    }, [serverSettings]);
 
     // Parallax scroll
     const { scrollYProgress } = useScroll({
