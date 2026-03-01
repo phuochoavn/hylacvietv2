@@ -462,7 +462,7 @@
     font-family: var(--font-display);
     font-size: var(--text-base);
     font-style: italic;
-    color: rgba(255, 255, 240, 0.5);
+    color: rgba(255, 255, 240, 0.65);
 }
 
 /* Links Row - Evenly spaced columns */
@@ -595,7 +595,7 @@
 
 .footer-copyright p {
     font-size: var(--text-xs);
-    color: rgba(255, 255, 240, 0.4);
+    color: rgba(255, 255, 240, 0.6);
     margin: 0;
     letter-spacing: 0.05em;
 }
@@ -603,7 +603,7 @@
 .footer-copyright .copyright-sub {
     font-size: 10px;
     font-style: italic;
-    color: rgba(255, 255, 240, 0.55);
+    color: rgba(255, 255, 240, 0.65);
     margin-top: var(--space-2);
 }
 
