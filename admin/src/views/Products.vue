@@ -817,40 +817,73 @@ function getImageUrl(path: string | undefined): string {
   }
 
   .product-row {
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    grid-template-areas: 
+      "img info"
+      "actions actions";
     gap: 0.75rem;
     padding: 0.75rem;
-    align-items: stretch;
+    align-items: start;
   }
 
   .row-image {
+    grid-area: img;
     width: 100%;
-    height: 200px;
+    height: 100px;
     border-radius: 0.5rem;
+  }
+
+  .row-info {
+    grid-area: info;
+    min-width: 0;
   }
 
   .row-header {
     flex-wrap: wrap;
-    gap: 0.5rem;
+    gap: 0.25rem;
+    margin-bottom: 0.25rem;
   }
 
   .row-header h3 {
-    font-size: 1rem;
+    font-size: 0.95rem;
     width: 100%;
+    margin-bottom: 0.1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .status-badge {
+    font-size: 0.65rem;
+    padding: 0.1rem 0.4rem;
+  }
+
+  .row-desc {
+    font-size: 0.75rem;
+    -webkit-line-clamp: 1;
+    margin-bottom: 0.25rem;
+  }
+
+  .row-price {
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
   }
 
   .row-actions {
+    grid-area: actions;
     flex-direction: row;
-    flex-wrap: wrap;
-    gap: 0.4rem;
+    flex-wrap: nowrap;
+    gap: 0.25rem;
+    width: 100%;
   }
 
   .btn-edit, .btn-toggle, .btn-delete {
     flex: 1;
     min-width: 0;
     justify-content: center;
-    padding: 0.6rem 0.5rem;
-    font-size: 0.75rem;
+    padding: 0.4rem 0.25rem;
+    font-size: 0.7rem;
   }
 
   /* Modal mobile */

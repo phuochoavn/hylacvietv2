@@ -153,6 +153,7 @@ function closeMobileSidebar() {
   display: flex;
   min-height: 100vh;
   background: #f3f4f6;
+  overflow-x: hidden;
 }
 
 /* Sidebar */
@@ -448,10 +449,13 @@ function closeMobileSidebar() {
   display: flex;
   flex-direction: column;
   transition: margin-left 0.3s ease;
+  width: calc(100% - 260px);
+  min-width: 0; /* Prevents flex children from blowing out width */
 }
 
 .admin-layout.collapsed .main-wrapper {
   margin-left: 80px;
+  width: calc(100% - 80px);
 }
 
 /* Header */
@@ -573,10 +577,12 @@ function closeMobileSidebar() {
 
   .main-wrapper {
     margin-left: 0;
+    width: 100%;
   }
 
   .admin-layout.collapsed .main-wrapper {
     margin-left: 0;
+    width: 100%;
   }
 
   .mobile-menu-btn {
