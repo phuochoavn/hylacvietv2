@@ -120,23 +120,25 @@ function closeMobileSidebar() {
     <div class="main-wrapper">
       <!-- Top Header -->
       <header class="main-header">
-        <div class="header-left">
-          <button @click="toggleMobileSidebar" class="mobile-menu-btn">
-            <span>☰</span>
-          </button>
-          <h2 class="page-title">{{ currentPageName }}</h2>
-        </div>
-        <div class="header-right">
-          <div class="header-search">
-            <span class="search-icon">🔍</span>
-            <input type="text" placeholder="Tìm kiếm..." />
+        <div class="header-top-row">
+          <div class="header-left">
+            <button @click="toggleMobileSidebar" class="mobile-menu-btn">
+              <span>☰</span>
+            </button>
+            <h2 class="page-title">{{ currentPageName }}</h2>
           </div>
-          <button class="header-btn notification">
-            <span>🔔</span>
-          </button>
-          <button @click="handleLogout" class="header-btn logout">
-            <span>🚪</span>
-          </button>
+          <div class="header-actions">
+            <button class="header-btn notification">
+              <span>🔔</span>
+            </button>
+            <button @click="handleLogout" class="header-btn logout">
+              <span>🚪</span>
+            </button>
+          </div>
+        </div>
+        <div class="header-search">
+          <span class="search-icon">🔍</span>
+          <input type="text" placeholder="Tìm kiếm..." />
         </div>
       </header>
 
@@ -460,21 +462,29 @@ function closeMobileSidebar() {
 
 /* Header */
 .main-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   padding: 1rem 2rem;
   background: white;
   border-bottom: 1px solid #e5e7eb;
   position: sticky;
   top: 0;
   z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header-top-row {
+  display: contents; /* On desktop, act as if it doesn't exist so flex-between works globally */
 }
 
 .header-left {
   display: flex;
   align-items: center;
   gap: 1rem;
+}
+
+.header-actions {
+  display: contents; /* On desktop, buttons flow naturally with search */
 }
 
 .mobile-menu-btn {
@@ -493,14 +503,9 @@ function closeMobileSidebar() {
   color: #1a1a1a;
 }
 
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
 .header-search {
   position: relative;
+  order: 2;
 }
 
 .search-icon {
@@ -539,6 +544,7 @@ function closeMobileSidebar() {
   cursor: pointer;
   transition: all 0.2s;
   font-size: 1rem;
+  order: 3;
 }
 
 .header-btn:hover {
@@ -589,19 +595,31 @@ function closeMobileSidebar() {
     display: flex;
   }
 
-  .header-search {
-    order: 3;
+  .main-header {
+    flex-direction: column;
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .header-top-row {
+    display: flex;
+    justify-content: space-between;
     width: 100%;
-    margin-top: 1rem;
+  }
+
+  .header-actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .header-search {
+    order: unset;
+    width: 100%;
+    margin-top: 0;
   }
 
   .header-search input {
     width: 100%;
-  }
-
-  .main-header {
-    flex-wrap: wrap;
-    padding: 1rem;
   }
 }
 </style>
