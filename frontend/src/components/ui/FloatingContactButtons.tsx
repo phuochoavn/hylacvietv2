@@ -10,6 +10,7 @@ const FloatingContactButtons = () => {
     const [isVisible, setIsVisible] = useState(false);
     const [zaloLink, setZaloLink] = useState(SITE.zalo);
     const [phoneLink, setPhoneLink] = useState(`tel:${SITE.phone.replace(/\s/g, '')}`);
+    const [messengerLink, setMessengerLink] = useState('https://m.me/1087390711118469'); // Default to provided ID
 
     // Delay showing buttons until after page is fully loaded, and fetch contact settings
     useEffect(() => {
@@ -28,6 +29,9 @@ const FloatingContactButtons = () => {
                         }
                         if (item.key === 'phone' && item.value) {
                             setPhoneLink(`tel:${item.value.replace(/\s/g, '')}`);
+                        }
+                        if (item.key === 'messenger' && item.value) {
+                            setMessengerLink(item.value);
                         }
                     }
                 }
@@ -67,6 +71,21 @@ const FloatingContactButtons = () => {
                             height={28}
                             unoptimized
                         />
+                    </motion.a>
+
+                    {/* Messenger */}
+                    <motion.a
+                        href={messengerLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="floating-btn messenger"
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.95 }}
+                        aria-label="Chat Messenger"
+                    >
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2C6.36 2 2 6.13 2 11.7c0 2.91 1.19 5.44 3.14 7.17.16.13.26.35.27.57l.05 1.78c.02.62.67 1.03 1.22.77l1.99-.88c.17-.07.36-.09.55-.05.91.23 1.88.35 2.88.35 5.64 0 10-4.13 10-9.7S17.64 2 12 2zm1.01 13.04l-2.54-2.71-4.96 2.71 5.46-5.79 2.6 2.71 4.9-2.71-5.46 5.79z" />
+                        </svg>
                     </motion.a>
 
                     {/* Hotline */}

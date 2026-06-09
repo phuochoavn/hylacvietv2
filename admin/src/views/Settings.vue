@@ -23,6 +23,7 @@ const socialFields = [
   { key: 'phone', label: 'Số điện thoại', type: 'text', icon: '📞', placeholder: '0912 345 678' },
   { key: 'email', label: 'Email', type: 'email', icon: '✉️', placeholder: 'contact@hylacviet.vn' },
   { key: 'zalo', label: 'Link Zalo', type: 'text', icon: '💬', placeholder: 'https://zalo.me/...' },
+  { key: 'messenger', label: 'Link Messenger', type: 'text', icon: '⚡', placeholder: 'https://m.me/...' },
   { key: 'facebook', label: 'Facebook', type: 'text', icon: '📘', placeholder: 'https://facebook.com/...' },
   { key: 'instagram', label: 'Instagram', type: 'text', icon: '📷', placeholder: 'https://instagram.com/...' },
   { key: 'address', label: 'Địa chỉ Showroom', type: 'textarea', icon: '📍', placeholder: 'Số 123, Phố Huế, Hà Nội' },
