@@ -961,24 +961,10 @@ function generateSlug(name: string): string {
           <div class="section-divider">
             <span>🖼️ Hình ảnh trang Liên Hệ</span>
           </div>
-          <div class="branding-uploads">
+          <div class="branding-uploads" style="grid-template-columns: 1fr;">
             <div class="upload-card">
-              <h3>Ảnh Banner (Trái)</h3>
-              <div class="upload-zone">
-                <img v-if="settings.contact_hero_image" :src="settings.contact_hero_image" alt="Contact Hero" class="logo-preview" />
-                <label v-else class="upload-placeholder">
-                  <input type="file" accept="image/*" @change="uploadBrandImage('contact_hero_image', $event)" :disabled="uploadingContactHero" />
-                  <span v-if="uploadingContactHero">⏳</span>
-                  <span v-else>Tải ảnh lên</span>
-                </label>
-                <div v-if="settings.contact_hero_image" class="upload-actions">
-                  <label class="change-btn"><input type="file" accept="image/*" @change="uploadBrandImage('contact_hero_image', $event)" />🔄 Đổi</label>
-                  <button @click="settings.contact_hero_image = ''" class="remove-btn">🗑️</button>
-                </div>
-              </div>
-            </div>
-            <div class="upload-card">
-              <h3>Ảnh Showroom (Phải)</h3>
+              <h3>Ảnh Showroom</h3>
+              <p class="upload-hint">Ảnh nghệ thuật và truyền thống giao thoa (800x1200px)</p>
               <div class="upload-zone">
                 <img v-if="settings.contact_showroom_image" :src="settings.contact_showroom_image" alt="Contact Showroom" class="logo-preview" />
                 <label v-else class="upload-placeholder">
@@ -995,17 +981,9 @@ function generateSlug(name: string): string {
           </div>
 
           <div class="section-divider">
-            <span>📝 Nội dung Trang Liên Hệ</span>
+            <span>📝 Lời ngỏ Trang Liên Hệ</span>
           </div>
           <div class="form-stack" style="margin-bottom: 2rem;">
-            <div class="form-group full">
-              <label>Tiêu đề (Vd: Ghé Thăm)</label>
-              <input v-model="settings.contact_hero_title" type="text" placeholder="Ghé Thăm" class="form-input" />
-            </div>
-            <div class="form-group full">
-              <label>Phụ đề (Vd: Hỷ Lạc Việt Atelier)</label>
-              <input v-model="settings.contact_hero_subtitle" type="text" placeholder="Hỷ Lạc Việt Atelier" class="form-input" />
-            </div>
             <div class="form-group full">
               <label>Lời ngỏ</label>
               <textarea v-model="settings.contact_intro_text" rows="3" placeholder="Để có trải nghiệm trọn vẹn nhất..." class="form-textarea"></textarea>

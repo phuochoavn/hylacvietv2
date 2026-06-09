@@ -61,32 +61,7 @@ export default function ContactPage() {
     }, []);
 
     return (
-        <main className="contact-showroom">
-            {/* HERO */}
-            <section className="contact-hero contact-hero-ghost">
-                <div className="contact-hero-bg">
-                    <Image
-                        src={heroImage}
-                        alt=""
-                        fill
-                        style={{ objectFit: 'cover' }}
-                        priority
-                    />
-                    <div className="contact-hero-ghost-overlay" />
-                </div>
-
-                <div className="contact-hero-content">
-                    <span className="contact-overline">Lời Mời Đặc Biệt</span>
-                    <h1 className="contact-title">{heroTitle}</h1>
-                    <p className="contact-subtitle">
-                        {heroSubtitle}
-                    </p>
-                    <div style={{ marginTop: '2rem', color: 'var(--gold)', opacity: 0.4, fontSize: '0.8rem', letterSpacing: '0.5em' }}>
-                        ◆
-                    </div>
-                </div>
-            </section>
-
+        <main className="contact-showroom" style={{ paddingTop: 'calc(var(--header-height) + 2rem)' }}>
             {/* INVITATION SECTION */}
             <section className="contact-invitation">
                 <div className="invitation-grid">
@@ -98,6 +73,7 @@ export default function ContactPage() {
                                 alt="Không gian Showroom"
                                 fill
                                 style={{ objectFit: 'cover' }}
+                                priority
                             />
                         </div>
                         <p className="invitation-image-caption">
