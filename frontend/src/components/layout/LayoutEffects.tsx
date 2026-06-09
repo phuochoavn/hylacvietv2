@@ -7,6 +7,7 @@ const ScrollProgress = dynamic(() => import('@/components/effects/ScrollProgress
 const CustomCursor = dynamic(() => import('@/components/effects/CustomCursor'), { ssr: false });
 const FloatingContactButtons = dynamic(() => import('@/components/ui/FloatingContactButtons'), { ssr: false });
 const SmoothScroll = dynamic(() => import('@/components/effects/SmoothScroll'), { ssr: false });
+const FacebookChatPlugin = dynamic(() => import('@/components/ui/FacebookChatPlugin'), { ssr: false });
 
 /**
  * Client wrapper for non-critical layout effects.
@@ -20,6 +21,7 @@ export default function LayoutEffects() {
             <CustomCursor />
             <SmoothScroll />
             <FloatingContactButtons />
+            <FacebookChatPlugin pageId="1087390711118469" />
         </>
     );
 }
