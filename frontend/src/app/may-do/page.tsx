@@ -91,8 +91,11 @@ const fadeUp = {
     visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.25, 0.1, 0.25, 1] as const } }
 };
 
+import { SITE } from '@/lib/constants';
+
 export default function MayDoPage() {
     const [splits, setSplits] = useState<SplitSection[]>(defaultSplits);
+    const [zaloLink, setZaloLink] = useState(SITE.zalo);
 
     useEffect(() => {
         async function fetchSettings() {
@@ -116,6 +119,8 @@ export default function MayDoPage() {
                     if (img3) updated[2] = { ...updated[2], image: toRelativeUrl(img3) };
 
                     setSplits(updated);
+                    
+                    if (s.zalo) setZaloLink(s.zalo);
                 }
             } catch (e) {
                 console.error('Failed to fetch settings:', e);
@@ -250,7 +255,7 @@ export default function MayDoPage() {
                     </motion.p>
                     <motion.div variants={fadeUp}>
                         <a
-                            href="https://zalo.me/0912503456"
+                            href={zaloLink}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="bespoke-btn-primary"
@@ -259,7 +264,7 @@ export default function MayDoPage() {
                         </a>
                         <div>
                             <a
-                                href="https://zalo.me/0912503456"
+                                href={zaloLink}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="bespoke-link-secondary"

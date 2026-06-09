@@ -4,15 +4,38 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import '@/styles/floating-contact.css';
+import { SITE } from '@/lib/constants';
 
 const FloatingContactButtons = () => {
     const [isVisible, setIsVisible] = useState(false);
+    const [zaloLink, setZaloLink] = useState(SITE.zalo);
+    const [phoneLink, setPhoneLink] = useState(`tel:${SITE.phone.replace(/\s/g, '')}`);
 
-    // Delay showing buttons until after page is fully loaded
+    // Delay showing buttons until after page is fully loaded, and fetch contact settings
     useEffect(() => {
         const timer = setTimeout(() => {
             setIsVisible(true);
         }, 2000); // 2 seconds delay to wait for preloader to finish
+
+        async function fetchSettings() {
+            try {
+                const res = await fetch('/api/settings');
+                const data = await res.json();
+                if (data.success && Array.isArray(data.data)) {
+                    for (const item of data.data) {
+                        if (item.key === 'zalo' && item.value) {
+                            setZaloLink(item.value);
+                        }
+                        if (item.key === 'phone' && item.value) {
+                            setPhoneLink(`tel:${item.value.replace(/\s/g, '')}`);
+                        }
+                    }
+                }
+            } catch (e) {
+                console.error('Failed to fetch contact settings:', e);
+            }
+        }
+        fetchSettings();
 
         return () => clearTimeout(timer);
     }, []);
@@ -29,7 +52,7 @@ const FloatingContactButtons = () => {
                 >
                     {/* Zalo */}
                     <motion.a
-                        href="https://zalo.me/0912503456"
+                        href={zaloLink}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="floating-btn zalo"
@@ -48,7 +71,7 @@ const FloatingContactButtons = () => {
 
                     {/* Hotline */}
                     <motion.a
-                        href="tel:+84912503456"
+                        href={phoneLink}
                         className="floating-btn phone"
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.95 }}

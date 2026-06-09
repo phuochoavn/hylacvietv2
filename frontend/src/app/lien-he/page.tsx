@@ -13,9 +13,17 @@ function toRelativeUrl(url: string): string {
     return url;
 }
 
+import { SITE } from '@/lib/constants';
+
 export default function ContactPage() {
     const [heroImage, setHeroImage] = useState('/images/craft-fabric.webp');
     const [showroomImage, setShowroomImage] = useState('/images/craft-final.webp');
+    
+    // Contact Info State
+    const [address, setAddress] = useState(SITE.address);
+    const [phone, setPhone] = useState(SITE.phone);
+    const [zaloLink, setZaloLink] = useState(SITE.zalo);
+    const [workingHours, setWorkingHours] = useState('8:00 - 20:00, Thứ 2 - Thứ 7');
 
     useEffect(() => {
         async function fetchSettings() {
@@ -31,6 +39,11 @@ export default function ContactPage() {
                     const showroom = s.story_image_2 || s.craft_step3_image || s.step3_image;
                     if (hero) setHeroImage(toRelativeUrl(hero));
                     if (showroom) setShowroomImage(toRelativeUrl(showroom));
+                    
+                    if (s.address) setAddress(s.address);
+                    if (s.phone) setPhone(s.phone);
+                    if (s.zalo) setZaloLink(s.zalo);
+                    if (s.working_hours) setWorkingHours(s.working_hours);
                 }
             } catch (e) {
                 console.error('Failed to fetch settings:', e);
@@ -97,7 +110,7 @@ export default function ContactPage() {
                                 <span style={{ width: 24, height: 24, flexShrink: 0, color: 'var(--gold)', fontSize: '1.2rem' }}>📍</span>
                                 <div className="detail-text">
                                     <span className="detail-label">Địa chỉ</span>
-                                    <span className="detail-value">Hà Nội, Việt Nam</span>
+                                    <span className="detail-value">{address}</span>
                                 </div>
                             </div>
 
@@ -105,7 +118,7 @@ export default function ContactPage() {
                                 <span style={{ width: 24, height: 24, flexShrink: 0, color: 'var(--gold)', fontSize: '1.2rem' }}>📞</span>
                                 <div className="detail-text">
                                     <span className="detail-label">Điện thoại</span>
-                                    <a href="tel:+84912503456" className="detail-value">0912 503 456</a>
+                                    <a href={`tel:${phone.replace(/\s/g, '')}`} className="detail-value">{phone}</a>
                                 </div>
                             </div>
 
@@ -113,7 +126,7 @@ export default function ContactPage() {
                                 <span style={{ width: 24, height: 24, flexShrink: 0, color: 'var(--gold)', fontSize: '1.2rem' }}>🕐</span>
                                 <div className="detail-text">
                                     <span className="detail-label">Đón khách</span>
-                                    <span className="detail-value">8:00 - 20:00, Thứ 2 - Thứ 7</span>
+                                    <span className="detail-value">{workingHours}</span>
                                 </div>
                             </div>
                         </div>
@@ -124,7 +137,7 @@ export default function ContactPage() {
                         </p>
 
                         <a
-                            href="https://zalo.me/0912503456"
+                            href={zaloLink}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="invitation-cta"

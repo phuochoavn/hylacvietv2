@@ -32,27 +32,45 @@ function formatPrice(price: number): string {
 
 const shimmer = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUzMyIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjVmMGViIi8+PC9zdmc+';
 
+import { SITE } from '@/lib/constants';
+
 export default function ShowroomPage() {
     const [products, setProducts] = useState<Product[]>([]);
     const [isLoaded, setIsLoaded] = useState(false);
+    const [zaloLink, setZaloLink] = useState(SITE.zalo);
 
     useEffect(() => {
-        async function fetchProducts() {
+        async function fetchData() {
             try {
-                const res = await fetch('/api/products');
-                const data = await res.json();
-                if (data.success && data.data) {
-                    const items = Array.isArray(data.data) ? data.data : (data.data.items || []);
-                    const active = items.filter((p: Product) => p.status === 'active');
-                    setProducts(active);
+                // Fetch settings for Zalo link concurrently
+                const [prodRes, setRes] = await Promise.all([
+                    fetch('/api/products'),
+                    fetch('/api/settings')
+                ]);
+
+                if (setRes.ok) {
+                    const setData = await setRes.json();
+                    if (setData.success && setData.data) {
+                        const sZalo = setData.data.find((i: any) => i.key === 'zalo');
+                        if (sZalo && sZalo.value) setZaloLink(sZalo.value);
+                    }
+                }
+
+                if (prodRes.ok) {
+                    const data = await prodRes.json();
+                    if (data.success && data.data) {
+                        const items = Array.isArray(data.data) ? data.data : (data.data.items || []);
+                        const active = items.filter((p: Product) => p.status === 'active');
+                        setProducts(active);
+                    }
                 }
             } catch (e) {
-                console.error('Failed to fetch products:', e);
+                console.error('Failed to fetch data:', e);
             } finally {
                 setIsLoaded(true);
             }
         }
-        fetchProducts();
+        fetchData();
     }, []);
 
     return (
@@ -161,7 +179,7 @@ export default function ShowroomPage() {
                                                 </svg>
                                             </Link>
                                             <a
-                                                href={`https://zalo.me/0912503456?text=Xin chào, tôi muốn tư vấn về ${product.name}`}
+                                                href={zaloLink}
                                                 className="showroom-btn-zalo"
                                                 target="_blank"
                                                 rel="noopener noreferrer"
