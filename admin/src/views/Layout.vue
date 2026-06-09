@@ -8,6 +8,7 @@ const route = useRoute()
 const authStore = useAuthStore()
 const sidebarCollapsed = ref(false)
 const showProfileMenu = ref(false)
+const mobileSidebarOpen = ref(false)
 
 const menuItems = [
   { path: '/dashboard', name: 'Dashboard', icon: '📊', badge: null },
@@ -29,10 +30,25 @@ async function handleLogout() {
 function toggleSidebar() {
   sidebarCollapsed.value = !sidebarCollapsed.value
 }
+
+function toggleMobileSidebar() {
+  mobileSidebarOpen.value = !mobileSidebarOpen.value
+}
+
+function closeMobileSidebar() {
+  mobileSidebarOpen.value = false
+}
 </script>
 
 <template>
-  <div class="admin-layout" :class="{ collapsed: sidebarCollapsed }">
+  <div class="admin-layout" :class="{ 'collapsed': sidebarCollapsed, 'sidebar-open': mobileSidebarOpen }">
+    <!-- Mobile Overlay -->
+    <div 
+      v-if="mobileSidebarOpen" 
+      class="mobile-overlay" 
+      @click="closeMobileSidebar"
+    ></div>
+
     <!-- Sidebar -->
     <aside class="sidebar">
       <!-- Logo Section -->
@@ -61,6 +77,7 @@ function toggleSidebar() {
                 :to="item.path"
                 :class="['nav-item', { active: currentPath === item.path }]"
                 :title="sidebarCollapsed ? item.name : ''"
+                @click="closeMobileSidebar"
               >
                 <span class="nav-icon">{{ item.icon }}</span>
                 <span class="nav-text" v-if="!sidebarCollapsed">{{ item.name }}</span>
@@ -104,6 +121,9 @@ function toggleSidebar() {
       <!-- Top Header -->
       <header class="main-header">
         <div class="header-left">
+          <button @click="toggleMobileSidebar" class="mobile-menu-btn">
+            <span>☰</span>
+          </button>
           <h2 class="page-title">{{ currentPageName }}</h2>
         </div>
         <div class="header-right">
@@ -447,6 +467,22 @@ function toggleSidebar() {
   z-index: 50;
 }
 
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #4b5563;
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
 .page-title {
   font-size: 1.25rem;
   font-weight: 600;
@@ -511,14 +547,28 @@ function toggleSidebar() {
   overflow-y: auto;
 }
 
+.mobile-overlay {
+  display: none;
+}
+
 /* Responsive */
 @media (max-width: 1024px) {
   .sidebar {
     transform: translateX(-100%);
+    z-index: 100;
   }
 
   .admin-layout.sidebar-open .sidebar {
     transform: translateX(0);
+  }
+
+  .mobile-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 90;
+    backdrop-filter: blur(2px);
   }
 
   .main-wrapper {
@@ -527,6 +577,18 @@ function toggleSidebar() {
 
   .admin-layout.collapsed .main-wrapper {
     margin-left: 0;
+  }
+
+  .mobile-menu-btn {
+    display: flex;
+  }
+
+  .header-search {
+    display: none; /* Hide search bar on very small screens to save space */
+  }
+
+  .main-header {
+    padding: 1rem;
   }
 }
 </style>
