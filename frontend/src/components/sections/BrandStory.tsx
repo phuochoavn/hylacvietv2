@@ -15,7 +15,6 @@ function toRelativeUrl(url: string): string {
 export default function BrandStory() {
     const containerRef = useRef<HTMLElement>(null);
     const [mainImage, setMainImage] = useState('/images/craft-measuring.webp');
-    const [accentImage, setAccentImage] = useState('/images/craft-embroidery.webp');
 
     useEffect(() => {
         async function fetchSettings() {
@@ -29,9 +28,7 @@ export default function BrandStory() {
                     }
                     // Prefer story_image (files exist on disk) over story_main_image (files may be missing)
                     const main = s.story_image || s.story_main_image;
-                    const accent = s.story_image_2 || s.story_accent_image;
                     if (main) setMainImage(toRelativeUrl(main));
-                    if (accent) setAccentImage(toRelativeUrl(accent));
                 }
             } catch (e) {
                 console.error('Failed to fetch story settings:', e);
@@ -69,22 +66,6 @@ export default function BrandStory() {
                                 loading="lazy"
                             />
                         </div>
-
-                        {/* Floating accent image */}
-                        <motion.div
-                            className="story-accent-image"
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
-                            transition={{ duration: 0.8, delay: 0.3 }}
-                            viewport={{ once: true }}
-                        >
-                            <img
-                                src={accentImage}
-                                alt="Chi tiết vải lụa"
-                                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                                loading="lazy"
-                            />
-                        </motion.div>
                     </div>
                 </motion.div>
 

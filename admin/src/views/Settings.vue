@@ -38,7 +38,6 @@ const uploadingOgImage = ref(false)
 const uploadingBackground = ref(false)
 // Story section images
 const uploadingStoryMain = ref(false)
-const uploadingStoryAccent = ref(false)
 // Process section images
 const uploadingProcessBg = ref(false)
 const uploadingStep1 = ref(false)
@@ -298,7 +297,6 @@ async function uploadBrandImage(key: string, event: Event) {
   if (key === 'hero_background') uploadingBackground.value = true
   // Story images
   if (key === 'story_main_image') uploadingStoryMain.value = true
-  if (key === 'story_accent_image') uploadingStoryAccent.value = true
   // Process images
   if (key === 'process_bg_image') uploadingProcessBg.value = true
   if (key === 'step1_image') uploadingStep1.value = true
@@ -329,7 +327,6 @@ async function uploadBrandImage(key: string, event: Event) {
     uploadingFavicon.value = false
     uploadingBackground.value = false
     uploadingStoryMain.value = false
-    uploadingStoryAccent.value = false
     uploadingProcessBg.value = false
     uploadingStep1.value = false
     uploadingStep2.value = false
@@ -871,30 +868,6 @@ function generateSlug(name: string): string {
                       🔄 Đổi
                     </label>
                     <button @click="settings.story_image = ''" class="delete-btn">🗑️</button>
-                  </div>
-                </div>
-              </div>
-              
-              <!-- Story Image 2 Upload -->
-              <div class="form-group full-width">
-                <label>Hình ảnh phụ (chi tiết)</label>
-                <p class="upload-hint">Ảnh chi tiết vải/thêu (khuyến nghị: 600x800px)</p>
-                <div class="upload-preview-single" style="max-width: 200px; position: relative;">
-                  <img v-if="settings.story_image_2" :src="settings.story_image_2" alt="Story Detail" style="width: 100%; border-radius: 8px;" />
-                  <label v-else class="upload-placeholder">
-                    <input type="file" accept="image/*" @change="uploadBrandImage('story_image_2', $event)" :disabled="uploadingStoryAccent" />
-                    <span v-if="uploadingStoryAccent">⏳ Đang tải...</span>
-                    <span v-else>
-                      <span class="upload-icon">🧵</span>
-                      <span>Upload ảnh chi tiết</span>
-                    </span>
-                  </label>
-                  <div v-if="settings.story_image_2" class="upload-actions" style="position: absolute; bottom: 8px; right: 8px;">
-                    <label class="change-btn">
-                      <input type="file" accept="image/*" @change="uploadBrandImage('story_image_2', $event)" />
-                      🔄
-                    </label>
-                    <button @click="settings.story_image_2 = ''" class="delete-btn">🗑️</button>
                   </div>
                 </div>
               </div>
@@ -1569,40 +1542,6 @@ function generateSlug(name: string): string {
                     🔄 Đổi
                   </label>
                   <button @click="settings.story_main_image = ''" class="remove-btn">🗑️</button>
-                </div>
-              </div>
-            </div>
-
-            <!-- Accent Image -->
-            <div class="upload-card">
-              <h3>Ảnh phụ nhỏ</h3>
-              <p class="upload-hint">Ảnh chi tiết vải/thêu nhỏ (300x400px)</p>
-              <div class="upload-zone">
-                <img 
-                  v-if="settings.story_accent_image" 
-                  :src="settings.story_accent_image" 
-                  alt="Story Accent"
-                  class="logo-preview"
-                />
-                <label v-else class="upload-placeholder">
-                  <input 
-                    type="file" 
-                    accept="image/*" 
-                    @change="uploadBrandImage('story_accent_image', $event)"
-                    :disabled="uploadingStoryAccent"
-                  />
-                  <span v-if="uploadingStoryAccent">⏳ Đang tải...</span>
-                  <span v-else>
-                    <span class="upload-icon">🌸</span>
-                    <span>Tải ảnh lên</span>
-                  </span>
-                </label>
-                <div v-if="settings.story_accent_image" class="upload-actions">
-                  <label class="change-btn">
-                    <input type="file" accept="image/*" @change="uploadBrandImage('story_accent_image', $event)" />
-                    🔄 Đổi
-                  </label>
-                  <button @click="settings.story_accent_image = ''" class="remove-btn">🗑️</button>
                 </div>
               </div>
             </div>
