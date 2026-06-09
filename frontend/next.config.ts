@@ -26,8 +26,8 @@ const nextConfig: NextConfig = {
         pathname: '/uploads/**',
       },
     ],
-    // Enable modern image formats (AVIF is 50%+ smaller than WebP)
-    formats: ['image/avif', 'image/webp'],
+    // Enable modern image formats (AVIF generation is slow on VPS, WebP is faster)
+    formats: ['image/webp'],
     // Responsive device sizes — removed 2048 (unnecessary)
     deviceSizes: [640, 750, 828, 1080, 1200, 1920],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],

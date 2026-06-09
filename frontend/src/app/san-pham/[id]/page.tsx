@@ -118,7 +118,7 @@ export default function ProductDetailPage() {
         );
     }
 
-    const zaloUrl = `${SITE.zalo}?text=${encodeURIComponent(`Xin chào, tôi muốn tư vấn về ${product.name}`)}`;
+    const zaloUrl = SITE.zalo;
     const images = product.images.length > 0 ? product.images : ['/images/placeholder.webp'];
 
     return (
@@ -155,7 +155,7 @@ export default function ProductDetailPage() {
                             availability: 'https://schema.org/InStock',
                             url: `https://hylacviet.vn/san-pham/${product.id}`,
                         },
-                    }),
+                    }).replace(/</g, '\\u003c'),
                 }}
             />
 
@@ -246,26 +246,26 @@ export default function ProductDetailPage() {
 
                         {/* Description */}
                         <div className="pd-description">
-                            <p>{product.description || 'Tác phẩm được thực hiện bởi các nghệ nhân lành nghề với chất liệu cao cấp, thêu tay tinh xảo và may theo số đo riêng.'}</p>
+                            <p style={{ whiteSpace: 'pre-wrap', lineHeight: '1.6' }}>{product.description || 'Tác phẩm được thực hiện bởi các nghệ nhân lành nghề với chất liệu cao cấp, thêu tay tinh xảo và may theo số đo riêng.'}</p>
                         </div>
 
                         {/* Features */}
                         <ul className="pd-features">
                             <li>
                                 <span className="pd-feature-icon">✦</span>
-                                May đo theo số đo riêng
+                                Nhận may theo số đo riêng
                             </li>
                             <li>
                                 <span className="pd-feature-icon">✦</span>
-                                Chất liệu gấm lụa tơ tằm
+                                Chất liệu gấm cao cấp mềm mại
                             </li>
                             <li>
                                 <span className="pd-feature-icon">✦</span>
-                                Hoàn thành trong 7-10 ngày
+                                Hoàn thiện trong 10 - 15 ngày
                             </li>
                             <li>
                                 <span className="pd-feature-icon">✦</span>
-                                Bảo hành 12 tháng đường may
+                                Bảo hành đường may 12 tháng
                             </li>
                         </ul>
 
