@@ -565,11 +565,32 @@ function navigateTo(path: string) {
   }
 
   .stats-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+  
+  .stat-card {
+    padding: 1rem;
+    gap: 0.5rem;
+  }
+
+  .stat-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1.25rem;
+  }
+
+  .stat-value {
+    font-size: 1.25rem;
+  }
+
+  .stat-label {
+    font-size: 0.7rem;
   }
 
   .actions-grid {
     grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
   }
 }
 </style>
