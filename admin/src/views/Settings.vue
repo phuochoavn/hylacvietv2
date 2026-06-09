@@ -8,6 +8,7 @@ const tabs = [
   { id: 'general', label: 'Cài Đặt Chung', icon: '⚙️' },
   { id: 'homepage', label: 'Trang Chủ', icon: '🏠' },
   { id: 'about', label: 'Câu Chuyện', icon: '📖' },
+  { id: 'maydo', label: 'May Đo', icon: '✂️' },
   { id: 'contact', label: 'Liên Hệ', icon: '📞' },
 ]
 
@@ -56,6 +57,10 @@ const uploadingOgImage = ref(false)
 const uploadingBackground = ref(false)
 // Story section images
 const uploadingStoryMain = ref(false)
+const uploadingStoryHero = ref(false)
+const uploadingContactHero = ref(false)
+const uploadingContactShowroom = ref(false)
+const uploadingMayDoHero = ref(false)
 // Process section images
 const uploadingProcessBg = ref(false)
 const uploadingStep1 = ref(false)
@@ -298,9 +303,11 @@ async function uploadBrandImage(key: string, event: Event) {
   if (key === 'logo_url') uploadingLogo.value = true
   if (key === 'favicon_url') uploadingFavicon.value = true
   if (key === 'hero_background') uploadingBackground.value = true
-  // Story images
   if (key === 'story_main_image') uploadingStoryMain.value = true
-  // Process images
+  if (key === 'about_hero_image') uploadingStoryHero.value = true
+  if (key === 'contact_hero_image') uploadingContactHero.value = true
+  if (key === 'contact_showroom_image') uploadingContactShowroom.value = true
+  if (key === 'maydo_hero_image') uploadingMayDoHero.value = true
   if (key === 'process_bg_image') uploadingProcessBg.value = true
   if (key === 'craft_step1_image' || key === 'step1_image') uploadingStep1.value = true
   if (key === 'craft_step2_image' || key === 'step2_image') uploadingStep2.value = true
@@ -330,6 +337,10 @@ async function uploadBrandImage(key: string, event: Event) {
     uploadingFavicon.value = false
     uploadingBackground.value = false
     uploadingStoryMain.value = false
+    uploadingStoryHero.value = false
+    uploadingContactHero.value = false
+    uploadingContactShowroom.value = false
+    uploadingMayDoHero.value = false
     uploadingProcessBg.value = false
     uploadingStep1.value = false
     uploadingStep2.value = false
@@ -847,15 +858,158 @@ function generateSlug(name: string): string {
               </div>
             </div>
           </div>
+          
+          <div class="section-divider">
+            <span>📝 Nội dung Trang Giới Thiệu</span>
+          </div>
+          <div class="form-stack">
+            <div class="form-group full">
+              <label>Tiêu đề chính</label>
+              <input v-model="settings.about_hero_title" type="text" placeholder="Hành Trình" class="form-input" />
+            </div>
+            <div class="form-group full">
+              <label>Phụ đề</label>
+              <input v-model="settings.about_hero_subtitle" type="text" placeholder="Tìm Về" class="form-input" />
+            </div>
+            
+            <div class="form-group full" style="margin-top: 1rem;">
+              <label>Đoạn 1 - Tiêu đề (Vd: Khởi Nguồn)</label>
+              <input v-model="settings.about_p1_title" type="text" placeholder="Khởi Nguồn" class="form-input" />
+            </div>
+            <div class="form-group full">
+              <label>Đoạn 1 - Nhấn mạnh</label>
+              <textarea v-model="settings.about_p1_desc1" rows="2" class="form-textarea" placeholder="Năm 2021, Hỷ Lạc Việt bắt đầu hành trình..."></textarea>
+            </div>
+            <div class="form-group full">
+              <label>Đoạn 1 - Nội dung</label>
+              <textarea v-model="settings.about_p1_desc2" rows="3" class="form-textarea" placeholder="Mỗi đường kim mũi chỉ là tâm huyết..."></textarea>
+            </div>
 
+            <div class="form-group full" style="margin-top: 1rem;">
+              <label>Đoạn 2 - Tiêu đề (Vd: Lời Hứa Với Di Sản)</label>
+              <input v-model="settings.about_p2_title" type="text" placeholder="Lời Hứa Với Di Sản" class="form-input" />
+            </div>
+            <div class="form-group full">
+              <label>Đoạn 2 - Nhấn mạnh</label>
+              <textarea v-model="settings.about_p2_desc1" rows="2" class="form-textarea" placeholder="Chúng tôi không chỉ may áo..."></textarea>
+            </div>
+            <div class="form-group full">
+              <label>Đoạn 2 - Nội dung</label>
+              <textarea v-model="settings.about_p2_desc2" rows="3" class="form-textarea" placeholder="Từ cách chọn lụa, nhuộm màu tự nhiên..."></textarea>
+            </div>
 
+            <div class="form-group full" style="margin-top: 1rem;">
+              <label>Trích dẫn (Quote Block)</label>
+              <textarea v-model="settings.about_quote" rows="2" class="form-textarea" placeholder="Một bộ áo dài hoàn hảo không chỉ đo bằng thước..."></textarea>
+            </div>
+          </div>
         </div>
+
+        <div v-if="activeTab === 'maydo'" class="tab-panel">
+          <div class="panel-header">
+            <h2>✂️ May Đo</h2>
+            <p>Thông tin và hình ảnh cho trang dịch vụ may đo</p>
+          </div>
+          
+          <div class="section-divider">
+            <span>🖼️ Hình ảnh trang May Đo</span>
+          </div>
+          <div class="branding-uploads">
+            <div class="upload-card">
+              <h3>Ảnh Banner May Đo</h3>
+              <p class="upload-hint">Ảnh đầu trang (1920x1080px)</p>
+              <div class="upload-zone">
+                <img v-if="settings.maydo_hero_image" :src="settings.maydo_hero_image" alt="May Đo Hero" class="logo-preview" />
+                <label v-else class="upload-placeholder">
+                  <input type="file" accept="image/*" @change="uploadBrandImage('maydo_hero_image', $event)" :disabled="uploadingMayDoHero" />
+                  <span v-if="uploadingMayDoHero">⏳ Đang tải...</span>
+                  <span v-else><span class="upload-icon">✂️</span><span>Tải ảnh lên</span></span>
+                </label>
+                <div v-if="settings.maydo_hero_image" class="upload-actions">
+                  <label class="change-btn"><input type="file" accept="image/*" @change="uploadBrandImage('maydo_hero_image', $event)" />🔄 Đổi</label>
+                  <button @click="settings.maydo_hero_image = ''" class="remove-btn">🗑️</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Text Content -->
+          <div class="section-divider">
+            <span>📝 Nội dung Trang May Đo</span>
+          </div>
+
+          <div class="form-stack">
+            <div class="form-group full">
+              <label>Tiêu đề chính</label>
+              <input v-model="settings.maydo_hero_title" type="text" placeholder="May Đo Độc Bản" class="form-input" />
+            </div>
+            <div class="form-group full">
+              <label>Phụ đề</label>
+              <input v-model="settings.maydo_hero_subtitle" type="text" placeholder="Bespoke Tailoring" class="form-input" />
+            </div>
+          </div>
+        </div>
+
 
         <!-- Social & Contact -->
         <div v-if="activeTab === 'contact'" class="tab-panel">
           <div class="panel-header">
             <h2>🔗 Liên Hệ & Mạng Xã Hội</h2>
             <p>Thông tin liên lạc và đường dẫn mạng xã hội</p>
+          </div>
+
+          <!-- Page Images -->
+          <div class="section-divider">
+            <span>🖼️ Hình ảnh trang Liên Hệ</span>
+          </div>
+          <div class="branding-uploads">
+            <div class="upload-card">
+              <h3>Ảnh Banner (Trái)</h3>
+              <div class="upload-zone">
+                <img v-if="settings.contact_hero_image" :src="settings.contact_hero_image" alt="Contact Hero" class="logo-preview" />
+                <label v-else class="upload-placeholder">
+                  <input type="file" accept="image/*" @change="uploadBrandImage('contact_hero_image', $event)" :disabled="uploadingContactHero" />
+                  <span v-if="uploadingContactHero">⏳</span>
+                  <span v-else>Tải ảnh lên</span>
+                </label>
+                <div v-if="settings.contact_hero_image" class="upload-actions">
+                  <label class="change-btn"><input type="file" accept="image/*" @change="uploadBrandImage('contact_hero_image', $event)" />🔄 Đổi</label>
+                  <button @click="settings.contact_hero_image = ''" class="remove-btn">🗑️</button>
+                </div>
+              </div>
+            </div>
+            <div class="upload-card">
+              <h3>Ảnh Showroom (Phải)</h3>
+              <div class="upload-zone">
+                <img v-if="settings.contact_showroom_image" :src="settings.contact_showroom_image" alt="Contact Showroom" class="logo-preview" />
+                <label v-else class="upload-placeholder">
+                  <input type="file" accept="image/*" @change="uploadBrandImage('contact_showroom_image', $event)" :disabled="uploadingContactShowroom" />
+                  <span v-if="uploadingContactShowroom">⏳</span>
+                  <span v-else>Tải ảnh lên</span>
+                </label>
+                <div v-if="settings.contact_showroom_image" class="upload-actions">
+                  <label class="change-btn"><input type="file" accept="image/*" @change="uploadBrandImage('contact_showroom_image', $event)" />🔄 Đổi</label>
+                  <button @click="settings.contact_showroom_image = ''" class="remove-btn">🗑️</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-divider">
+            <span>📝 Nội dung Trang Liên Hệ</span>
+          </div>
+          <div class="form-stack" style="margin-bottom: 2rem;">
+            <div class="form-group full">
+              <label>Tiêu đề (Vd: Ghé Thăm)</label>
+              <input v-model="settings.contact_hero_title" type="text" placeholder="Ghé Thăm" class="form-input" />
+            </div>
+            <div class="form-group full">
+              <label>Phụ đề (Vd: Hỷ Lạc Việt Atelier)</label>
+              <input v-model="settings.contact_hero_subtitle" type="text" placeholder="Hỷ Lạc Việt Atelier" class="form-input" />
+            </div>
+            <div class="form-group full">
+              <label>Lời ngỏ</label>
+              <textarea v-model="settings.contact_intro_text" rows="3" placeholder="Để có trải nghiệm trọn vẹn nhất..." class="form-textarea"></textarea>
+            </div>
           </div>
 
           <!-- Thông tin liên hệ chung -->

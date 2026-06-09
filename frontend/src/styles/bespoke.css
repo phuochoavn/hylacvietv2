@@ -20,7 +20,16 @@
 /* .bespoke-hero-bg { display: none; } */
 
 .bespoke-hero-bg {
-    display: none;
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+
+.bespoke-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(10, 9, 8, 0.4);
+    z-index: 1;
 }
 
 /* Hero Content - Clean Typography (No Box) */

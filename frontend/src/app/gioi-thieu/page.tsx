@@ -81,6 +81,17 @@ export default function AboutPage() {
     const [storyImage1, setStoryImage1] = useState('/images/craft-measuring.webp');
     const [storyImage2, setStoryImage2] = useState('/images/craft-embroidery.webp');
 
+    // Text content states
+    const [heroTitle, setHeroTitle] = useState('Hành Trình');
+    const [heroSubtitle, setHeroSubtitle] = useState('Tìm Về');
+    const [p1Title, setP1Title] = useState('Khởi Nguồn');
+    const [p1Desc1, setP1Desc1] = useState('Năm 2021, Hỷ Lạc Việt bắt đầu hành trình miệt mài tìm hiểu, nghiên cứu nghệ thuật may áo dài truyền thống và pháp phục — để có thể lan toả nét đẹp văn hóa ấy đến mọi người.');
+    const [p1Desc2, setP1Desc2] = useState('Mỗi đường kim mũi chỉ là tâm huyết của những nghệ nhân lành nghề, những người đã dành cả đời để hoàn thiện kỹ thuật thêu tay, may đo thủ công tinh xảo. Chúng tôi tin rằng áo dài, pháp phục không chỉ là trang phục — mà là một nét văn hóa cần được trân quý và gìn giữ.');
+    const [p2Title, setP2Title] = useState('Lời Hứa Với Di Sản');
+    const [p2Desc1, setP2Desc1] = useState('Chúng tôi không chỉ may áo — chúng tôi gìn giữ một di sản. Mỗi bộ áo dài, mỗi bộ pháp phục rời xưởng là một lời cam kết: rằng vẻ đẹp Việt Nam sẽ không bao giờ bị lãng quên.');
+    const [p2Desc2, setP2Desc2] = useState('Từ cách chọn lụa, nhuộm màu tự nhiên, đến kỹ thuật thêu tay truyền thống — tất cả đều được thực hiện bởi những nghệ nhân đã dành cả đời cho nghề. Chúng tôi tin rằng áo dài, pháp phục không chỉ là trang phục — mà là một nét văn hóa cần được trân quý và gìn giữ.');
+    const [quote, setQuote] = useState('Một bộ áo dài hoàn hảo không chỉ đo bằng thước,\nmà đo bằng cảm xúc khi người mặc soi gương.');
+
     useEffect(() => {
         async function fetchSettings() {
             try {
@@ -92,12 +103,22 @@ export default function AboutPage() {
                         if (item.value) s[item.key] = item.value;
                     }
                     // Use real uploaded images from API settings
-                    const hero = s.story_image || s.craft_step1_image || s.step1_image;
+                    const hero = s.about_hero_image || s.story_image || s.craft_step1_image || s.step1_image;
                     const img1 = s.story_image_2 || s.craft_step2_image || s.step2_image;
                     const img2 = s.craft_step3_image || s.step3_image;
                     if (hero) setHeroImage(toRelativeUrl(hero));
                     if (img1) setStoryImage1(toRelativeUrl(img1));
                     if (img2) setStoryImage2(toRelativeUrl(img2));
+
+                    if (s.about_hero_title) setHeroTitle(s.about_hero_title);
+                    if (s.about_hero_subtitle) setHeroSubtitle(s.about_hero_subtitle);
+                    if (s.about_p1_title) setP1Title(s.about_p1_title);
+                    if (s.about_p1_desc1) setP1Desc1(s.about_p1_desc1);
+                    if (s.about_p1_desc2) setP1Desc2(s.about_p1_desc2);
+                    if (s.about_p2_title) setP2Title(s.about_p2_title);
+                    if (s.about_p2_desc1) setP2Desc1(s.about_p2_desc1);
+                    if (s.about_p2_desc2) setP2Desc2(s.about_p2_desc2);
+                    if (s.about_quote) setQuote(s.about_quote);
                 }
             } catch (e) {
                 console.error('Failed to fetch settings:', e);
@@ -146,8 +167,8 @@ export default function AboutPage() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 0.4 }}
                     >
-                        Hành Trình<br />
-                        <em>Tìm Về</em>
+                        {heroTitle}<br />
+                        <em>{heroSubtitle}</em>
                     </motion.h1>
                 </div>
                 <div className="memoir-scroll-hint">
@@ -169,12 +190,12 @@ export default function AboutPage() {
                         <div className="memoir-image-frame">
                             <Image
                                 src={storyImage1}
-                                alt="Những ngày đầu tiên"
+                                alt={p1Title}
                                 fill
                                 style={{ objectFit: 'cover' }}
                             />
                         </div>
-                        <span className="memoir-image-caption">Hà Nội, 2018</span>
+                        <span className="memoir-image-caption">Hà Nội, 2021</span>
                     </motion.div>
 
                     <motion.div
@@ -185,16 +206,13 @@ export default function AboutPage() {
                         transition={{ duration: 0.8, delay: 0.2 }}
                     >
                         <span className="memoir-section-number">01</span>
-                        <h2 className="memoir-heading">Khởi Nguồn</h2>
+                        <h2 className="memoir-heading">{p1Title}</h2>
                         <div className="memoir-divider" />
                         <p className="memoir-drop-cap">
-                            Năm 2018, tại một góc nhỏ Hà Nội, chúng tôi bắt đầu với một giấc mơ:
-                            khôi phục vẻ đẹp nguyên bản của áo dài Việt — không phải bằng lý thuyết suông,
-                            mà bằng chính đôi tay, bằng từng sợi tơ, và bằng tâm hồn người thợ may.
+                            {p1Desc1}
                         </p>
                         <p className="memoir-body">
-                            Khi ngành may mặc công nghiệp nuốt chửng sự tinh tế, khi &quot;nhanh&quot; và &quot;rẻ&quot;
-                            trở thành tiêu chí, chúng tôi chọn đi ngược dòng. Chậm rãi. Tỉ mỉ. Và trân trọng.
+                            {p1Desc2}
                         </p>
                     </motion.div>
                 </div>
@@ -213,7 +231,7 @@ export default function AboutPage() {
                         <div className="memoir-image-frame">
                             <Image
                                 src={storyImage2}
-                                alt="Nghệ nhân tại xưởng"
+                                alt={p2Title}
                                 fill
                                 style={{ objectFit: 'cover' }}
                             />
@@ -229,16 +247,13 @@ export default function AboutPage() {
                         transition={{ duration: 0.8, delay: 0.2 }}
                     >
                         <span className="memoir-section-number">02</span>
-                        <h2 className="memoir-heading">Lời Hứa Với Di Sản</h2>
+                        <h2 className="memoir-heading">{p2Title}</h2>
                         <div className="memoir-divider" />
                         <p className="memoir-drop-cap">
-                            Chúng tôi không chỉ may áo — chúng tôi gìn giữ một di sản.
-                            Mỗi bộ áo dài rời xưởng là một lời cam kết: rằng vẻ đẹp Việt Nam
-                            sẽ không bao giờ bị lãng quên.
+                            {p2Desc1}
                         </p>
                         <p className="memoir-body">
-                            Từ cách chọn lụa, nhuộm màu tự nhiên, đến kỹ thuật thêu tay truyền thống —
-                            tất cả đều được thực hiện bởi những nghệ nhân đã dành cả đời cho nghề.
+                            {p2Desc2}
                         </p>
                     </motion.div>
                 </div>
@@ -254,9 +269,8 @@ export default function AboutPage() {
                     transition={{ duration: 1 }}
                 >
                     <span className="quote-mark">&quot;</span>
-                    <p>
-                        Một bộ áo dài hoàn hảo không chỉ đo bằng thước,<br />
-                        mà đo bằng cảm xúc khi người mặc soi gương.
+                    <p style={{ whiteSpace: 'pre-wrap' }}>
+                        {quote}
                     </p>
                     <span className="quote-mark end">&quot;</span>
                 </motion.blockquote>
@@ -297,40 +311,8 @@ export default function AboutPage() {
                 </div>
             </section>
 
-            {/* SECTION 5: Chữ Ký Founder */}
-            <section className="memoir-signature-section">
-                <motion.div
-                    className="memoir-signature-content"
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.8 }}
-                >
-                    <p className="signature-thankyou">
-                        Cảm ơn bạn đã ghé thăm và quan tâm đến Hỷ Lạc Việt.<br />
-                        Chúng tôi hy vọng được đồng hành cùng bạn trong những khoảnh khắc đặc biệt.
-                    </p>
 
-                    <div className="signature-block">
-                        <div className="signature-line-decor" />
-                        <div className="signature-text">
-                            <span className="founder-name">Hàn Hân</span>
-                            <span className="founder-title">Nhà thiết kế & Sáng lập</span>
-                        </div>
-                    </div>
 
-                    <motion.a
-                        href="https://zalo.me/0912503456"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="memoir-cta"
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                    >
-                        Liên Hệ Với Chúng Tôi
-                    </motion.a>
-                </motion.div>
-            </section>
         </main>
     );
 }

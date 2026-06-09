@@ -96,6 +96,9 @@ import { SITE } from '@/lib/constants';
 export default function MayDoPage() {
     const [splits, setSplits] = useState<SplitSection[]>(defaultSplits);
     const [zaloLink, setZaloLink] = useState(SITE.zalo);
+    const [heroImage, setHeroImage] = useState('/images/hero/aodai-1.webp');
+    const [heroTitle, setHeroTitle] = useState('May Đo Độc Bản');
+    const [heroSubtitle, setHeroSubtitle] = useState('Bespoke Tailoring');
 
     useEffect(() => {
         async function fetchSettings() {
@@ -121,6 +124,11 @@ export default function MayDoPage() {
                     setSplits(updated);
                     
                     if (s.zalo) setZaloLink(s.zalo);
+                    if (s.maydo_hero_title) setHeroTitle(s.maydo_hero_title);
+                    if (s.maydo_hero_subtitle) setHeroSubtitle(s.maydo_hero_subtitle);
+                    
+                    const hero = s.maydo_hero_image || s.hero_background;
+                    if (hero) setHeroImage(toRelativeUrl(hero));
                 }
             } catch (e) {
                 console.error('Failed to fetch settings:', e);
@@ -133,7 +141,16 @@ export default function MayDoPage() {
         <main className="bespoke-page">
             {/* Hero Section */}
             <section className="bespoke-hero">
-                <div className="bespoke-hero-bg" />
+                <div className="bespoke-hero-bg">
+                    <Image
+                        src={heroImage}
+                        alt="May đo độc bản"
+                        fill
+                        style={{ objectFit: 'cover' }}
+                        priority
+                    />
+                    <div className="bespoke-hero-overlay" />
+                </div>
 
                 <motion.div
                     className="bespoke-hero-content"
@@ -142,11 +159,12 @@ export default function MayDoPage() {
                     variants={containerVariants}
                 >
                     <motion.p className="bespoke-overline" variants={fadeUp}>
-                        Bespoke Tailoring
+                        {heroSubtitle}
                     </motion.p>
                     <motion.h1 className="bespoke-title" variants={fadeUp}>
-                        Kiến Tạo<br />
-                        <em>Tác Phẩm Độc Bản</em>
+                        {heroTitle.split(' ').map((word, i) => (
+                            <span key={i}>{word} </span>
+                        ))}
                     </motion.h1>
                     <motion.p className="bespoke-subtitle" variants={fadeUp}>
                         Một chiếc áo dài không chỉ để mặc — mà để kể câu chuyện của riêng bạn.

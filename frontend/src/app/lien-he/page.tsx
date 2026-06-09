@@ -24,6 +24,10 @@ export default function ContactPage() {
     const [phone, setPhone] = useState(SITE.phone);
     const [zaloLink, setZaloLink] = useState(SITE.zalo);
     const [workingHours, setWorkingHours] = useState('8:00 - 20:00, Thứ 2 - Thứ 7');
+    
+    const [heroTitle, setHeroTitle] = useState('Ghé Thăm');
+    const [heroSubtitle, setHeroSubtitle] = useState('Hỷ Lạc Việt Atelier');
+    const [introText, setIntroText] = useState('Để có trải nghiệm trọn vẹn nhất, xin vui lòng đặt lịch hẹn trước.\nChúng tôi sẽ chuẩn bị trà bánh và các mẫu vải mới nhất để đón tiếp bạn.');
 
     useEffect(() => {
         async function fetchSettings() {
@@ -35,8 +39,8 @@ export default function ContactPage() {
                     for (const item of data.data) {
                         if (item.value) s[item.key] = item.value;
                     }
-                    const hero = s.craft_step4_image || s.step4_image || s.story_image;
-                    const showroom = s.story_image_2 || s.craft_step3_image || s.step3_image;
+                    const hero = s.contact_hero_image || s.craft_step4_image || s.step4_image || s.story_image;
+                    const showroom = s.contact_showroom_image || s.story_image_2 || s.craft_step3_image || s.step3_image;
                     if (hero) setHeroImage(toRelativeUrl(hero));
                     if (showroom) setShowroomImage(toRelativeUrl(showroom));
                     
@@ -44,6 +48,10 @@ export default function ContactPage() {
                     if (s.phone) setPhone(s.phone);
                     if (s.zalo) setZaloLink(s.zalo);
                     if (s.working_hours) setWorkingHours(s.working_hours);
+                    
+                    if (s.contact_hero_title) setHeroTitle(s.contact_hero_title);
+                    if (s.contact_hero_subtitle) setHeroSubtitle(s.contact_hero_subtitle);
+                    if (s.contact_intro_text) setIntroText(s.contact_intro_text);
                 }
             } catch (e) {
                 console.error('Failed to fetch settings:', e);
@@ -69,10 +77,9 @@ export default function ContactPage() {
 
                 <div className="contact-hero-content">
                     <span className="contact-overline">Lời Mời Đặc Biệt</span>
-                    <h1 className="contact-title">Ghé Thăm</h1>
-                    <span className="contact-title-accent">Atelier</span>
+                    <h1 className="contact-title">{heroTitle}</h1>
                     <p className="contact-subtitle">
-                        Nơi lưu giữ hồn Việt trong từng tà áo
+                        {heroSubtitle}
                     </p>
                     <div style={{ marginTop: '2rem', color: 'var(--gold)', opacity: 0.4, fontSize: '0.8rem', letterSpacing: '0.5em' }}>
                         ◆
@@ -101,7 +108,7 @@ export default function ContactPage() {
                     {/* Right: Contact Info */}
                     <div className="invitation-card">
                         <h2 className="invitation-heading">
-                            Hỷ Lạc Việt <em>Atelier</em>
+                            {heroSubtitle.split(' ').slice(0, -1).join(' ')} <em>{heroSubtitle.split(' ').slice(-1)}</em>
                         </h2>
                         <div className="invitation-divider" />
 
@@ -110,7 +117,7 @@ export default function ContactPage() {
                                 <span style={{ width: 24, height: 24, flexShrink: 0, color: 'var(--gold)', fontSize: '1.2rem' }}>📍</span>
                                 <div className="detail-text">
                                     <span className="detail-label">Địa chỉ</span>
-                                    <span className="detail-value">{address}</span>
+                                    <span className="detail-value" style={{ whiteSpace: 'pre-wrap' }}>{address}</span>
                                 </div>
                             </div>
 
@@ -126,14 +133,13 @@ export default function ContactPage() {
                                 <span style={{ width: 24, height: 24, flexShrink: 0, color: 'var(--gold)', fontSize: '1.2rem' }}>🕐</span>
                                 <div className="detail-text">
                                     <span className="detail-label">Đón khách</span>
-                                    <span className="detail-value">{workingHours}</span>
+                                    <span className="detail-value" style={{ whiteSpace: 'pre-wrap' }}>{workingHours}</span>
                                 </div>
                             </div>
                         </div>
 
-                        <p className="invitation-note">
-                            Để có trải nghiệm trọn vẹn nhất, xin vui lòng đặt lịch hẹn trước.
-                            Chúng tôi sẽ chuẩn bị trà bánh và các mẫu vải mới nhất để đón tiếp bạn.
+                        <p className="invitation-note" style={{ whiteSpace: 'pre-wrap' }}>
+                            {introText}
                         </p>
 
                         <a
