@@ -8,6 +8,7 @@ const tabs = [
   { id: 'general', label: 'Cài Đặt Chung', icon: '⚙️' },
   { id: 'homepage', label: 'Trang Chủ', icon: '🏠' },
   { id: 'about', label: 'Câu Chuyện', icon: '📖' },
+  { id: 'contact', label: 'Liên Hệ', icon: '📞' },
 ]
 
 // Data
@@ -17,6 +18,16 @@ const heroSlides = ref<Array<{id: number, image: string, title: string, subtitle
   { id: 2, image: '', title: 'Áo Dài Cưới', subtitle: 'Ngày trọng đại' },
   { id: 3, image: '', title: 'Pháp Phục Linen', subtitle: 'Thiền định cao quý' },
 ])
+
+const socialFields = [
+  { key: 'phone', label: 'Số điện thoại', type: 'text', icon: '📞', placeholder: '0912 345 678' },
+  { key: 'email', label: 'Email', type: 'email', icon: '✉️', placeholder: 'contact@hylacviet.vn' },
+  { key: 'zalo', label: 'Link Zalo', type: 'text', icon: '💬', placeholder: 'https://zalo.me/...' },
+  { key: 'facebook', label: 'Facebook', type: 'text', icon: '📘', placeholder: 'https://facebook.com/...' },
+  { key: 'instagram', label: 'Instagram', type: 'text', icon: '📷', placeholder: 'https://instagram.com/...' },
+  { key: 'address', label: 'Địa chỉ Showroom', type: 'textarea', icon: '📍', placeholder: 'Số 123, Phố Huế, Hà Nội' },
+  { key: 'working_hours', label: 'Giờ làm việc', type: 'text', icon: '🕐', placeholder: '8:00 - 20:00, Thứ 2 - Thứ 7' },
+]
 
 // 3 separate galleries for Hero section
 const heroBackgrounds = ref<Array<{id: number, image: string}>>([{ id: 1, image: '' }])
@@ -829,6 +840,40 @@ function generateSlug(name: string): string {
 
 
         </div>
+
+        <!-- Social & Contact -->
+        <div v-if="activeTab === 'contact'" class="tab-panel">
+          <div class="panel-header">
+            <h2>🔗 Liên Hệ & Mạng Xã Hội</h2>
+            <p>Thông tin liên lạc và đường dẫn mạng xã hội</p>
+          </div>
+
+          <div class="form-stack">
+            <div v-for="field in socialFields" :key="field.key" class="form-group icon-group">
+              <label>
+                <span class="field-icon">{{ field.icon }}</span>
+                {{ field.label }}
+              </label>
+              
+              <textarea 
+                v-if="field.type === 'textarea'"
+                v-model="settings[field.key]"
+                rows="3"
+                :placeholder="field.placeholder"
+                class="form-textarea"
+              ></textarea>
+              
+              <input 
+                v-else
+                v-model="settings[field.key]"
+                :type="field.type"
+                :placeholder="field.placeholder"
+                class="form-input"
+              />
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
