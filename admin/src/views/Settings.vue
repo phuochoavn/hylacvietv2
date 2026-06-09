@@ -2093,6 +2093,9 @@ function generateSlug(name: string): string {
 }
 
 .form-input, .form-textarea {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   padding: 0.75rem 1rem;
   border: 1px solid #e5e7eb;
   border-radius: 0.75rem;
@@ -2146,6 +2149,8 @@ function generateSlug(name: string): string {
   border: 1px solid #e5e7eb;
   border-radius: 1rem;
   overflow: hidden;
+  box-sizing: border-box;
+  max-width: 100%;
 }
 
 .slide-number {
@@ -2364,6 +2369,8 @@ function generateSlug(name: string): string {
   border: 1px solid #e5e7eb;
   border-radius: 1rem;
   padding: 1.5rem;
+  box-sizing: border-box;
+  max-width: 100%;
 }
 
 .upload-card h3 {
@@ -2947,6 +2954,8 @@ function generateSlug(name: string): string {
   border-radius: 0.75rem;
   padding: 1.25rem;
   margin-bottom: 1rem;
+  box-sizing: border-box;
+  max-width: 100%;
 }
 
 .pillar-card h4 {
@@ -2965,6 +2974,8 @@ function generateSlug(name: string): string {
   border-radius: 0.75rem;
   padding: 1.25rem;
   margin-bottom: 1rem;
+  box-sizing: border-box;
+  max-width: 100%;
 }
 
 .step-number {
