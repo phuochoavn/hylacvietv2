@@ -114,7 +114,12 @@ export default async function Footer() {
                     </div>
                 </div>
 
-                <div className="footer-bottom">
+                <div className="footer-copyright">
+                    <div className="copyright-decor">
+                        <span className="decor-line"></span>
+                        <span className="decor-diamond">◆</span>
+                        <span className="decor-line"></span>
+                    </div>
                     <p className="copyright">
                         © {new Date().getFullYear()} Hỷ Lạc Việt. All rights reserved.
                     </p>
