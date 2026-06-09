@@ -19,15 +19,24 @@ const heroSlides = ref<Array<{id: number, image: string, title: string, subtitle
   { id: 3, image: '', title: 'Pháp Phục Linen', subtitle: 'Thiền định cao quý' },
 ])
 
-const socialFields = [
+const contactFields = [
   { key: 'phone', label: 'Số điện thoại', type: 'text', icon: '📞', placeholder: '0912 345 678' },
   { key: 'email', label: 'Email', type: 'email', icon: '✉️', placeholder: 'contact@hylacviet.vn' },
-  { key: 'zalo', label: 'Link Zalo', type: 'text', icon: '💬', placeholder: 'https://zalo.me/...' },
-  { key: 'messenger', label: 'Link Messenger', type: 'text', icon: '⚡', placeholder: 'https://m.me/...' },
-  { key: 'facebook', label: 'Facebook', type: 'text', icon: '📘', placeholder: 'https://facebook.com/...' },
-  { key: 'instagram', label: 'Instagram', type: 'text', icon: '📷', placeholder: 'https://instagram.com/...' },
   { key: 'address', label: 'Địa chỉ Showroom', type: 'textarea', icon: '📍', placeholder: 'Số 123, Phố Huế, Hà Nội' },
   { key: 'working_hours', label: 'Giờ làm việc', type: 'text', icon: '🕐', placeholder: '8:00 - 20:00, Thứ 2 - Thứ 7' },
+]
+
+const chatButtons = [
+  { key: 'zalo', toggle: 'show_zalo_btn', label: 'Zalo', type: 'text', icon: '💬', placeholder: 'https://zalo.me/0912...' },
+  { key: 'messenger', toggle: 'show_messenger_btn', label: 'Messenger', type: 'text', icon: '⚡', placeholder: 'https://m.me/1087...' },
+  { key: 'ig_dm', toggle: 'show_ig_dm_btn', label: 'Instagram DM', type: 'text', icon: '📸', placeholder: 'https://ig.me/m/hylacviet' },
+  { key: 'phone_btn', toggle: 'show_phone_btn', label: 'Nút Gọi Điện', type: 'info', icon: '📞', placeholder: 'Dùng chung Số điện thoại ở trên' },
+]
+
+const socialLinks = [
+  { key: 'facebook', toggle: 'show_fb_link', label: 'Facebook Page', type: 'text', icon: '📘', placeholder: 'https://facebook.com/...' },
+  { key: 'instagram', toggle: 'show_ig_link', label: 'Instagram Profile', type: 'text', icon: '📷', placeholder: 'https://instagram.com/...' },
+  { key: 'tiktok', toggle: 'show_tiktok_link', label: 'TikTok Profile', type: 'text', icon: '🎵', placeholder: 'https://tiktok.com/@...' },
 ]
 
 // 3 separate galleries for Hero section
@@ -849,8 +858,12 @@ function generateSlug(name: string): string {
             <p>Thông tin liên lạc và đường dẫn mạng xã hội</p>
           </div>
 
+          <!-- Thông tin liên hệ chung -->
+          <div class="section-divider">
+            <span>📍 Thông tin chung</span>
+          </div>
           <div class="form-stack">
-            <div v-for="field in socialFields" :key="field.key" class="form-group icon-group">
+            <div v-for="field in contactFields" :key="field.key" class="form-group icon-group">
               <label>
                 <span class="field-icon">{{ field.icon }}</span>
                 {{ field.label }}
@@ -870,6 +883,54 @@ function generateSlug(name: string): string {
                 :type="field.type"
                 :placeholder="field.placeholder"
                 class="form-input"
+              />
+            </div>
+          </div>
+
+          <!-- Nút Chat lơ lửng -->
+          <div class="section-divider" style="margin-top: 2rem;">
+            <span>💬 Nút Chat Nổi (Website)</span>
+          </div>
+          <div class="form-stack">
+            <div v-for="field in chatButtons" :key="field.key" class="form-group toggle-group-card">
+              <div class="toggle-header">
+                <label class="toggle-switch">
+                  <input type="checkbox" :checked="settings[field.toggle] !== 'false'" @change="settings[field.toggle] = $event.target.checked ? 'true' : 'false'">
+                  <span class="slider round"></span>
+                </label>
+                <span class="toggle-label"><span class="field-icon">{{ field.icon }}</span> Hiển thị nút {{ field.label }}</span>
+              </div>
+              <input 
+                v-if="field.type !== 'info'"
+                v-model="settings[field.key]"
+                :type="field.type"
+                :placeholder="field.placeholder"
+                class="form-input"
+                :disabled="settings[field.toggle] === 'false'"
+              />
+              <p v-else class="info-text">{{ field.placeholder }}</p>
+            </div>
+          </div>
+
+          <!-- Footer Social Links -->
+          <div class="section-divider" style="margin-top: 2rem;">
+            <span>🌐 Mạng Xã Hội (Chân trang)</span>
+          </div>
+          <div class="form-stack">
+            <div v-for="field in socialLinks" :key="field.key" class="form-group toggle-group-card">
+              <div class="toggle-header">
+                <label class="toggle-switch">
+                  <input type="checkbox" :checked="settings[field.toggle] !== 'false'" @change="settings[field.toggle] = $event.target.checked ? 'true' : 'false'">
+                  <span class="slider round"></span>
+                </label>
+                <span class="toggle-label"><span class="field-icon">{{ field.icon }}</span> Hiện {{ field.label }}</span>
+              </div>
+              <input 
+                v-model="settings[field.key]"
+                :type="field.type"
+                :placeholder="field.placeholder"
+                class="form-input"
+                :disabled="settings[field.toggle] === 'false'"
               />
             </div>
           </div>
@@ -954,6 +1015,100 @@ function generateSlug(name: string): string {
   align-items: center;
   padding: 4rem;
   color: #6b7280;
+}
+
+/* Toggle Styles */
+.toggle-group-card {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+.toggle-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.toggle-label {
+  font-weight: 500;
+  color: #374151;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.info-text {
+  font-size: 0.8rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* Toggle Switch UI */
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #c9a227;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #c9a227;
+}
+
+input:checked + .slider:before {
+  transform: translateX(20px);
+}
+
+.slider.round {
+  border-radius: 24px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+.form-input:disabled {
+  background-color: #f3f4f6;
+  color: #9ca3af;
+  border-color: #e5e7eb;
 }
 
 .spinner {

@@ -67,6 +67,19 @@
     border-color: rgba(255, 255, 255, 0.5);
 }
 
+/* Instagram DM - IG Gradient */
+.floating-btn.ig_dm {
+    background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+    box-shadow: 0 4px 20px rgba(220, 39, 67, 0.25);
+}
+
+.floating-btn.ig_dm:hover {
+    background: linear-gradient(45deg, #f09433 10%, #e6683c 35%, #dc2743 60%, #cc2366 85%, #bc1888 100%);
+    box-shadow: 0 6px 24px rgba(220, 39, 67, 0.4);
+    transform: scale(1.08);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
 /* Phone - Refined Gold instead of Green (Imperial Zen) */
 .floating-btn.phone {
     background: rgba(201, 162, 39, 0.9);

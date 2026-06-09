@@ -94,10 +94,12 @@ export default async function Footer() {
                     <div className="footer-col">
                         <h4>Kết Nối</h4>
                         <div className="footer-social-links">
-                            {s.facebook && <a href={s.facebook} target="_blank" rel="noopener noreferrer">Facebook</a>}
-                            {s.instagram && <a href={s.instagram} target="_blank" rel="noopener noreferrer">Instagram</a>}
-                            {s.zalo && <a href={s.zalo} target="_blank" rel="noopener noreferrer">Zalo</a>}
-                            {!s.facebook && !s.instagram && !s.zalo && SOCIAL_LINKS.map((link) => (
+                            {s.facebook && s.show_fb_link !== 'false' && <a href={s.facebook} target="_blank" rel="noopener noreferrer">Facebook</a>}
+                            {s.instagram && s.show_ig_link !== 'false' && <a href={s.instagram} target="_blank" rel="noopener noreferrer">Instagram</a>}
+                            {s.tiktok && s.show_tiktok_link !== 'false' && <a href={s.tiktok} target="_blank" rel="noopener noreferrer">TikTok</a>}
+                            
+                            {/* Fallback to constants if all are missing/hidden */}
+                            {(!s.facebook && !s.instagram && !s.tiktok) && SOCIAL_LINKS.map((link) => (
                                 <a
                                     key={link.name}
                                     href={link.href}
