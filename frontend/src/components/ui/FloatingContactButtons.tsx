@@ -10,7 +10,7 @@ const FloatingContactButtons = () => {
     const [isVisible, setIsVisible] = useState(false);
     const [zaloLink, setZaloLink] = useState(SITE.zalo);
     const [phoneLink, setPhoneLink] = useState(`tel:${SITE.phone.replace(/\s/g, '')}`);
-    const [messengerLink, setMessengerLink] = useState('https://m.me/1087390711118469'); // Default to provided ID
+    const [messengerLink, setMessengerLink] = useState('https://m.me/61586356173205'); // Default to provided ID
 
     // Delay showing buttons until after page is fully loaded, and fetch contact settings
     useEffect(() => {
