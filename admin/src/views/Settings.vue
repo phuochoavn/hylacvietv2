@@ -1985,6 +1985,12 @@ function generateSlug(name: string): string {
   display: flex;
   border-bottom: 1px solid #e5e7eb;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Firefox */
+}
+
+.tabs-nav::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
 }
 
 .tab-btn {
@@ -2333,10 +2339,7 @@ function generateSlug(name: string): string {
 
   .tab-btn {
     padding: 0.75rem 1rem;
-  }
-
-  .tab-label {
-    display: none;
+    font-size: 0.8rem;
   }
 
   .form-grid {
@@ -2890,6 +2893,10 @@ function generateSlug(name: string): string {
 }
 
 @media (max-width: 768px) {
+  .tab-content {
+    padding: 1rem;
+  }
+
   .branding-uploads {
     grid-template-columns: 1fr;
   }

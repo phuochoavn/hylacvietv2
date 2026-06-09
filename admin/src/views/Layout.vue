@@ -590,10 +590,17 @@ function closeMobileSidebar() {
   }
 
   .header-search {
-    display: none; /* Hide search bar on very small screens to save space */
+    order: 3;
+    width: 100%;
+    margin-top: 1rem;
+  }
+
+  .header-search input {
+    width: 100%;
   }
 
   .main-header {
+    flex-wrap: wrap;
     padding: 1rem;
   }
 }
